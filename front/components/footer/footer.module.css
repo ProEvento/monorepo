@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(-gap) 0 var(--gap);
+    width: var(--page-width-with-margin);
+    max-width: 100%;
+    margin: auto;
+  }
+  
+  .logotype {
+    display: flex;
+    text-align: center;
+    padding-top: var(--gap);
+    width: var(--page-width-with-margin);
+    max-width: 100%;
+    margin: auto;
+  }
+  
+  .social a {
+    color: var(--light-gray);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  
+  .social a:hover {
+    color: var(--fg);
+  }
+  
+  
+  
+  @media screen and (max-width: 960px) {
+    .wrapper {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+  

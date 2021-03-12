@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize-typescript';
-import { applyExtraSetup } from './extra-setup';
 
 require('dotenv').config({ path: '.env.local' })
 
@@ -24,9 +23,6 @@ const modelDefiners = [
 for (const modelDefiner of modelDefiners) {
 	modelDefiner(sequelize);
 }
-
-// Execute any extra setup after the models are defined, such as adding associations.
-applyExtraSetup(sequelize);
 
 // We export the sequelize connection instance to be used around our app.
 export default sequelize;

@@ -76,7 +76,7 @@ const Pages = [
   },
   {
     name: "Profile",
-    url: "/me"
+    url: "/profile"
   },
   {
     name: "My Events",

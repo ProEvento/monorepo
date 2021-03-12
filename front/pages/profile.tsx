@@ -1,14 +1,14 @@
 import Page from '@components/page'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-const Events = () => {
+const Profile = () => {
   const { user, error, isLoading } = useUser();  
 
   return (
-    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"}>
+    <Page header={false} activePage={"Profile"} title={user.name}>
       
     </Page>
   )
 }
 
-export default withPageAuthRequired(Events)
+export default withPageAuthRequired(Profile)

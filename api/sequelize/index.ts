@@ -4,8 +4,8 @@ import { applyExtraSetup } from './extra-setup';
 // TODO: keep db connection URL as environment variable
 // const sequelize = new Sequelize(process.env.DB_CONNECTION_URL);
 
-const sequelize = new Sequelize('mindful-coder-307303:us-west2:proevento', 'user1', 'team15', {
-	host: '34.94.31.54',
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+	host: process.env.DB_HOST,
 	dialect: 'mysql',
 	logQueryParameters: true,
 	benchmark: true

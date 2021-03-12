@@ -1,29 +1,33 @@
-import { DataType, Sequelize } from 'sequelize-typescript';
+'use strict';
+import {
+  Model,
+  DataType,
+  Sequelize
+} from 'sequelize-typescript'
 
-// We export a function that defines the model.
-// This function will automatically receive as parameter the Sequelize connection object.
-export default (sequelize: Sequelize) => {
-	sequelize.define('user', {
-		// The following specification of the 'id' attribute could be omitted
-		// since it is the default.
-		id: {
-			allowNull: false,
-			autoIncrement: true,
-			primaryKey: true,
-			type: DataType.INTEGER
-		},
-		username: {
-			allowNull: false,
-			type: DataType.STRING,
-			unique: true,
-		},
+module.exports = (sequelize: Sequelize) => {
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models: Model[]) {
+      // define association here
+    }
+  };
+  User.init({
     firstName: DataType.STRING,
     lastName: DataType.STRING,
+	email: DataType.STRING,
     github: DataType.STRING,
     linkedin: DataType.STRING,
     bio: DataType.STRING(500),
     twitterHandle: DataType.STRING,
-	  // attending: models.Events[]
-    // attending, followingUsers, followingTags, notifications, proper auth
-	});
+
+  }, {
+    sequelize,
+    modelName: 'User',
+  });
+  return User;
 };

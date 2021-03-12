@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.ts",
+    "start": "ts-node index.ts",
     "setup-db": "ts-node mysql-db/setup.ts",
     "build": "tsc --project ./"
   },

@@ -3,12 +3,14 @@ import { applyExtraSetup } from './extra-setup';
 
 // TODO: keep db connection URL as environment variable
 // const sequelize = new Sequelize(process.env.DB_CONNECTION_URL);
-const sequelize = new Sequelize({
+
+const sequelize = new Sequelize('mindful-coder-307303:us-west2:proevento', 'user1', 'team15', {
+	host: '34.94.31.54',
 	dialect: 'mysql',
-	storage: 'mysql-db/db.mysql',
 	logQueryParameters: true,
 	benchmark: true
 });
+  
 
 const modelDefiners = [
 	require('./models/user.model').default,

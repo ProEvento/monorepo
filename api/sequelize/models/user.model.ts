@@ -23,6 +23,7 @@ export default (sequelize: Sequelize) => {
     linkedin: DataType.STRING,
     bio: DataType.STRING(500),
     twitterHandle: DataType.STRING,
+	  // attending: models.Events[]
     // attending, followingUsers, followingTags, notifications, proper auth
 	});
 };

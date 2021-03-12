@@ -1,5 +1,6 @@
 import app from './express/app'
 import sequelize from './sequelize'
+
 const PORT = 8080
 
 async function assertDatabaseConnectionOk() {
@@ -17,7 +18,7 @@ async function assertDatabaseConnectionOk() {
 async function init() {
 	await assertDatabaseConnectionOk();
 
-	console.log(`Starting Sequelize + Express example on port ${PORT}...`);
+	console.log(`Starting Sequelize + Express on port ${PORT}...`);
 
 	app.listen(PORT, () => {
 		console.log(`Express server started on port ${PORT}`);

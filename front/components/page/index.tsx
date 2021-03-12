@@ -111,7 +111,7 @@ const Page = ({
       <Divider />
       <List>
         {user && Pages.map(({ name, url }, index) => (
-          <ListItem selected={name === activePage} component="a" href={url} button key={name}>
+          <ListItem selected={name.toLowerCase() === activePage.toLowerCase()} component="a" href={url} button key={name}>
             <ListItemText primary={name} />
           </ListItem>
         ))}

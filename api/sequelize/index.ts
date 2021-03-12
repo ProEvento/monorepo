@@ -1,8 +1,14 @@
 import { Sequelize } from 'sequelize-typescript';
 import { applyExtraSetup } from './extra-setup';
 
+require('dotenv').config({ path: '.env.local' })
+
 // TODO: keep db connection URL as environment variable
 // const sequelize = new Sequelize(process.env.DB_CONNECTION_URL);
+
+if (!process.env.DB_NAME || !process.env.DB_USERNAME || !process.env.DB_PASSWORD || !process.env.DB_HOST) {
+	throw new Error("Missing required DB env vars.")
+}
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
 	host: process.env.DB_HOST,

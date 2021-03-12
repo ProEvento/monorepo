@@ -8,11 +8,12 @@
 
 ### Backend
 1. Ask Max or Haeju for `.env.local` files
-    1a. Add them to `front/` and `api/`
-2. `yarn global add sequelize-cli`
-3. `sequelize-cli db:create` if you havent already run before
-4. `sequelize-cli db:migrate`
-5. `yarn start`
+2. Add them to `front/` and `api/`
+3. `yarn global add sequelize-cli`
+4. `sequelize-cli db:create`
+5. `sequelize-cli db:migrate` <-- run this every time you `git pull`
+6. `yarn` <-- run this every time you `git pull`
+7. `yarn start`
 
 To create a model:
 

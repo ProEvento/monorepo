@@ -1,8 +1,9 @@
 import Page from '@components/page'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { UserContext, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withUserProp } from '../lib/withUserProp';
 
-const Events = () => {
-  const { user, error, isLoading } = useUser();  
+const Events = ({ userContext }: { userContext: UserContext}) => {
+  const { user, error, isLoading } = userContext;  
 
   return (
     <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"}>
@@ -11,4 +12,4 @@ const Events = () => {
   )
 }
 
-export default withPageAuthRequired(Events)
+export default withPageAuthRequired(withUserProp(Events))

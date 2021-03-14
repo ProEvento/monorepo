@@ -1,4 +1,5 @@
 import { useState} from "react"
+import { UserContext } from "@auth0/nextjs-auth0"
 import Head from '@components/head'
 // import Header from '@components/header'
 import styles from './page.module.css'
@@ -18,7 +19,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useUser } from '@auth0/nextjs-auth0';
+
+import { withUserProp } from '../../lib/withUserProp';
 
 const drawerWidth = 240;
 
@@ -62,7 +64,8 @@ type Props = {
   description?: string,
   image?: string,
   activePage: string,
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  userContext: UserContext
 }
 
 const Pages = [
@@ -91,12 +94,13 @@ const Page = ({
   description,
   image,
   children,
-  activePage
+  activePage,
+  userContext
 }: Props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, error, isLoading } = useUser();  
+  const { user, error, isLoading } = userContext;
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -194,4 +198,4 @@ const Page = ({
 }
 
 
-export default Page
+export default withUserProp(Page)

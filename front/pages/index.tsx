@@ -1,8 +1,9 @@
 import Page from '@components/page'
-import { useUser } from '@auth0/nextjs-auth0';
+import { UserContext } from '@auth0/nextjs-auth0';
+import { withUserProp } from '../lib/withUserProp';
 
-const Home = () => {
-  const { user, error, isLoading } = useUser();  
+const Home = ({ userContext }: { userContext: UserContext}) => {
+  const { user, error, isLoading } = userContext;  
 
   return (
     <Page header={false} activePage={"Dashboard"} title={user ? `Welcome, ${user.name}!` : "Welcome!"}>
@@ -11,4 +12,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default withUserProp(Home)

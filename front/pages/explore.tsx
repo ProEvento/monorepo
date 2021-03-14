@@ -1,8 +1,9 @@
 import Page from '@components/page'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { UserContext, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withUserProp } from '../lib/withUserProp';
 
-const Explore = () => {
-  const { user, error, isLoading } = useUser();  
+const Explore = ({ userContext }: { userContext: UserContext }) => {
+  const { user, error, isLoading } = userContext;  
 
   return (
     <Page header={false} activePage={"Explore"} title={"Explore"}>
@@ -11,4 +12,4 @@ const Explore = () => {
   )
 }
 
-export default withPageAuthRequired(Explore)
+export default withPageAuthRequired(withUserProp(Explore))

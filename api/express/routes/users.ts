@@ -1,12 +1,34 @@
 import { Request, Response } from "express"
-import sequelize from '../../sequelize'
+import db from '../../sequelize'
 import { getIdParam } from '../helpers'
-
-const { models } = sequelize;
+import { UserType } from '../../types'
+const { models } = db.sequelize;
 
 async function getAll(req: Request, res: Response) {
 	const users = await models.User.findAll();
 	res.status(200).json(users);
+};
+
+async function signupUser(req: Request, res: Response) {
+	const user: UserType = req.body;
+	console.log(req.body)
+	if (!user.firstName || !user.lastName) {
+		return res.status(500).json({ msg: "Must provide a first and last name."}).end()
+	}
+
+	const count = await models.User.count({
+		where: {
+			firstName: user.firstName,
+			lastName: user.lastName
+		}
+	})
+
+	if (count !== 0) {
+		return res.status(500).json({ msg: "User already exists"}).end()
+	}
+
+	await models.User.create(req.body);
+	res.status(201).json({ msg: "success"})
 };
 
 async function getById(req: Request, res: Response) {
@@ -58,5 +80,6 @@ export default {
 	getById,
 	create,
 	update,
+	signupUser,
 	remove,
 };

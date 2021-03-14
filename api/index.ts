@@ -1,12 +1,12 @@
 import app from './express/app'
-import sequelize from './sequelize'
+import db from './sequelize'
 
 const PORT = 8080
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);
 	try {
-		await sequelize.authenticate();
+		await db.sequelize.authenticate();
 		console.log('Database connection OK!');
 	} catch (error) {
 		console.log('Unable to connect to the database:');

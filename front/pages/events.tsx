@@ -6,7 +6,7 @@ const Events = ({ userContext }: { userContext: UserContext}) => {
   const { user, error, isLoading } = userContext;  
 
   return (
-    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"}>
+    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
       
     </Page>
   )

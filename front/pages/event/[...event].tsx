@@ -8,7 +8,7 @@ const Event = () => {
   const { event } = router.query
   
   return (
-    <Page  header={false} activePage={"Event"} title={"Event"}>
+    <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
       <p>Event to lookup: {event}</p>
     </Page>
   )

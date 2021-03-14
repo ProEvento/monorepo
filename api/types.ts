@@ -1,4 +1,4 @@
-export type UserType {
+export type UserType = {
     // readonly id: string,
     firstName: string,
     lastName: string,

@@ -6,7 +6,7 @@ const Profile = ({ userContext }: { userContext: UserContext }) => {
   const { user, error, isLoading } = userContext;  
 
   return (
-    <Page header={false} activePage={"Profile"} title={user.name}>
+    <Page header={false} activePage={"Profile"} title={user.name} userContext={userContext}>
       
     </Page>
   )

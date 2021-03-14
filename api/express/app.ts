@@ -27,6 +27,12 @@ app.get('/', (req, res) => {
 	`);
 });
 
+// Custom API routes
+app.post(
+	`/api/users/signup`,
+	makeHandlerAwareOfAsyncErrors(routes.users.signupUser)
+)
+
 // Define REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
 	if (routeController.getAll) {
@@ -60,5 +66,6 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 		);
 	}
 }
+
 
 export default app

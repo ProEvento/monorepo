@@ -6,7 +6,7 @@ const Explore = ({ userContext }: { userContext: UserContext }) => {
   const { user, error, isLoading } = userContext;  
 
   return (
-    <Page header={false} activePage={"Explore"} title={"Explore"}>
+    <Page header={false} activePage={"Explore"} title={"Explore"} userContext={userContext}>
       
     </Page>
   )

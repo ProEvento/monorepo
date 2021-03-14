@@ -20,8 +20,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-import { withUserProp } from '../../lib/withUserProp';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -119,7 +117,8 @@ const Page = ({
             <ListItemText primary={name} />
           </ListItem>
         ))}
-        {!user && !error && !isLoading && <ListItem component="a" href="/api/auth/login" button>
+        {!user && !error && !isLoading && 
+          <ListItem component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
             <ListItemText primary={"Login"} />
           </ListItem>}
       </List>
@@ -198,4 +197,4 @@ const Page = ({
 }
 
 
-export default withUserProp(Page)
+export default Page

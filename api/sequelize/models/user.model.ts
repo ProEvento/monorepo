@@ -16,6 +16,7 @@ module.exports = (sequelize: Sequelize) => {
       User.hasMany(models.Notification);
       User.belongsToMany(models.Event, { through: 'UserEvents'});
       User.hasMany(models.Topic);
+      User.hasMany(models.Event);
     }
   };
   User.init({

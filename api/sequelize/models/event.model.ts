@@ -14,6 +14,7 @@ module.exports = (sequelize: Sequelize) => {
      */
     static associate(models: any) {
       Event.belongsToMany(models.User, { through: 'UserEvents'});
+      Event.belongsTo(models.User);
     }
   };
   Event.init({

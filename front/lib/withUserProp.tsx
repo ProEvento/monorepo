@@ -29,7 +29,6 @@ export const withUserProp = (Component: any) => {
   return (props: any) => {
     const user = useUser();
     const router = useRouter();
-    console.log(user)
     const { data, error } = useSWR(() => `/api/getByEmail?email=${user.user.email}`, fetcher, { refreshInterval: 15000 });
     const isLoading = !data && !error;
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {

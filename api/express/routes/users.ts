@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import db from '../../sequelize'
+import { Op } from "sequelize"
 import { getIdParam } from '../helpers'
 import { UserType } from '../../types'
 const { models } = db.sequelize;
@@ -18,8 +19,20 @@ async function signupUser(req: Request, res: Response) {
 
 	const count = await models.User.count({
 		where: {
-			firstName: user.firstName,
-			lastName: user.lastName
+			[Op.or]: [
+				{
+					email: 
+					{
+						[Op.eq]: user.email
+					}
+				}, 
+				{
+					username: 
+					{
+						[Op.eq]: user.username
+					}
+				}, 
+			]
 		}
 	})
 

@@ -14,12 +14,13 @@ module.exports = (sequelize: Sequelize) => {
      */
     static associate(models: Model[]) {
       // define association here
+      User.hasMany(Notification)
     }
   };
   User.init({
     firstName: DataType.STRING,
     lastName: DataType.STRING,
-    email: DataType.STRING,
+	  email: DataType.STRING,
     github: DataType.STRING,
     linkedin: DataType.STRING,
     bio: DataType.STRING(500),

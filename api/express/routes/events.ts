@@ -5,13 +5,13 @@ import { EventType } from '../../types'
 const { models } = db.sequelize;
 
 async function getAll(req: Request, res: Response) {
-	const events = await models.Event.findAll();
+	const events = await models.Event.findAll({include: models.User});
 	res.status(200).json(events);
 };
 
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
-	const events = await models.Event.findByPk(id);
+	const events = await models.Event.findByPk(id, {include: models.User});
 	if (events) {
 		res.status(200).json(events);
 	} else {

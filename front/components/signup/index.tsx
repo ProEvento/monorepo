@@ -10,7 +10,7 @@ type FormEntry = {
   type: "text" | "multitext",
   rows?: number,
   set: Function,
-  value: string
+  value: string,
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,27 +45,32 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
   const [linkedin, setLinkedin] = useState("")
   const [github, setGithub] = useState("")
   const [twitter, setTwitter] = useState("")
+  const [username, setUsername] = useState("")
   const [bio, setBio] = useState("")
-  const [response, setResponse] = useState({})
+  const [response, setResponse] = useState("")
 
   const classes = useStyles();
   const fields: FormEntry[] = [
     { name: "First Name", key: "firstName", type: "text", set: setFirstName, value: firstName},
     { name: "Last Name", key: "lastName", type: "text", set: setLastName, value: lastName },
+    { name: "Username", key: "username", type: "text", set: setUsername, value: username},
     { name: "LinkedIn URL", key: "linkedin", type: "text", set: setLinkedin, value: linkedin},
     { name: "GitHub Username", key: "github",type: "text", set: setGithub, value: github},
     { name: "Twitter Username", key: "twitter", type: "text", set: setTwitter, value: twitter},
     { name: "Bio (500 character max)", key: "bio", type: "multitext", rows: 5, set: setBio, value: bio },
   ];
 
-  const submit = () => {
+  const submit = (e: MouseEventHandler<HTMLAnchorElement>) => {
+    e.preventDefault();
     const toSend = {
       lastName,
       firstName,
       linkedin,
       github,
-      twitter,
-      bio
+      twitterHandle: twitter,
+      bio,
+      email: user.email,
+      username: username || user.username || ""
     }
 
     const requestOptions = {
@@ -74,37 +79,40 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
       body: JSON.stringify(toSend)
     };
 
+    let resp = null;
     fetch('/api/userSignup', requestOptions)
       .then(response => response.json())
-      .then(data => setResponse(data.msg));
-
-
-    if (response === "success") {
-      router.push("/")
-      return
-    } else {
-      
-    }
+      .then(data => { 
+        setResponse(data.msg)
+      });
   }
+
+  if (response.toLowerCase() === "success") {
+    router.push("/")
+    return <></>
+  }
+
   return (
     <form className={classes.root}>
         <div className={classes.row}>
           <Typography variant="h6">👋, {user.name}! Now that you've signed up, please provide us with some more information so we can complete your onboarding.</Typography>
-        </div>
+        </div>  
+        {response && response !== "success" && <Typography variant="h6">‼️{response}‼️</Typography>}
         <div className={classes.row}>
           <Typography variant="subtitle2">You can change these at any time by accessing the "Settings" button at the bottom of the sidebar!</Typography>
         </div>
         <div className={classes.row}>
           <ControlledTextField entry={fields[0]} />
           <ControlledTextField entry={fields[1]} />
-        </div>
-        <div className={classes.row}>
           <ControlledTextField entry={fields[2]} />
-          <ControlledTextField entry={fields[3]} />
         </div>
         <div className={classes.row}>
+          <ControlledTextField entry={fields[3]} />
           <ControlledTextField entry={fields[4]} />
+        </div>
+        <div className={classes.row}>
           <ControlledTextField entry={fields[5]} />
+          <ControlledTextField entry={fields[6]} />
         </div>
 
         <Button onClick={submit} size="large" variant="contained" color="primary">Save & Go to ProEvento</Button>
@@ -116,7 +124,6 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
 
 
 const ControlledTextField = ({entry}: { entry: FormEntry }) => {
-
   return <TextField onChange={(e) => { entry.set(e.target.value) }} style={{margin: 'var(--gap-double)'}} variant={"outlined"} id={entry.key} label={entry.name} value={entry.value} multiline={entry.type === "multitext"} rows={entry.rows} />
 }
 

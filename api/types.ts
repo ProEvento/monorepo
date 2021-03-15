@@ -7,6 +7,7 @@ export type UserType = {
     linkedin: string,
     bio: string,
     twitterHandle: string,
+    username: string
 }
 
 export type EventType = {

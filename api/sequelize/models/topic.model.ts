@@ -13,7 +13,7 @@ module.exports = (sequelize: Sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models: any) {
-      // define association here
+      Topic.belongsTo(models.User);
     }
   };
   Topic.init({

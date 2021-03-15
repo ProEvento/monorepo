@@ -9,3 +9,14 @@ export type UserType = {
     twitterHandle: string,
     username: string
 }
+
+export type EventType = {
+    private: boolean,
+    invitedUsers: string,
+    attendingUsers: string,
+    time: string,
+    description: string,
+    topics: string,
+    meetingURL: string,
+    comments: string
+}

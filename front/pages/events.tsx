@@ -1,8 +1,9 @@
 import Page from '@components/page'
-import { UserContext, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../lib/withUserProp';
+import { CustomUserContext } from '../types';
 
-const Events = ({ userContext }: { userContext: UserContext}) => {
+const Events = ({ userContext }: { userContext: CustomUserContext}) => {
   const { user, error, isLoading } = userContext;  
 
   return (

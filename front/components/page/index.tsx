@@ -19,6 +19,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { CustomUserContext } from "../../types";
+
 
 const drawerWidth = 240;
 
@@ -63,7 +65,7 @@ type Props = {
   image?: string,
   activePage: string,
   children?: React.ReactNode,
-  userContext: UserContext
+  userContext: UserContext | CustomUserContext
 }
 
 const Pages = [

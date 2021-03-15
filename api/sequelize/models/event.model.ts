@@ -13,7 +13,7 @@ module.exports = (sequelize: Sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models: any) {
-      Event.belongsToMany(models.User, { through: 'UserEvent'});
+      Event.belongsToMany(models.User, { through: 'UserEvents'});
     }
   };
   Event.init({

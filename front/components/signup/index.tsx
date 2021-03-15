@@ -10,7 +10,7 @@ type FormEntry = {
   type: "text" | "multitext",
   rows?: number,
   set: Function,
-  value: string
+  value: string,
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,7 +46,7 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
   const [github, setGithub] = useState("")
   const [twitter, setTwitter] = useState("")
   const [bio, setBio] = useState("")
-  const [response, setResponse] = useState({})
+  const [response, setResponse] = useState("")
 
   const classes = useStyles();
   const fields: FormEntry[] = [
@@ -58,14 +58,17 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
     { name: "Bio (500 character max)", key: "bio", type: "multitext", rows: 5, set: setBio, value: bio },
   ];
 
-  const submit = () => {
+  const submit = (e: MouseEvent) => {
+    e.preventDefault();
     const toSend = {
       lastName,
       firstName,
       linkedin,
       github,
-      twitter,
-      bio
+      twitterHandle: twitter,
+      bio,
+      email: user.email,
+      username: user.username || ""
     }
 
     const requestOptions = {
@@ -74,23 +77,25 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
       body: JSON.stringify(toSend)
     };
 
+    let resp = null;
     fetch('/api/userSignup', requestOptions)
       .then(response => response.json())
-      .then(data => setResponse(data.msg));
-
-
-    if (response === "success") {
-      router.push("/")
-      return
-    } else {
-      
-    }
+      .then(data => { 
+        setResponse(data.msg)
+      });
   }
+
+  if (response.toLowerCase() === "success") {
+    router.push("/")
+    return <></>
+  }
+
   return (
     <form className={classes.root}>
         <div className={classes.row}>
           <Typography variant="h6">👋, {user.name}! Now that you've signed up, please provide us with some more information so we can complete your onboarding.</Typography>
-        </div>
+        </div>  
+        {response && response !== "success" && <Typography variant="h6">‼️{response}‼️</Typography>}
         <div className={classes.row}>
           <Typography variant="subtitle2">You can change these at any time by accessing the "Settings" button at the bottom of the sidebar!</Typography>
         </div>
@@ -116,7 +121,6 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
 
 
 const ControlledTextField = ({entry}: { entry: FormEntry }) => {
-
   return <TextField onChange={(e) => { entry.set(e.target.value) }} style={{margin: 'var(--gap-double)'}} variant={"outlined"} id={entry.key} label={entry.name} value={entry.value} multiline={entry.type === "multitext"} rows={entry.rows} />
 }
 

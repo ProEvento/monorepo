@@ -14,6 +14,7 @@ module.exports = (sequelize: Sequelize) => {
      */
     static associate(models: Model[]) {
       // define association here
+      User.hasMany(Notification)
     }
   };
   User.init({

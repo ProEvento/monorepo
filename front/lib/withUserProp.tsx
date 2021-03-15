@@ -11,7 +11,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const fetcher = async url => {
   const res = await fetch(url)
 
-
   if (!res.ok) {
     const error = new Error('An error occurred while fetching the data.')
     //@ts-expect-error

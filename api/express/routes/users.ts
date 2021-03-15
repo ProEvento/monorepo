@@ -73,6 +73,23 @@ async function getById(req: Request, res: Response) {
 	}
 };
 
+async function getByUsername(req: Request, res: Response) {
+	const { query } = req;
+	console.log(query)
+	
+	if (!query.username) {
+		res.status(500).json({ msg: "Username in query required"})
+		return;
+	}
+	
+	const user = await models.User.findOne({ where: { username: query.username }});
+	
+	if (user) {
+		res.status(200).json(user);
+	} else {
+		res.status(404).json({ msg: "User not found."});
+	}
+};
 async function create(req: Request, res: Response) {
 	if (req.body.id) {
 		res.status(400).send(`Bad request: ID should not be provided, since it is determined automatically by the database.`)
@@ -110,6 +127,7 @@ async function remove(req: Request, res: Response) {
 export default {
 	getAll,
 	getById,
+	getByUsername,
 	create,
 	update,
 	signupUser,

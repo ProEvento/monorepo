@@ -10,7 +10,7 @@
 1. Ask Max or Haeju for `.env.local` files
 2. Add them to `front/` and `api/`
 3. In `api/`, `yarn`
-4. In `api/` `yarn add sequelize-cl`
+4. In `api/` `yarn add sequelize-cli`
 5. In `api/`, `sequelize-cli db:create`
 6. In `api/`, `sequelize-cli db:migrate` <-- run this every time you `git pull`
 7. `yarn` <-- run this every time you `git pull`

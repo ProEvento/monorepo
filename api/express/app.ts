@@ -39,6 +39,12 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.users.getByEmail)
 )
 
+app.get(
+	`/api/users/getByUsername`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
+
 // Define REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {
 	if (routeController.getAll) {
@@ -53,6 +59,7 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.getById)
 		);
 	}
+
 	if (routeController.create) {
 		app.post(
 			`/api/${routeName}`,

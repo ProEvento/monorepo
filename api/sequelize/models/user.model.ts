@@ -12,9 +12,10 @@ module.exports = (sequelize: Sequelize) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models: Model[]) {
-      // define association here
-      User.hasMany(Notification)
+    static associate(models: any) {
+      User.hasMany(models.Notification);
+      User.belongsToMany(models.Event, { through: 'UserEvent'});
+      User.hasMany(models.Topic);
     }
   };
   User.init({
@@ -25,6 +26,7 @@ module.exports = (sequelize: Sequelize) => {
     linkedin: DataType.STRING,
     bio: DataType.STRING(500),
     twitterHandle: DataType.STRING,
+    username: DataType.STRING
 
   }, {
     sequelize,

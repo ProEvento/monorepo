@@ -5,22 +5,22 @@ import {
   Sequelize
 } from 'sequelize-typescript'
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize: Sequelize) => {
   class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate(models: any) {
       // define association here
     }
   };
   Comment.init({
-    targetID: DataTypes.INTEGER,
-    text: DataTypes.TEXT,
-    time: DataTypes.DATE,
-    isEvent: DataTypes.BOOLEAN
+    targetID: DataType.INTEGER,
+    text: DataType.TEXT,
+    time: DataType.DATE,
+    isEvent: DataType.BOOLEAN
   }, {
     sequelize,
     modelName: 'Comment',

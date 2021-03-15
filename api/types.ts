@@ -8,3 +8,14 @@ export type UserType = {
     bio: string,
     twitterHandle: string,
 }
+
+export type EventType = {
+    private: boolean,
+    invitedUsers: string,
+    attendingUsers: string,
+    time: string,
+    description: string,
+    topics: string,
+    meetingURL: string,
+    comments: string
+}

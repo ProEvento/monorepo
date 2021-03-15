@@ -7,7 +7,6 @@ const Profile = ({ userContext }: { userContext: UserContext }) => {
 
   return (
     <Page header={false} activePage={"Profile"} title={user.name} userContext={userContext}>
-      
     </Page>
   )
 }

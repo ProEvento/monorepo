@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 
 const routes = {
 	users: require('./routes/users').default,
+	events: require('./routes/events').default,
 	// items: require('./routes/<item>'),
 };
 
@@ -30,7 +31,7 @@ app.get('/', (req, res) => {
 // Custom API routes
 app.post(
 	`/api/users/signup`,
-	makeHandlerAwareOfAsyncErrors(routes.users.signupUser)
+	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
 )
 
 app.get(

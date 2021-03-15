@@ -28,7 +28,7 @@ export const withUserProp = (Component: any) => {
   return (props: any) => {
     const user = useUser();
     const router = useRouter();
-    const { data, error } = useSWR(() => `/api/getByEmail?email=${user.user.email}`, fetcher, { refreshInterval: 15000 });
+    const { data, error } = useSWR(() => `/api/getUserByEmail?email=${user.user.email}`, fetcher, { refreshInterval: 15000 });
     const isLoading = !data && !error;
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")

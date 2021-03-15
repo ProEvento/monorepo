@@ -17,7 +17,7 @@
     "express-validator": "^6.10.0",
     "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.5.1",
+    "sequelize": "^6.5.0",
     "sequelize-cli": "^6.2.0",
     "sequelize-typescript": "^2.1.0"
   },

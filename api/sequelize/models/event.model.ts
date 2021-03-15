@@ -5,26 +5,26 @@ import {
   Sequelize
 } from 'sequelize-typescript'
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize: Sequelize) => {
   class Event extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate(models: any) {
+      Event.belongsToMany(models.User, { through: 'UserEvent'});
     }
   };
   Event.init({
-    private: DataTypes.BOOLEAN,
-    invitedUsers: DataTypes.STRING,
-    attendingUsers: DataTypes.STRING,
-    time: DataTypes.DATE,
-    description: DataTypes.TEXT,
-    topics: DataTypes.STRING,
-    meetingURL: DataTypes.STRING,
-    comments: DataTypes.STRING
+    private: DataType.BOOLEAN,
+    invitedUsers: DataType.STRING,
+    attendingUsers: DataType.STRING,
+    time: DataType.DATE,
+    description: DataType.TEXT,
+    topics: DataType.STRING,
+    meetingURL: DataType.STRING,
+    comments: DataType.STRING
   }, {
     sequelize,
     modelName: 'Event',

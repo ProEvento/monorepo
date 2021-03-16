@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Participant from "./participant";
+import styles from "./room.module.css";
 
 const Room = ({ roomName, room, handleLogout }) => {
   const [participants, setParticipants] = useState([]);
@@ -29,10 +30,10 @@ const Room = ({ roomName, room, handleLogout }) => {
   ));
 
   return (
-    <div className="room">
+    <div className={styles.room}>
       <h2>Room: {roomName}</h2>
-      <button onClick={handleLogout}>Log out</button>
-      <div className="local-participant">
+      <button onClick={handleLogout}>Return to app</button>
+      <div className={styles['local-participant']}>
         {room ? (
           <Participant
             key={room.localParticipant.sid}
@@ -43,7 +44,7 @@ const Room = ({ roomName, room, handleLogout }) => {
         )}
       </div>
       <h3>Remote Participants</h3>
-      <div className="remote-participants">{remoteParticipants}</div>
+      <div className={styles['remote-participants']}>{remoteParticipants}</div>
     </div>
   );
 };

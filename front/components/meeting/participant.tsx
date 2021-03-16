@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import styles from './participant.module.css'
 
 const Participant = ({ participant }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
-
+  console.log(videoTracks, audioTracks)
   const videoRef = useRef();
   const audioRef = useRef();
 
@@ -63,10 +64,10 @@ const Participant = ({ participant }) => {
   }, [audioTracks]);
 
   return (
-    <div className="participant">
+    <div className={styles.participant}>
       <h3>{participant.identity}</h3>
       <video ref={videoRef} autoPlay={true} />
-      <audio ref={audioRef} autoPlay={true} muted={true} />
+      <audio ref={audioRef} autoPlay={true} muted={false} />
     </div>
   );
 };

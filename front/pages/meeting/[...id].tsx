@@ -59,6 +59,7 @@ const User = ({userContext }: { userContext: CustomUserContext}) => {
           }
           return null;
         });
+        router.push("/")
       }, []);
       
 

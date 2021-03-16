@@ -11,6 +11,7 @@ type FormEntry = {
   rows?: number,
   set: Function,
   value: string,
+  required?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -51,16 +52,16 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
 
   const classes = useStyles();
   const fields: FormEntry[] = [
-    { name: "First Name", key: "firstName", type: "text", set: setFirstName, value: firstName},
-    { name: "Last Name", key: "lastName", type: "text", set: setLastName, value: lastName },
-    { name: "Username", key: "username", type: "text", set: setUsername, value: username},
+    { name: "First Name", key: "firstName", type: "text", set: setFirstName, value: firstName, required: true },
+    { name: "Last Name", key: "lastName", type: "text", set: setLastName, value: lastName, required: true },
+    { name: "Username", key: "username", type: "text", set: setUsername, value: username, required: true },
     { name: "LinkedIn URL", key: "linkedin", type: "text", set: setLinkedin, value: linkedin},
     { name: "GitHub Username", key: "github",type: "text", set: setGithub, value: github},
     { name: "Twitter Username", key: "twitter", type: "text", set: setTwitter, value: twitter},
     { name: "Bio (500 character max)", key: "bio", type: "multitext", rows: 5, set: setBio, value: bio },
   ];
 
-  const submit = (e: MouseEventHandler<HTMLAnchorElement>) => {
+  const submit = (e: any) => {
     e.preventDefault();
     const toSend = {
       lastName,
@@ -124,7 +125,7 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
 
 
 const ControlledTextField = ({entry}: { entry: FormEntry }) => {
-  return <TextField onChange={(e) => { entry.set(e.target.value) }} style={{margin: 'var(--gap-double)'}} variant={"outlined"} id={entry.key} label={entry.name} value={entry.value} multiline={entry.type === "multitext"} rows={entry.rows} />
+  return <TextField onChange={(e) => { entry.set(e.target.value) }} required={entry.required} style={{margin: 'var(--gap-double)'}} variant={"outlined"} id={entry.key} label={entry.name} value={entry.value} multiline={entry.type === "multitext"} rows={entry.rows} />
 }
 
 export default Signup

@@ -68,25 +68,6 @@ type Props = {
   userContext: UserContext | CustomUserContext
 }
 
-const Pages = [
-  {
-    name: "Dashboard",
-    url: "/"
-  },
-  {
-    name: "Explore",
-    url: "/explore"
-  },
-  {
-    name: "Profile",
-    url: "/profile"
-  },
-  {
-    name: "My Events",
-    url: "/events"
-  }
-]
-
 const Page = ({
   header = true,
   footer = true,
@@ -101,6 +82,26 @@ const Page = ({
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, error, isLoading } = userContext;
+
+  const Pages = [
+    {
+      name: "Dashboard",
+      url: "/"
+    },
+    {
+      name: "Explore",
+      url: "/explore"
+    },
+    {
+      name: "Profile",
+      url: `/user/${user.username}`
+    },
+    {
+      name: "My Events",
+      url: "/events"
+    }
+  ]
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

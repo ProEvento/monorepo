@@ -23,12 +23,28 @@ const fetcher = async url => {
   return res.json()
 }
 
+const textFetcher = async url => {
+  const res = await fetch(url)
+
+  if (!res.ok) {
+    const error = new Error('An error occurred while fetching the data.')
+    //@ts-expect-error
+    error.info = await res.json()
+    //@ts-expect-error
+    error.status = res.status
+    throw error
+  }
+
+  return res.text()
+}
+
+
 
 export const withUserProp = (Component: any) => {
   return (props: any) => {
     const user = useUser();
     const router = useRouter();
-    const { data, error } = useSWR(() => `/api/getUserByEmail?email=${user.user.email}`, fetcher, { refreshInterval: 15000 });
+    const { data, error } = useSWR(() => `/api/getUserByEmail?email=${user.user.email}`, fetcher, { refreshInterval: 60000 });
     const isLoading = !data && !error;
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")

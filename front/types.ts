@@ -27,6 +27,7 @@ export type CustomUserContext = {
         linkedin: string,
         bio: string,
         twitterHandle: string,
+        username: string
     },
     error?: Error,
     isLoading: boolean,

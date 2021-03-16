@@ -17,7 +17,8 @@
     "next": "10.0.7",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "swr": "^0.5.3"
+    "swr": "^0.5.3",
+    "twilio-video": "^2.13.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",

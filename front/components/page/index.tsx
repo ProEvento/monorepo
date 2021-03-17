@@ -20,9 +20,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { CustomUserContext } from "../../types";
+import Image from 'next/image'
 
-
-const drawerWidth = 240;
+const drawerWidth = 325;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
+    background: theme.palette.background.default,
+    color: 'var(--bg)'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -47,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
   },
@@ -55,6 +56,26 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  toolbar: {
+    height: 140,
+    borderTop: 'none',
+    paddingLeft: 48,
+    paddingTop: 48
+  },
+  list: {
+    width: drawerWidth,
+  },
+  listItem: {
+    "&:hover": {
+      backgroundColor: "var(--button)",
+      color: "#535353"
+    },
+    width: `calc(${drawerWidth}px - ${drawerWidth/4}px)`,
+    margin: 30,
+    borderRadius: 16,
+    height: 60,
+    overflowX: 'hidden'
+  }
 }));
 
 type Props = {
@@ -109,26 +130,22 @@ const Page = ({
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-        <Typography style={{display: "flex", justifyContent: "center"}} variant="h6" >
-              ProEvento
-        </Typography>
-        </div>
-      <Divider />
-      <List>
+            <Image width={87} height={78} src="/logo.png" />
+      </div>
+      <List className={classes.list}>
         {user && Pages.map(({ name, url }, index) => (
-          <ListItem selected={name.toLowerCase() === activePage.toLowerCase()} component="a" href={url} button key={name}>
-            <ListItemText primary={name} />
+          <ListItem className={classes.listItem} selected={name.toLowerCase() === activePage.toLowerCase()} component="a" href={url} button key={name}>
+            <ListItemText  primaryTypographyProps={{variant: "h5"}} primary={name} />
           </ListItem>
         ))}
         {!user && !error && !isLoading && 
-          <ListItem component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
-            <ListItemText primary={"Login"} />
+          <ListItem className={classes.listItem} component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
+            <ListItemText  primaryTypographyProps={{variant: "h5"}} primary={"Login"} />
           </ListItem>}
       </List>
-      <Divider />
       <List>
-          {user && <ListItem component="a" href="/api/auth/logout" button>
-            <ListItemText primary={"Logout"} />
+          {user && <ListItem className={classes.listItem}  component="a" href="/api/auth/logout" button>
+            <ListItemText primaryTypographyProps={{variant: "h5"}} primary={"Logout"} />
           </ListItem>}
       </List>
     </div>

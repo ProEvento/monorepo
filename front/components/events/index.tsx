@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const Events = ({ user }) => {
     const styles = useStyles()
 
-    const openCreateEvent = ({ e: MouseEvent) => {
+    const openCreateEvent = ((e) => {
 
-    }
+    })
 
     return (
         <Grid

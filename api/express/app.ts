@@ -101,6 +101,7 @@ for (const [routeName, routeController] of Object.entries(routes)) {
 			makeHandlerAwareOfAsyncErrors(routeController.create)
 		);
 	}
+
 	if (routeController.update) {
 		app.put(
 			`/api/${routeName}/:id`,

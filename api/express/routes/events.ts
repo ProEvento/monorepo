@@ -12,6 +12,7 @@ async function getAll(req: Request, res: Response) {
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
 	const events = await models.Event.findByPk(id, {include: models.User});
+
 	if (events) {
 		res.status(200).json(events);
 	} else {

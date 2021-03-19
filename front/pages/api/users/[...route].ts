@@ -1,4 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
+import getByUsername from '../getByUsername';
 
 
 export default async (request: VercelRequest, response: VercelResponse) => {

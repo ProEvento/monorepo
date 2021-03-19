@@ -39,15 +39,12 @@ async function signupUser(req: Request, res: Response) {
 	if (count !== 0) {
 		return res.status(500).json({ msg: "User already exists"}).end()
 	}
-
 	await models.User.create(req.body);
 	res.status(201).json({ msg: "success"})
 };
 
 async function getByEmail(req: Request, res: Response) {
 	const { query } = req;
-
-	console.log(query)
 
 	if (!query.email) {
 		res.status(500).json({ msg: "Email in query required"})

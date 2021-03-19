@@ -10,8 +10,14 @@ import { UserType } from '../../../api/types';
 import makeServerCall from '../../lib/makeServerCall';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const data = await makeServerCall({ apiCall: "getByUsername", method: "POST", 
-    queryParameters: { username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user } })
+
+  // GET localhost:8080/api/users/getByUsername?username=username 
+ 
+  const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
+    queryParameters: { 
+      username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
+    },
+  })
 
   return { 
     props: {

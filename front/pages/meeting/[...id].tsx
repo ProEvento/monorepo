@@ -90,7 +90,7 @@ const User = ({userContext }: { userContext: CustomUserContext}) => {
     } else if (token && connecting) {
         return <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (token && !connecting && room) {
-        render = <Room roomName={roomName} room={room} handleLogout={handleLogout} />
+        render =  <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}><Room roomName={roomName} room={room} handleLogout={handleLogout} /></Page>
     } else {
         render = (
             <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>

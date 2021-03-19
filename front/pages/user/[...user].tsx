@@ -7,16 +7,16 @@ import { CustomUserContext } from '../../types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
 import { UserType } from '../../../api/types';
-
+import makeServerCall from '../../lib/makeServerCall';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`http://localhost:3000/api/getByUsername?username=${context.params.user}`,{method : "GET"});
-  const data = await res.json()
+  const data = await makeServerCall({ apiCall: "getByUsername", method: "POST", 
+    queryParameters: { username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user } })
 
   return { 
     props: {
       user : data
-     } 
+     }
   }
 }
 const User = ({user, userContext }: { userContext: CustomUserContext, user: UserType }) => {

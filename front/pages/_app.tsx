@@ -16,6 +16,13 @@ export default function App({ Component, pageProps }: AppProps): React.ReactElem
   }, []);
 
   const theme = createMuiTheme({
+    typography: {
+      button: {
+        textTransform: 'none',
+        background: 'var(--bg)',
+        color: 'var(--fg)'
+      }
+    },
     overrides: {
       MuiListItem: {
         root: {
@@ -38,10 +45,11 @@ export default function App({ Component, pageProps }: AppProps): React.ReactElem
     },
   });
   return (
-    <UserProvider user={user}>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </UserProvider>
+    <ThemeProvider theme={theme}>
+      <UserProvider user={user}>
+          <Component {...pageProps} />
+      </UserProvider>
+    </ThemeProvider>
+
   );
 }

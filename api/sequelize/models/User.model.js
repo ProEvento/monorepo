@@ -47,13 +47,14 @@ User.associate = function(models) {
    User.hasMany(models.Event, {
       as: 'hosting',
       foreignKey: 'User_id',
-      target: 'id'
+      target: 'id',
+      constraints: false
    });
 
    User.belongsToMany(models.Event, {
       as: 'attending',
       target: 'id',
-      through: 'AttendingTable'
+      through: 'AttendingTable',
    });
 
    User.hasMany(models.Comment, {
@@ -95,8 +96,6 @@ User.associate = function(models) {
       target: 'id',
       through: 'FollowersTable'
    });
-
-
 }
 
 return User;

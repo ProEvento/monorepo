@@ -48,7 +48,8 @@ Event.associate = function(models) {
       as: 'host',
       foreignKey: 'User_id',
       target: 'id',
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      constraints: false
    });
 
    Event.belongsToMany(models.User, {

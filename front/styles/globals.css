@@ -22,25 +22,21 @@
   --transition-slow: 0.3s ease-in-out;
 
   /* Dark Mode Colors */
-  --bg: #1D2C3F;
-  --fg: #fafbfc;
-  --widget-bg: #2D4158;
-  --lighest-gray: #999;
-  --lighter-gray: #444;
-  --light-gray: #222;
-  --gray: #1a1a1a;
-  --header-bg: rgba(18,18,18,0.5);
-  --gray-alpha: rgba(255, 255, 255, 0.5);
-  --selection: rgba(255, 255, 255, 0.99);
-  --link: #4D9EFF;
-  /* Syntax Highlighting */
-  --token: #999;
-  --comment: #999;
-  --keyword: #fff;
-  --name: #fff;
-  --highlight: #2e2e2e;
+  --bg: #fff;
+  --fg: #000;
+  --gray: #888;
+  --light-gray: #dedede;
+  --lighter-gray: #f5f5f5;
+  --lightest-gray: #fafafa;
+  --article-color: #212121;
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --gray-alpha: rgba(19, 20, 21, 0.5);
+  --selection: rgba(0, 0, 0, 0.99);
 
+  --link: #4D9EFF;
   --button: #B2C3FF;
+  --button2: var(--link);
+
 }
 
 * {

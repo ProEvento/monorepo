@@ -6,7 +6,7 @@ export type UserType = {
     github: string,
     linkedin: string,
     bio: string,
-    twitterHandle: string,
+    twitter: string,
     username: string
 }
 

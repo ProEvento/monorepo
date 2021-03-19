@@ -18,16 +18,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
   
 
-const modelDefiners = [
-	require('./models/user.model'),
-	// require('./models/<model>'),
-];
-
-// Define all models
-for (const modelDefiner of modelDefiners) {
-	modelDefiner(sequelize);
-}
-
 let db: { sequelize: Sequelize, Sequelize: Sequelize, [name:string] : any } = {
 	sequelize: sequelize,
 	Sequelize: sequelize

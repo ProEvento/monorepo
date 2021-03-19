@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: drawerWidth,
     },
     background: theme.palette.background.default,
-    color: 'var(--bg)'
+    color: 'var(--fg)'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -160,22 +160,21 @@ const Page = ({
         image={image}
       />
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            {title}
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Hidden smUp implementation="css">
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </Hidden>
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -207,7 +206,6 @@ const Page = ({
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
         {isLoading && <div>Loading</div>}
         {error && <div>Error</div>}
         {!error && !isLoading && children}

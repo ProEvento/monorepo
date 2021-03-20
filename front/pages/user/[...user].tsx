@@ -21,18 +21,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return { 
     props: {
-      user : data
+      targetUser : data
      }
   }
 }
-const User = ({user, userContext }: { userContext: CustomUserContext, user: UserType }) => {
-
-  return (
-    <Page header={false} activePage={"User Profile"} title={user.firstName} userContext={userContext}>
-      <Avatar alt={user.firstName} src=" ">
+const User = ({targetUser, userContext }: { userContext: CustomUserContext, targetUser: UserType }) => {
+  const { user: contextUser, error, isLoading } = userContext;
+  console.log(targetUser)
+   return (
+    <Page header={false} activePage={"User Profile"} title={targetUser.firstName} userContext={userContext}>
+      <Avatar alt={targetUser.firstName} src={targetUser.picture}>
         
       </Avatar>
-      <h1>{user.firstName} {user.lastName}</h1>
+      <h1>{targetUser.firstName} {targetUser.lastName}</h1>
         <Chip color="primary" label="Following Users"/>
         <Chip color="primary" label="Following Topics"/>
       <Divider/>

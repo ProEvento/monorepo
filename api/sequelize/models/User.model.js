@@ -35,6 +35,9 @@ const User = sequelize.define(
    bio: {
       type: DataTypes.STRING
    },
+   picture: {
+      type: DataTypes.STRING
+   }
 }, { 
   timestamps: false,
   paranoid: true,

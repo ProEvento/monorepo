@@ -10,6 +10,9 @@ import Avatar from '@material-ui/core/Avatar';
 import EventIcon from '@material-ui/icons/Event';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { withUserProp } from '../lib/withUserProp';
+import { CustomUserContext } from '../types';
+import EventPage from '@components/events';
 
 /*
 * useStyles function and Event component adapted from Folder List, Align List Items: https://material-ui.com/components/lists/
@@ -28,9 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Events = () => {
+const Events = ({ userContext }: { userContext: CustomUserContext}) => {
+  const { user, error, isLoading } = userContext;  
   const classes = useStyles();
-  const { user, error, isLoading } = useUser();
   const fakeEvents = [
     {
       title: "Science Class",
@@ -58,8 +61,9 @@ const Events = () => {
     );
   } 
   return (
-    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"}>
-      <List className={classes.root}>
+    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
+        <EventPage user={userContext.user} />
+        <List className={classes.root}>
         {events}
       </List>
     </Page>
@@ -95,4 +99,4 @@ const Event = ({classes, title, dateTime, host}) => {
   )
 }
 
-export default withPageAuthRequired(Events)
+export default withPageAuthRequired(withUserProp(Events))

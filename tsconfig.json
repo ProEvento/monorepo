@@ -4,7 +4,7 @@
         "module": "commonjs",
         "target": "es6",
         "esModuleInterop": true,
-        "strict": true,
+        "strict": false,
         "experimentalDecorators": true, // necessary for sequelize-typescript https://www.npmjs.com/package/sequelize-typescript
         "emitDecoratorMetadata": true, // necessary for sequelize-typescript
         "strictPropertyInitialization": false, // TODO: enable this

@@ -3,7 +3,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node'
 
 
 export default async (request: VercelRequest, response: VercelResponse) => {
-    const { method, queryParameters, bodyParameters } = request.body;
+   const { method, queryParameters, bodyParameters } = JSON.parse(request.body);
 
     // auto populated by next
     const { route } = request.query;

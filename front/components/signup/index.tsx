@@ -71,7 +71,8 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
       twitterHandle: twitter,
       bio,
       email: user.email,
-      username: username || user.username || ""
+      username: username || user.username || "",
+      picture: user.picture || ""
     }
 
     const requestOptions = {

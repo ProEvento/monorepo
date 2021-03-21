@@ -4,7 +4,6 @@ import styles from './participant.module.css'
 const Participant = ({ participant }) => {
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
-  console.log(videoTracks, audioTracks)
   const videoRef = useRef();
   const audioRef = useRef();
 

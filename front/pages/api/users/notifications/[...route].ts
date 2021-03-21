@@ -1,13 +1,12 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 
-
 export default async (request: VercelRequest, response: VercelResponse) => {
     const { method, queryParameters, bodyParameters } = JSON.parse(request.body);
 
     // auto populated by next
     const { route } = request.query;
 
-    const apiURL = new URL(`http://localhost:8080/api/users/${route}`)
+    const apiURL = new URL(`http://localhost:8080/api/users/notifications/${route}`)
     apiURL.search = new URLSearchParams(queryParameters).toString(); 
     console.log(apiURL.toString())
     const res = await fetch(apiURL.toString(), {
@@ -15,7 +14,6 @@ export default async (request: VercelRequest, response: VercelResponse) => {
         body: JSON.stringify(bodyParameters)
     })
 
-    
   const data = await res.json();
   response.status(res.status).send(data);
 }

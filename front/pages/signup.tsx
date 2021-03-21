@@ -4,7 +4,6 @@ import SignupComponent from '@components/signup'
 
 const Signup = () => {
   const userContext = useUser();  
-  console.log(userContext)
   return (
     <Page header={false} activePage={"Login"} title={"Finish signing up"} userContext={userContext}>
       <SignupComponent userContext={userContext} />

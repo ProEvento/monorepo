@@ -13,7 +13,6 @@ const Notification = sequelize.define(
    }, 
    User_id: {
       type: DataTypes.INTEGER, 
-      allowNull:false
    }
 }, { 
   timestamps: true,
@@ -24,12 +23,10 @@ const Notification = sequelize.define(
 );
 
 Notification.associate = function(models) {
-Notification.belongsTo(models.User, {
- foreignKey: 'User_id',
- target: 'id'
-});
-
-
+   Notification.belongsTo(models.User, {
+      foreignKey: 'User_id',
+      target: 'id'
+   });
 }
 
 return Notification;

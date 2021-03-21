@@ -20,7 +20,7 @@ const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
 const routes = {
 	users: require('./routes/users').default,
 	events: require('./routes/events').default,
-	// items: require('./routes/<item>'),
+	// items: require('./routes/<item>').default,
 };
 
 const app = express();
@@ -58,6 +58,16 @@ app.get(
 app.get(
 	`/api/users/getByUsername`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
+app.get(
+	`/api/users/notifications/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getNotificationsForUser)
+)
+
+app.post(
+	`/api/users/notifications/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.addNotificationToUser)
 )
 
 // Twilio token

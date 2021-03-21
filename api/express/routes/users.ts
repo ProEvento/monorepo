@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { query, Request, Response } from "express"
 import db from '../../sequelize'
 import { Op } from "sequelize"
 import { getIdParam } from '../helpers'
@@ -12,7 +12,6 @@ async function getAll(req: Request, res: Response) {
 
 async function signupUser(req: Request, res: Response) {
 	const user: UserType = req.body;
-	console.log(req.body)
 	if (!user.firstName || !user.lastName) {
 		return res.status(500).json({ msg: "Must provide a first and last name."}).end()
 	}
@@ -60,6 +59,32 @@ async function getByEmail(req: Request, res: Response) {
 	}
 };
 
+async function getNotificationsForUser(req: Request, res: Response) {
+	const id = getIdParam(req);
+
+	const user = await models.User.findOne({where: { id: id }})
+	if (user) {
+		//@ts-ignore
+		res.status(200).json(await user.getNotifications())
+	} else {
+		res.status(400).json({msg: "User not found."})
+	}
+}
+
+async function addNotificationToUser(req: Request, res: Response) {
+	const id = getIdParam(req);
+	const { text } = req.body;
+
+	const user = await models.User.findOne({where: { id: id }})
+	if (user) {
+		//@ts-ignore
+		const notification = await user.createNotification({ text: text })
+		res.status(200).json(notification);
+	} else {
+		res.status(400).json({msg: "User not found."})
+	}
+}
+
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
 	const user = await models.User.findByPk(id);
@@ -72,8 +97,7 @@ async function getById(req: Request, res: Response) {
 
 async function getByUsername(req: Request, res: Response) {
 	const { query } = req;
-	console.log(query)
-	
+x	
 	if (!query.username) {
 		res.status(500).json({ msg: "Username in query required"})
 		return;
@@ -87,6 +111,7 @@ async function getByUsername(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not found."});
 	}
 };
+
 async function create(req: Request, res: Response) {
 	if (req.body.id) {
 		res.status(400).send(`Bad request: ID should not be provided, since it is determined automatically by the database.`)
@@ -130,4 +155,6 @@ export default {
 	signupUser,
 	getByEmail,
 	remove,
+	getNotificationsForUser,
+	addNotificationToUser
 };

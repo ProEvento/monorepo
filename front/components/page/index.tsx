@@ -1,27 +1,21 @@
 import { useState} from "react"
 import { UserContext } from "@auth0/nextjs-auth0"
 import Head from '@components/head'
+import Notification from '@components/notification'
 // import Header from '@components/header'
-import styles from './page.module.css'
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { CustomUserContext } from "../../types";
 import Image from 'next/image'
-
+import CustomUserContext from '../../types'
 const drawerWidth = 325;
 
 const useStyles = makeStyles((theme) => ({
@@ -175,7 +169,7 @@ const Page = ({
           </Toolbar>
         </AppBar>
       </Hidden>
-      <nav className={classes.drawer} aria-label="mailbox folders">
+      <nav className={classes.drawer} aria-label="sidebar menu">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
@@ -209,6 +203,7 @@ const Page = ({
         {isLoading && <div>Loading</div>}
         {error && <div>Error</div>}
         {!error && !isLoading && children}
+        <Notification notifications={userContext.user.notifications} />
       </main>
     </div>
   )

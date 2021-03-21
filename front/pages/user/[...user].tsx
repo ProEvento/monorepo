@@ -10,8 +10,6 @@ import { UserType } from '../../../api/types';
 import makeServerCall from '../../lib/makeServerCall';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
-  // GET localhost:8080/api/users/getByUsername?username=username 
  
   const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
     queryParameters: { 

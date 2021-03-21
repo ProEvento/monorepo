@@ -46,6 +46,7 @@ app.get('/', (req, res) => {
 
 // Custom API routes
 
+
 app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
@@ -75,6 +76,18 @@ app.get(
 app.post(
 	`/api/users/notifications/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addNotificationToUser)
+)
+
+// Events
+
+app.get(
+	`/api/userevents/getEventsForUser/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
+)
+
+app.post(
+	`/api/events/createEventByUser`,
+	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
 )
 
 // Twilio token

@@ -3,10 +3,37 @@ import { getIdParam } from '../helpers'
 import { EventType } from '../../types'
 const { models } = db.sequelize;
 import { query, Request, Response } from "express"
-import { Op } from "sequelize"
+import { Op, useInflection } from "sequelize"
 
 async function getAll(req: Request, res: Response) {
 	const events = await models.Event.findAll({include: models.User});
+	res.status(200).json(events);
+};
+
+// Gets all attending events for user, including those they're hosting
+async function getEventsForUser(req: Request, res: Response) {
+	const userId = getIdParam(req);
+
+	const user = await models.User.findOne({ where: {
+		id: userId
+	}})
+
+	if (!user) {
+		return res.status(404).json({ msg: "User not found."})
+	}
+
+	//@ts-ignore
+	const hosting = await user.getHosting({ as: "hosting"})
+	console.log(hosting)
+	//@ts-ignore
+	const attending = await user.getAttending({ as: "attending"})
+	const events = {
+		...hosting,
+		...attending
+	}
+	//@ts-ignore
+	console.log()
+	//@ts-ignore
 	res.status(200).json(events);
 };
 
@@ -36,6 +63,27 @@ async function getByTitle(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not found."});
 	}
 };
+async function createEventByUser(req: Request, res: Response) {
+	const { userId, ...event } = req.body;
+	console.log(req.body)
+	const user = await models.User.findOne({ where: {
+		id: userId
+	}});
+
+	if (!user) {
+		return res.status(400).json({msg: "User not found"})
+	}
+
+	if (req.body.id) {
+		res.status(400).json({msg: `Bad request: ID should not be provided, since it is determined automatically by the database.`})
+	} else {
+		const createdEvent = await models.Event.create(event);
+
+		//@ts-ignore
+		await user.addAttending(createdEvent);
+		res.status(201).end();
+	}
+}
 
 async function create(req: Request, res: Response) {
 	if (req.body.id) {
@@ -78,4 +126,6 @@ export default {
 	update,
 	remove,
 	getByTitle
+	getEventsForUser,
+	createEventByUser
 };

@@ -52,7 +52,9 @@ export const withUserProp = (Component: any) => {
     const { data: notifData, error: notifError } = useSWR(() => `users/notifications/${data.id}`, makeServerCallFetcher, { refreshInterval: 60000 * 5 });
 
     const isLoading = !data && !error;
-    console.log("error", error)
+    if (error) {
+      console.log("withUserProp Error", error);
+    }
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")
     }
@@ -69,7 +71,7 @@ export const withUserProp = (Component: any) => {
        checkSession: () => undefined
      }
 
-     if (user.isLoading || (isLoading && user.user !== undefined)) {
+     if (user.isLoading || (isLoading && mergedUser.user !== undefined)) {
        return <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
      }
 

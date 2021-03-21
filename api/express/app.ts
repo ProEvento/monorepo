@@ -45,6 +45,7 @@ app.get('/', (req, res) => {
 });
 
 // Custom API routes
+
 app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
@@ -54,6 +55,12 @@ app.get(
 	`/api/users/getByEmail`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByEmail)
 )
+
+app.get(
+	`/api/events/getByTitle`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
 
 app.get(
 	`/api/users/getByUsername`,

@@ -1,8 +1,9 @@
-import { Request, Response } from "express"
 import db from '../../sequelize'
 import { getIdParam } from '../helpers'
 import { EventType } from '../../types'
 const { models } = db.sequelize;
+import { query, Request, Response } from "express"
+import { Op } from "sequelize"
 
 async function getAll(req: Request, res: Response) {
 	const events = await models.Event.findAll({include: models.User});
@@ -11,12 +12,28 @@ async function getAll(req: Request, res: Response) {
 
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
-	const events = await models.Event.findByPk(id, {include: models.User});
-
-	if (events) {
-		res.status(200).json(events);
+	const user = await models.Event.findByPk(id);
+	if (user) {
+		res.status(200).json(user);
 	} else {
 		res.status(404).send('404 - Not found');
+	}
+};
+
+async function getByTitle(req: Request, res: Response) {
+	const { query } = req;
+
+	if (!query.title) {
+		res.status(500).json({ msg: "Title in query required"})
+		return;
+	}
+	
+	const user = await models.Event.findOne({ where: { title: query.title }});
+	
+	if (user) {
+		res.status(200).json(user);
+	} else {
+		res.status(404).json({ msg: "User not found."});
 	}
 };
 
@@ -60,4 +77,5 @@ export default {
 	create,
 	update,
 	remove,
+	getByTitle
 };

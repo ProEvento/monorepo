@@ -11,12 +11,12 @@ export type UserType = {
 }
 
 export type EventType = {
+    title: string,
+    User_id: UserType, 
     private: boolean,
-    invitedUsers: string,
-    attendingUsers: string,
     time: string,
     description: string,
     topics: string,
     meetingURL: string,
-    comments: string
+    id: BigInteger
 }

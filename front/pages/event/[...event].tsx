@@ -6,6 +6,7 @@ import { CustomUserContext } from '../../types';
 import {EventType} from '../../../api/types'
 import {  GetServerSideProps } from 'next'
 import makeServerCall from '../../lib/makeServerCall';
+import Moment from 'moment';
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -19,18 +20,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
+Moment.locale('en');
+
 const Event = ({event, userContext }: { userContext: CustomUserContext, event:EventType}) => {
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
       <h1>{event.title}</h1>
-      <h1>{event.getuser}</h1>
-      <h4>Description: {event.description}</h4>
-      <h4>Hosted By: {event.User_id}</h4>
-      <h3>Event id: {event.id}</h3>
-
+      <h4> When: {Moment(event.time).format('LT ddd MMM YY')} </h4>
+      {event.private
+        ? <h5>Private Event </h5>
+        : <h5>Open Event</h5>
+      }
+      <h5>Hosted By: {event.User_id}</h5>
+      <h4>{event.description}</h4>
+      <h4>Meeting URL: proevento.com/meeting/{event.id}</h4>
     </Page>
   )
 }
+
 
 export default withPageAuthRequired(withUserProp(Event))
 

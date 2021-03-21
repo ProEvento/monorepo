@@ -3,16 +3,11 @@ import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import EventIcon from '@material-ui/icons/Event';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import { withUserProp } from '../lib/withUserProp';
 import { CustomUserContext } from '../types';
 import EventPage from '@components/events';
+import Event from '@components/event';
 
 /*
 * useStyles function and Event component adapted from Folder List, Align List Items: https://material-ui.com/components/lists/
@@ -54,7 +49,7 @@ const Events = ({ userContext }: { userContext: CustomUserContext}) => {
   let events = [];
   for (let i = 0; i < fakeEvents.length; i++) {
     events.push(
-      <Event classes={classes} title={fakeEvents[i].title} dateTime={fakeEvents[i].dateTime} host={fakeEvents[i].host} />
+      <Event title={fakeEvents[i].title} dateTime={fakeEvents[i].dateTime} host={fakeEvents[i].host} />
     );
     events.push(
       <Divider />
@@ -67,35 +62,6 @@ const Events = ({ userContext }: { userContext: CustomUserContext}) => {
         {events}
       </List>
     </Page>
-  )
-}
-
-const Event = ({classes, title, dateTime, host}) => {
-  return (
-    <ListItem>
-      <ListItemAvatar>
-        <Avatar>
-          <EventIcon />
-        </Avatar>
-        </ListItemAvatar>
-        <ListItemText 
-          primary={title}
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary" 
-              >
-                Hosted by {host}
-              </Typography>
-                {" on " + dateTime} 
-            </React.Fragment>
-          }
-          />
-      </ListItem>
-
   )
 }
 

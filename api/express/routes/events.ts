@@ -38,19 +38,19 @@ async function getEventsForUser(req: Request, res: Response) {
 
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
-	const user = await models.Event.findByPk(id);
-	if (user) {
-		res.status(200).json(user);
+	const event = await models.Event.findByPk(id);
+	if (event) {
+		res.status(200).json(event);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
 };
 
 async function leaveEvent(req: Request, res: Response) {
-	const { userId } = req.body;
+	const { userId } = req.query;
 	const id = getIdParam(req);
-	const event = await models.Event.findByPk(id);
-	const user = await models.User.findByPk(userId);
+	const event = await models.Event.findByPk(id, { include: [{model: models.User, as: "host"}]});
+	const user = await models.User.findOne({where: {id: userId}});
 
 	if (!event) {
 		return res.status(404).json({msg: "Event not found"})
@@ -59,18 +59,20 @@ async function leaveEvent(req: Request, res: Response) {
 	if (!user) {
 		return res.status(404).json({msg: "User not found"})
 	}
+
+	//@ts-ignore
+	await event.host.createNotification({ text: `${user.username} has said they're no longer attending ${event.name}`})
+
 	//@ts-ignore
 	const resp = await event.removeAttendee(user);
-	res.status(200).json(resp);
+	res.status(200).json({ msg: "success"});
 }
 
 async function joinEvent(req: Request, res: Response) {
 	const { userId } = req.body;
 	const id = getIdParam(req);
-	const event = await models.Event.findByPk(id);
+	const event = await models.Event.findByPk(id, { include: [{model: models.User, as: "host"}]});
 	const user = await models.User.findByPk(userId);
-
-	console.log(event, user)
 
 	if (!event) {
 		return res.status(404).json({msg: "Event not found"})
@@ -80,11 +82,12 @@ async function joinEvent(req: Request, res: Response) {
 		return res.status(404).json({msg: "User not found"})
 	}
 	
+	//@ts-ignore
+	await event.host.createNotification({ text: `${user.username} has said they're attending ${event.name}`})
 
 	//@ts-ignore
 	const resp = await event.addAttendee(user);
-	console.log(resp)
-	res.status(200).json(resp);
+	res.status(200).json({ msg: "success"});
 }
 
 async function getByTitle(req: Request, res: Response) {
@@ -157,7 +160,7 @@ async function remove(req: Request, res: Response) {
 
 	if (attendees.length > 0) {
 		//@ts-ignore
-		Promise.all(attendees.map(async (attendee) => await attendee.createNotification({ text: `The event ${event.title} has been canceled by the host, ${event.host.username}` })))
+		Promise.all(attendees.map(async (attendee) => attendee.username === event.host.username ? await attendee.createNotification({ text: `You canceled ${event.title}`}) : await attendee.createNotification({ text: `The event ${event.title} has been canceled by the host, ${event.host.username}` })))
 	}
 	await models.Event.destroy({
 		where: {

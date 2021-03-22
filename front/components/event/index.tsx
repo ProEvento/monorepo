@@ -48,7 +48,7 @@ const getAttendeeAvatars = (attendees: DBUser[]) => {
   }
 }
 
-const Item = ({ user, event }: { user: User, event: any }) => {
+const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
   const [response, setResponse] = useState("")
   const classes = containerStyles();
   const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -58,14 +58,6 @@ const Item = ({ user, event }: { user: User, event: any }) => {
 
   const isHost = user.username === (host ? host.username : user.username);
   const isAttending = !!attendees.find((attendee) => attendee.username === user.username)
-
-  const cancelEvent = () => {
-    makeServerCall({ apiCall: `events/${id}`, method: "DELETE" }).then((data) => console.log(data))
-  }
-
-  const leaveEvent = () => {
-    makeServerCall({ apiCall: `events/leaveEvent/${id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
-  }
 
   return (
     <ListItem className={classes.root}>
@@ -92,16 +84,17 @@ const Item = ({ user, event }: { user: User, event: any }) => {
         }
       />
       <ListItemText primary={<div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{getAttendeeAvatars(attendees)}</div>}/>
-        {isHost && <Button onClick={cancelEvent} variant="contained">Cancel</Button>}
-        {isAttending && !isHost && <Button onClick={leaveEvent} variant="contained">Leave</Button>}
-        {!isHost && !isAttending && <Button variant="contained">Join</Button>}
+        {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
+        {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
+        {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>}
+        <a href={`/event/${id}`}><Button style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a>
     </ListItem>
     )
 }
 
-const Event = ({user, event} : {user: User, event: any}) => {
+const Event = ({user, event,  cancelEvent, joinEvent, leaveEvent } : {user: User, event: any, cancelEvent: Function, joinEvent: Function, leaveEvent: Function }) => {
     const classes = useStyles();
-    return (<Item user={user} event={event} />)
+    return (<Item user={user} event={event} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} />)
 }
 
 export default Event

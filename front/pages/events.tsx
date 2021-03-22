@@ -34,10 +34,21 @@ const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   useEffect(() => {
     if (user)
       makeServerCall({ apiCall: `events/getEventsForUser/${user.id}`, method: "GET" }).then((data) => {
-        setEvents(data)
+        const cleaned = []
+        for (const event of data) {
+          const { time, title, description, host, attendees, id } = event
+          let dupe = false
+          for (const item of cleaned) {
+            if (item.id === id) dupe = true
+          }
+          if (!dupe)
+            cleaned.push({ host: host ? host : user, time, title, description, attendees, id})
+          dupe = false
+        }
+        setEvents([...cleaned])
       });
   }, [user])
-  console.log(events)
+
   const classes = useStyles();
 
   return (

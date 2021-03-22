@@ -52,6 +52,8 @@ export const withUserProp = (Component: any) => {
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")
     }
+
+    console.log(data)
     const mergedUser: (CustomUserContext) = (user.user && data) ? {
       ...user,
       user: {

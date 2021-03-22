@@ -19,6 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
     },
   })
+
   const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" })
   return { 
     props: {
@@ -44,6 +45,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const classes = useStyles();
   const { user: contextUser, error, isLoading } = userContext;
   const [followers, setFollowers] = useState(followerData);
+  
   const isUserFollowing = (targetUsername: string)  => {
     for (let follower of followers) {
       if (follower.username === targetUsername) {

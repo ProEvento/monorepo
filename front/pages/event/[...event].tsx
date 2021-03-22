@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import Page from '@components/page'
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
 import { CustomUserContext } from '../../types';
 import {EventType, UserType} from '../../../api/types'
@@ -10,6 +10,8 @@ import makeServerCall from '../../lib/makeServerCall';
 import Moment from 'moment';
 import {Grid, Button} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React from 'react'
+import Link from 'next/link';
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -89,7 +91,12 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       }
       <h5>Hosted By: {event.User_id}</h5>
       <h4>{event.description}</h4>
-      <h4>Meeting URL: proevento.com/meeting/{event.id}</h4>
+      {attend &&
+        <Button href={`/meeting/${event.id}`}> 
+        <a>Join Meeting</a>
+        </Button>
+      }
+    
       {attend
         ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>

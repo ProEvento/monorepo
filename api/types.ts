@@ -7,7 +7,8 @@ export type UserType = {
     linkedin: string,
     bio: string,
     twitter: string,
-    username: string
+    username: string,
+    picture: string
 }
 
 export type EventType = {
@@ -18,5 +19,11 @@ export type EventType = {
     description: string,
     topics: string,
     meetingURL: string,
+    comments: string
+}
+
+export type AttendingType = {
+    eventId: string,
+    userId: string
     id: BigInteger
 }

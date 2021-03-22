@@ -62,6 +62,21 @@ app.post(
 )
 
 app.get(
+	`/api/users/followers/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getFollowers)
+)
+
+app.delete(
+	`/api/users/removeFollower`,
+	makeHandlerAwareOfAsyncErrors(routes.users.removeFollower)
+)
+
+app.put(
+	`/api/users/addFollower`,
+	makeHandlerAwareOfAsyncErrors(routes.users.addFollower)
+)
+
+app.get(
 	`/api/users/getByEmail`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByEmail)
 )

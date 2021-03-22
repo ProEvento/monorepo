@@ -111,6 +111,85 @@ async function getByUsername(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not found."});
 	}
 };
+async function getFollowers(req: Request, res: Response) {
+	const { query } = req;
+	const id = getIdParam(req);
+	
+	const user = await models.User.findOne({
+		where: {
+			id: id
+		}
+	})
+	
+	if (user) {
+		//@ts-ignore
+		res.status(200).json(await user.getFollowers());
+		//user.addNotification()
+	} else {
+		res.status(404).json({ msg: "User not not found."});
+	}
+};
+
+async function getFollowing(req: Request, res: Response) {
+	const { query } = req;
+	const id = getIdParam(req);
+	
+	const user = await models.User.findOne({
+		where: {
+			id: id
+		}
+	})
+
+	if (user) {
+		//@ts-ignore
+		res.status(200).json(await user.getFollowing());
+	} else {
+		res.status(404).json({ msg: "User not not found."});
+	}
+};
+async function removeFollower(req: Request, res: Response) {
+	const { userfollowed, unfollower} = req.query;
+
+	const unfollowerUser = await models.User.findOne({
+		where: {
+			username: unfollower
+		}
+	})
+
+	const userfollowedUser = await models.User.findOne({
+		where: {
+			username: userfollowed
+		}
+	})
+	if (unfollowerUser && userfollowedUser) {
+		//@ts-ignore
+		res.status(200).json(await unfollowerUser.removeFollowing(userfollowedUser));
+	} else {
+		res.status(404).json({ msg: "User not found."});
+	}
+};
+
+async function addFollower(req: Request, res: Response) {
+	const { userfollowed, follower} = req.query;
+
+	const followerUser = await models.User.findOne({
+		where: {
+			username: follower
+		}
+	})
+
+	const followedUser = await models.User.findOne({
+		where: {
+			username: userfollowed
+		}
+	})
+	if (followerUser && followedUser) {
+		//@ts-ignore
+		res.status(200).json(await followerUser.addFollowing(followedUser));
+	} else {
+		res.status(404).json({ msg: "User not found."});
+	}
+};
 
 async function create(req: Request, res: Response) {
 	if (req.body.id) {
@@ -150,6 +229,9 @@ export default {
 	getAll,
 	getById,
 	getByUsername,
+	getFollowers,
+	removeFollower,
+	addFollower,
 	create,
 	update,
 	signupUser,

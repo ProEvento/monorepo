@@ -1,7 +1,3 @@
-/**
- * This file handles creating the User object in the database if it doesn't exist, and passing the user object to Components.
- */
-
 import { useUser, UserContext } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router'
 import useSWR from 'swr';
@@ -52,9 +48,7 @@ export const withUserProp = (Component: any) => {
     const { data: notifData, error: notifError } = useSWR(() => `users/notifications/${data.id}`, makeServerCallFetcher, { refreshInterval: 60000 * 5 });
 
     const isLoading = !data && !error;
-    if (error) {
-      console.log("withUserProp Error", error);
-    }
+    console.log("error", error)
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")
     }
@@ -71,7 +65,7 @@ export const withUserProp = (Component: any) => {
        checkSession: () => undefined
      }
 
-     if (user.isLoading || (isLoading && mergedUser.user !== undefined)) {
+     if (user.isLoading || (isLoading && user.user !== undefined)) {
        return <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
      }
 

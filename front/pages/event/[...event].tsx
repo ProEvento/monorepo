@@ -52,10 +52,10 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
   const { user, error, isLoading } = userContext;
 
   const leaveEvent = () => {
-    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
   const joinEvent = () => {
-    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
 
   

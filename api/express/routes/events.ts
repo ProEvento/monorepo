@@ -3,7 +3,7 @@ import { getIdParam } from '../helpers'
 import { EventType } from '../../types'
 const { models } = db.sequelize;
 import { query, Request, Response } from "express"
-import { Op, useInflection } from "sequelize"
+import { Model, Op, useInflection } from "sequelize"
 import { createDecipher } from 'crypto';
 
 async function getAll(req: Request, res: Response) {

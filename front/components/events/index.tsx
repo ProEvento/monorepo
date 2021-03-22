@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import {Grid, Button, List} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Link from "@components/link"
+import Link from "next/link"
 import Event from '../event'
 import makeServerCall from "@lib/makeServerCall";
 
@@ -63,7 +63,7 @@ const Events = ({ user, events }) => {
     return (
         <section className={styles.root}>
             <section style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--gap-double)'}}>
-                <Button onClick={openCreateEvent} className={styles.button}>create a new event</Button>
+                <Link href="/createEvent"><Button className={styles.button}>create a new event</Button></Link>
             </section>
             {/* @ts-ignore */}
             {error && error.msg}

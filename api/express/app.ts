@@ -20,6 +20,7 @@ const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
 const routes = {
 	users: require('./routes/users').default,
 	events: require('./routes/events').default,
+	search: require('./routes/search').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -46,6 +47,14 @@ app.get('/', (req, res) => {
 
 // Custom API routes
 
+// Search
+
+app.get(
+	`/api/search/:type`,
+	makeHandlerAwareOfAsyncErrors(routes.search.search)
+)
+
+// Users
 
 app.post(
 	`/api/users/signup`,
@@ -56,12 +65,6 @@ app.get(
 	`/api/users/getByEmail`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByEmail)
 )
-
-app.get(
-	`/api/events/getByTitle`,
-	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
-)
-
 
 app.get(
 	`/api/users/getByUsername`,
@@ -99,6 +102,13 @@ app.post(
 	`/api/events/leaveEvent/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.leaveEvent)
 )
+
+app.get(
+	`/api/events/getByTitle`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
+
 
 // Twilio token
 app.get('/api/token', (req, res) => {

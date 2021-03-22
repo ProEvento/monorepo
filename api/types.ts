@@ -13,7 +13,7 @@ export type UserType = {
 export type EventType = {
     title: string,
     User_id: UserType, 
-    private: boolean,
+    priv: boolean,
     time: string,
     description: string,
     topics: string,

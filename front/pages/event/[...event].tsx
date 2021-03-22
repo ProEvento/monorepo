@@ -27,7 +27,7 @@ const Event = ({event, userContext }: { userContext: CustomUserContext, event:Ev
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
       <h1>{event.title}</h1>
       <h4> When: {Moment(event.time).format('LT ddd MMM YY')} </h4>
-      {event.private
+      {event.priv
         ? <h5>Private Event </h5>
         : <h5>Open Event</h5>
       }

@@ -52,10 +52,10 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
   const { user, error, isLoading } = userContext;
 
   const leaveEvent = () => {
-    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
   const joinEvent = () => {
-    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
 
   
@@ -79,7 +79,7 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       attend = true; 
     }
   } 
-
+  var dateEvent = new Date(event.time)
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
       <h1>Hello {userContext.user.username}</h1>
@@ -92,11 +92,10 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       <h5>Hosted By: {event.User_id}</h5>
       <h4>{event.description}</h4>
       {attend &&
-        <Button href={`/meeting/${event.id}`}> 
+        <Button disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
         <a>Join Meeting</a>
         </Button>
       }
-    
       {attend
         ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>

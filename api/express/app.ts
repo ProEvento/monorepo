@@ -81,7 +81,7 @@ app.post(
 // Events
 
 app.get(
-	`/api/userevents/getEventsForUser/:id`,
+	`/api/events/getEventsForUser/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
 )
 

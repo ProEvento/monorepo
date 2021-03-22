@@ -60,8 +60,7 @@ export default function Notifications({ notifications }) {
     }
   };
 
-
-  // useEffect(() => setMessages(notifications), [notifications])
+  useEffect(() => setMessages(notifications), [notifications])
 
   return (
     <div className={classes.root}>

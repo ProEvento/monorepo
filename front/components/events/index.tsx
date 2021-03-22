@@ -1,22 +1,24 @@
-import {Grid, Button} from "@material-ui/core"
+import {Grid, Button, List} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Link from "@components/link"
+import Event from '../event'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       background: 'var(--button2)',
-      width: 200
+      width: 200,
+      margin: "0 auto"
     },
     root: {
         maxWidth: 800,
         margin: "0 auto",
-        marginTop: 'var(--gap-double)'
+        marginTop: 'calc(var(--gap-double) * 4)',
     }
   }),
 );
 
-const Events = ({ user }) => {
+const Events = ({ user, events }) => {
     const styles = useStyles()
 
     const openCreateEvent = ((e) => {
@@ -24,18 +26,15 @@ const Events = ({ user }) => {
     })
 
     return (
-        <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            className={styles.root}
-        >
-            <section>
+        <section className={styles.root}>
+            <section style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--gap-double)'}}>
                 <Button onClick={openCreateEvent} className={styles.button}>create a new event</Button>
             </section>
-
-        </Grid>
+            
+            <List>
+              {events.map((e) => <Event key={e.id} attendees={e.attendees} title={e.title} dateTime={e.time} host={e.AttendingTable ? e.host : user} />)}
+            </List>
+        </section>
     )
 }
 

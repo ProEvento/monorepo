@@ -12,6 +12,7 @@ async function getAll(req: Request, res: Response) {
 
 // Gets all attending events for user, including those they're hosting
 async function getEventsForUser(req: Request, res: Response) {
+	const attributesToInclude = ['priv', 'title', 'description', 'createdAt', 'time', 'id']
 	const userId = getIdParam(req);
 
 	const user = await models.User.findOne({ where: {
@@ -23,17 +24,15 @@ async function getEventsForUser(req: Request, res: Response) {
 	}
 
 	//@ts-ignore
-	const hosting = await user.getHosting({ as: "hosting"})
-	console.log(hosting)
+	const hosting = await user.getHosting({ include: [ { model: models.User, as: 'host' }, { model: models.User, as: 'attendees' } ] })
+
 	//@ts-ignore
-	const attending = await user.getAttending({ as: "attending"})
-	const events = {
+	const attending = await user.getAttending({ include: [ { model: models.User, as: 'host' }, { model: models.User, as: 'attendees' } ] })
+
+	const events = [
 		...hosting,
 		...attending
-	}
-	//@ts-ignore
-	console.log()
-	//@ts-ignore
+	]
 	res.status(200).json(events);
 };
 

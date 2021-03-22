@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Events = ({ user, events, setEvents }) => {
+const Events = ({ user, events }) => {
     const styles = useStyles()
     const [error, setError] = useState("")
     
@@ -65,6 +65,7 @@ const Events = ({ user, events, setEvents }) => {
             <section style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--gap-double)'}}>
                 <Button onClick={openCreateEvent} className={styles.button}>create a new event</Button>
             </section>
+            {/* @ts-ignore */}
             {error && error.msg}
             <List>
               {events.map((e) => <Event leaveEvent={leaveEvent} joinEvent={joinEvent} cancelEvent={cancelEvent} user={user} key={e.id} event={e}/>)}

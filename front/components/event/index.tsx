@@ -84,9 +84,10 @@ const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
         }
       />
       <ListItemText primary={<div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{getAttendeeAvatars(attendees)}</div>}/>
-        {isHost && <Button onClick={() => cancelEvent(id)} variant="contained">Cancel</Button>}
-        {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained">Leave</Button>}
+        {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
+        {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
         {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>}
+        <a href={`/event/${id}`}><Button style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a>
     </ListItem>
     )
 }

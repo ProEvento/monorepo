@@ -90,6 +90,16 @@ app.post(
 	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
 )
 
+app.post(
+	`/api/events/joinEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.joinEvent)
+)
+
+app.post(
+	`/api/events/leaveEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.leaveEvent)
+)
+
 // Twilio token
 app.get('/api/token', (req, res) => {
 	const { username, room } = req.query;

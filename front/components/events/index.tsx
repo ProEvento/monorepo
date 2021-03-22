@@ -32,7 +32,7 @@ const Events = ({ user, events }) => {
             </section>
             
             <List>
-              {events.map((e) => <Event key={e.id} attendees={e.attendees} title={e.title} dateTime={e.time} host={e.AttendingTable ? e.host : user} />)}
+              {events.map((e) => <Event user={user} key={e.id} event={e}/>)}
             </List>
         </section>
     )

@@ -46,6 +46,47 @@ async function getById(req: Request, res: Response) {
 	}
 };
 
+async function leaveEvent(req: Request, res: Response) {
+	const { userId } = req.body;
+	const id = getIdParam(req);
+	const event = await models.Event.findByPk(id);
+	const user = await models.User.findByPk(userId);
+
+	if (!event) {
+		return res.status(404).json({msg: "Event not found"})
+	}
+
+	if (!user) {
+		return res.status(404).json({msg: "User not found"})
+	}
+	//@ts-ignore
+	const resp = await event.removeAttendee(user);
+	res.status(200).json(resp);
+}
+
+async function joinEvent(req: Request, res: Response) {
+	const { userId } = req.body;
+	const id = getIdParam(req);
+	const event = await models.Event.findByPk(id);
+	const user = await models.User.findByPk(userId);
+
+	console.log(event, user)
+
+	if (!event) {
+		return res.status(404).json({msg: "Event not found"})
+	}
+
+	if (!user) {
+		return res.status(404).json({msg: "User not found"})
+	}
+	
+
+	//@ts-ignore
+	const resp = await event.addAttendee(user);
+	console.log(resp)
+	res.status(200).json(resp);
+}
+
 async function getByTitle(req: Request, res: Response) {
 	const { query } = req;
 
@@ -109,12 +150,21 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
 	const id = getIdParam(req);
+
+	const event = await models.Event.findOne({ where: { id: id }, include: [{ model: models.User, as: 'host' }]})
+	//@ts-ignore
+	const attendees = await event.getAttendees()
+
+	if (attendees.length > 0) {
+		//@ts-ignore
+		Promise.all(attendees.map(async (attendee) => await attendee.createNotification({ text: `The event ${event.title} has been canceled by the host, ${event.host.username}` })))
+	}
 	await models.Event.destroy({
 		where: {
 			id: id
 		}
 	});
-	res.status(200).end();
+	res.status(200).json({ msg: "Success"});
 };
 
 
@@ -126,5 +176,7 @@ export default {
 	remove,
 	getByTitle,
 	getEventsForUser,
-	createEventByUser
+	createEventByUser,
+	joinEvent,
+	leaveEvent
 };

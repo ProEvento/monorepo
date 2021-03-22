@@ -41,16 +41,25 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 Moment.locale('en');
 
+
 const Event = ({event, userContext, targetUser}: { userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
   const styles = useStyles()
   // console.log(targetUser)
   var attend = false; 
   const [events, setEvents] = useState([]);
+  const { user, error, isLoading } = userContext;
 
-  const openCreateEvent = ((e) => {
+  const leaveEvent = () => {
+    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+  }
+  const joinEvent = () => {
+    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", bodyParameters: { userId: user.id } }).then((data) => console.log(data))
+  }
+
+  
+  const openAttendEvent = ((e) => {
 
   })
-  const { user, error, isLoading } = userContext;
   // console.log(userContext.user)
 
 
@@ -63,13 +72,11 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
   // console.log(events)
 
   for (var index in events){
-    // console.log(events[index])
     if(events[index].id == event.id){
       console.log("success")
       attend = true; 
     }
   } 
-
 
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
@@ -84,8 +91,8 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       <h4>{event.description}</h4>
       <h4>Meeting URL: proevento.com/meeting/{event.id}</h4>
       {attend
-        ?  <Button onClick={openCreateEvent} className={styles.button}>Unattend this event</Button>
-        :  <Button onClick={openCreateEvent} className={styles.button}>Attend this event</Button>
+        ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
+        :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
     </Page>

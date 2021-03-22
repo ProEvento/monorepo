@@ -160,7 +160,7 @@ async function remove(req: Request, res: Response) {
 
 	if (attendees.length > 0) {
 		//@ts-ignore
-		Promise.all(attendees.map(async (attendee) => await attendee.createNotification({ text: `The event ${event.title} has been canceled by the host, ${event.host.username}` })))
+		Promise.all(attendees.map(async (attendee) => attendee.username === event.host.username ? await attendee.createNotification({ text: `You canceled ${event.title}`}) : await attendee.createNotification({ text: `The event ${event.title} has been canceled by the host, ${event.host.username}` })))
 	}
 	await models.Event.destroy({
 		where: {

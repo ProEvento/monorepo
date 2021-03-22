@@ -56,12 +56,11 @@ export default function Notifications({ notifications }) {
     setTooltipOpen(false);
 
     if (messages && messages.length > 0) {
-      setLastSeen(messages[messages.length - 1].id)
+      setLastSeen(messages[0].id)
     }
   };
 
-
-  // useEffect(() => setMessages(notifications), [notifications])
+  useEffect(() => setMessages((notifications || []).reverse()), [notifications])
 
   return (
     <div className={classes.root}>
@@ -132,7 +131,8 @@ export default function Notifications({ notifications }) {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
-                              })}
+                              })}{' '}
+                              {new Date(message.createdAt).toLocaleTimeString('en-US')}
                             </Typography>
                           )}
                         </ListItem>

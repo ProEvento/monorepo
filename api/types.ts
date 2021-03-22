@@ -12,9 +12,9 @@ export type UserType = {
 }
 
 export type EventType = {
-    private: boolean,
-    invitedUsers: string,
-    attendingUsers: string,
+    title: string,
+    User_id: UserType, 
+    priv: boolean,
     time: string,
     description: string,
     topics: string,
@@ -25,4 +25,5 @@ export type EventType = {
 export type AttendingType = {
     eventId: string,
     userId: string
+    id: BigInteger
 }

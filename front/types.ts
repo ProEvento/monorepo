@@ -1,5 +1,13 @@
 export type CustomUserContext = {
-    user: {
+    user: User,
+    error?: Error,
+    isLoading: boolean,
+    checkSession: () => Promise<void>;
+}
+
+export type User = Auth0User & DBUser
+
+export type Auth0User = {
         // Auth0
         sub: string;
         name?: string;
@@ -19,7 +27,9 @@ export type CustomUserContext = {
         locale?: string;
         phone_number?: string;
         updated_at?: number;
+}
 
+export type DBUser = {
         //Custom
         firstName: string,
         lastName: string,
@@ -27,9 +37,7 @@ export type CustomUserContext = {
         linkedin: string,
         bio: string,
         twitterHandle: string,
-        username: string
-    },
-    error?: Error,
-    isLoading: boolean,
-    checkSession: () => Promise<void>;
+        username: string,
+        id: string,
+        picture?: string
 }

@@ -20,6 +20,7 @@ const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
 const routes = {
 	users: require('./routes/users').default,
 	events: require('./routes/events').default,
+	search: require('./routes/search').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -45,6 +46,16 @@ app.get('/', (req, res) => {
 });
 
 // Custom API routes
+
+// Search
+
+app.get(
+	`/api/search/:type`,
+	makeHandlerAwareOfAsyncErrors(routes.search.search)
+)
+
+// Users
+
 app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
@@ -84,6 +95,35 @@ app.post(
 	`/api/users/notifications/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addNotificationToUser)
 )
+
+// Events
+
+app.get(
+	`/api/events/getEventsForUser/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
+)
+
+app.post(
+	`/api/events/createEventByUser`,
+	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
+)
+
+app.post(
+	`/api/events/joinEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.joinEvent)
+)
+
+app.post(
+	`/api/events/leaveEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.leaveEvent)
+)
+
+app.get(
+	`/api/events/getByTitle`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
+
 
 // Twilio token
 app.get('/api/token', (req, res) => {

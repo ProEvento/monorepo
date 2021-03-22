@@ -97,7 +97,7 @@ async function getById(req: Request, res: Response) {
 
 async function getByUsername(req: Request, res: Response) {
 	const { query } = req;
-	
+
 	if (!query.username) {
 		res.status(500).json({ msg: "Username in query required"})
 		return;

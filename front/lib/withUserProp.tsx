@@ -1,7 +1,3 @@
-/**
- * This file handles creating the User object in the database if it doesn't exist, and passing the user object to Components.
- */
-
 import { useUser, UserContext } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router'
 import useSWR from 'swr';

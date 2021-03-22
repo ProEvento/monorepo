@@ -11,15 +11,7 @@ const Event = sequelize.define(
       type: DataTypes.UUID, 
       allowNull:false
    }, 
-   private: {
-      type: DataTypes.BOOLEAN, 
-      allowNull:false
-   }, 
-   time: {
-      type: DataTypes.DATE, 
-      allowNull:false
-   }, 
-   private: {
+   priv: {
       type: DataTypes.BOOLEAN, 
       allowNull:false
    }, 
@@ -35,6 +27,10 @@ const Event = sequelize.define(
       type: DataTypes.STRING, 
       allowNull:false
    },
+   picture: {
+      type: DataTypes.STRING,
+      allowNull:true
+   }
 }, { 
   timestamps: true,
   paranoid: true,

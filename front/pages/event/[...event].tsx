@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import Page from '@components/page'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       background: 'var(--button2)',
-      width: 200
+      width: 200,
     },
     root: {
         maxWidth: 800,
@@ -42,13 +43,33 @@ Moment.locale('en');
 
 const Event = ({event, userContext, targetUser}: { userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
   const styles = useStyles()
-  console.log(targetUser)
+  // console.log(targetUser)
+  var attend = false; 
+  const [events, setEvents] = useState([]);
 
   const openCreateEvent = ((e) => {
 
   })
-  const { user: contextUser, error, isLoading } = userContext;
-  console.log(userContext.user)
+  const { user, error, isLoading } = userContext;
+  // console.log(userContext.user)
+
+
+  useEffect(() => {
+    if (user)
+      makeServerCall({ apiCall: `events/getEventsForUser/${user.id}`, method: "GET" }).then((data) => {
+        setEvents(data)
+      });
+  }, [user])
+  // console.log(events)
+
+  for (var index in events){
+    // console.log(events[index])
+    if(events[index].id == event.id){
+      console.log("success")
+      attend = true; 
+    }
+  } 
+
 
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
@@ -62,7 +83,10 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       <h5>Hosted By: {event.User_id}</h5>
       <h4>{event.description}</h4>
       <h4>Meeting URL: proevento.com/meeting/{event.id}</h4>
-      <Button onClick={openCreateEvent} className={styles.button}>Attend this event</Button>
+      {attend
+        ?  <Button onClick={openCreateEvent} className={styles.button}>Unattend this event</Button>
+        :  <Button onClick={openCreateEvent} className={styles.button}>Attend this event</Button>
+      }
 
     </Page>
   )

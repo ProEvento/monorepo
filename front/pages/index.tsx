@@ -13,7 +13,7 @@ const Home = ({ userContext }: { userContext: CustomUserContext}) => {
   }
 
   const { user, error, isLoading } = userContext;
-
+  console.log(user)
   return (
     <Page header={false} activePage={"Dashboard"} title={`Welcome, ${user.firstName}!`} userContext={userContext}>
     </Page>

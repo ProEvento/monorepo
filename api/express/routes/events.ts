@@ -125,7 +125,7 @@ export default {
 	create,
 	update,
 	remove,
-	getByTitle
+	getByTitle,
 	getEventsForUser,
 	createEventByUser
 };

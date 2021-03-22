@@ -4,6 +4,7 @@ import { EventType } from '../../types'
 const { models } = db.sequelize;
 import { query, Request, Response } from "express"
 import { Op, useInflection } from "sequelize"
+import { createDecipher } from 'crypto';
 
 async function getAll(req: Request, res: Response) {
 	const events = await models.Event.findAll({include: models.User});
@@ -107,8 +108,8 @@ async function getByTitle(req: Request, res: Response) {
 	}
 };
 async function createEventByUser(req: Request, res: Response) {
-	const { userId, ...event } = req.body;
-	console.log(req.body)
+	const { userId, ...event } = req.query;
+	console.log(req.query)
 	const user = await models.User.findOne({ where: {
 		id: userId
 	}});
@@ -124,7 +125,7 @@ async function createEventByUser(req: Request, res: Response) {
 
 		//@ts-ignore
 		await user.addAttending(createdEvent);
-		res.status(201).end();
+		res.status(201).json({ msg: "success", event: createdEvent } );
 	}
 }
 

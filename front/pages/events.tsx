@@ -42,7 +42,7 @@ const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
 
   return (
     <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
-        <EventPage user={userContext.user} events={events} />
+        <EventPage setEvents={setEvents} user={userContext.user} events={events} />
     </Page>
   )
 }

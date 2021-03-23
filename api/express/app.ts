@@ -60,17 +60,18 @@ app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
 )
-
 app.get(
 	`/api/users/followers/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getFollowers)
 )
-
+app.get(
+	`/api/users/following/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getFollowing)
+)
 app.delete(
 	`/api/users/removeFollower`,
 	makeHandlerAwareOfAsyncErrors(routes.users.removeFollower)
 )
-
 app.put(
 	`/api/users/addFollower`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addFollower)
@@ -84,6 +85,11 @@ app.get(
 app.get(
 	`/api/users/getByUsername`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+)
+
+app.get(
+	`/api/users/topics/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getTopics)
 )
 
 app.get(
@@ -101,6 +107,11 @@ app.post(
 app.get(
 	`/api/events/getEventsForUser/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
+)
+
+app.get(
+	`/api/events/getAttending/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventsAttending)
 )
 
 app.post(

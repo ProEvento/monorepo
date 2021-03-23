@@ -9,11 +9,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import makeServerCall from '@lib/makeServerCall';
 
 // Simple tabs: https://material-ui.com/components/tabs/#centered
-// Search Bar: https://material-ui.com/components/autocomplete/#search-input
 
 const Explore = ({ userContext }: { userContext: CustomUserContext }) => {
   const { user, error, isLoading } = userContext;  
@@ -65,49 +65,46 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function SearchBar() {
+async function getUsers(value) {
+  const data = await makeServerCall({apiCall: "search/user", method: "GET", queryParameters: {query: value}})
   return (
-    <div style={{ width: 300 }}>
-      <Autocomplete
-        freeSolo
-        id="free-solo-2-demo"
-        disableClearable
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search..."
-            margin="normal"
-            variant="outlined"
-            InputProps={{ ...params.InputProps, type: 'search' }}
-          />
-        )}
-      />
+    <div>
+      {data}
     </div>
-  );
+  )
+}
+
+async function getEvents(value) {
+  const data = await makeServerCall({apiCall: "search/event", method: "GET", queryParameters: {query: value}})
+  return (
+    <div>
+      {data}
+    </div>
+  )
 }
 
 function SimpleTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const searchBar1 = SearchBar();
-  const searchBar2 = SearchBar();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-
+  let data;
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+        <Tabs value={value} onChange={handleChange} aria-label="search">
           <Tab label="Search for Events" {...a11yProps(0)} />
           <Tab label="Search for Users" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        {searchBar1}
+        <TextField id="outlined-basic" label="Search for Events..." variant="outlined" onChange={event => {data = getEvents(event.target.value)}}></TextField>
+        {data}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {searchBar2}
+        <TextField id="outlined-basic" label="Search for Users..." variant="outlined" onChange={event => {data = getUsers(event.target.value)}}></TextField>
+        {data}
       </TabPanel>
     </div>
   );

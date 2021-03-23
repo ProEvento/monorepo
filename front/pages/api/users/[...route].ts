@@ -9,7 +9,6 @@ export default async (request: VercelRequest, response: VercelResponse) => {
 
     const apiURL = new URL(`http://localhost:8080/api/users/${route}`)
     apiURL.search = new URLSearchParams(queryParameters).toString(); 
-    console.log(apiURL.toString())
     const res = await fetch(apiURL.toString(), {
         method: method,
         body: JSON.stringify(bodyParameters)

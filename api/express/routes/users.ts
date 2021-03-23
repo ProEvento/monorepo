@@ -111,19 +111,35 @@ async function getByUsername(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not found."});
 	}
 };
+
+async function getTopics(req: Request, res: Response) {
+	const { query } = req;
+	const id = getIdParam(req);
+	const topics = await models.Topic.findAll({
+		where: {
+			User_id: id
+		}
+	})
+	if (topics) {
+		//@ts-ignore
+		res.status(200).json(topics);
+		//user.addNotification()
+	} else {
+		res.status(404).json({ msg: "No topics found"});
+	}
+};
+
 async function getFollowers(req: Request, res: Response) {
 	const { query } = req;
 	const id = getIdParam(req);
-	
 	const user = await models.User.findOne({
 		where: {
 			id: id
 		}
 	})
-	
 	if (user) {
 		//@ts-ignore
-		res.status(200).json(await user.getFollowers());
+		res.status(200).json(await user.getFollowing());
 		//user.addNotification()
 	} else {
 		res.status(404).json({ msg: "User not not found."});
@@ -132,17 +148,16 @@ async function getFollowers(req: Request, res: Response) {
 
 async function getFollowing(req: Request, res: Response) {
 	const { query } = req;
-	const id = getIdParam(req);
 	
+	const id = getIdParam(req);
 	const user = await models.User.findOne({
 		where: {
 			id: id
 		}
 	})
-
 	if (user) {
 		//@ts-ignore
-		res.status(200).json(await user.getFollowing());
+		res.status(200).json(await user.getFollowers());
 	} else {
 		res.status(404).json({ msg: "User not not found."});
 	}
@@ -161,9 +176,10 @@ async function removeFollower(req: Request, res: Response) {
 			username: userfollowed
 		}
 	})
+
 	if (unfollowerUser && userfollowedUser) {
 		//@ts-ignore
-		res.status(200).json(await unfollowerUser.removeFollowing(userfollowedUser));
+		res.status(200).json(await userfollowedUser.removeFollowing(unfollowerUser));
 	} else {
 		res.status(404).json({ msg: "User not found."});
 	}
@@ -185,7 +201,7 @@ async function addFollower(req: Request, res: Response) {
 	})
 	if (followerUser && followedUser) {
 		//@ts-ignore
-		res.status(200).json(await followerUser.addFollowing(followedUser));
+		res.status(200).json(await followedUser.addFollowing(followerUser));
 	} else {
 		res.status(404).json({ msg: "User not found."});
 	}
@@ -230,6 +246,8 @@ export default {
 	getById,
 	getByUsername,
 	getFollowers,
+	getFollowing,
+	getTopics,
 	removeFollower,
 	addFollower,
 	create,

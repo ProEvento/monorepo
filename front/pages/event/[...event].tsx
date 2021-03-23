@@ -15,15 +15,15 @@ import Link from 'next/link';
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
   const data = await makeServerCall({ apiCall: `events/${context.params.event}`, method: "GET" })
-  
   return { 
     props: {
       event : data
      }
   }
 }
+
+
 
 //have username -> make call to see if attending?
 

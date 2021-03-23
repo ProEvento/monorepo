@@ -70,10 +70,10 @@ async function leaveEvent(req: Request, res: Response) {
 }
 
 async function joinEvent(req: Request, res: Response) {
-	const { userId } = req.body;
+	const { userId } = req.query;
 	const id = getIdParam(req);
 	const event = await models.Event.findByPk(id, { include: [{model: models.User, as: "host"}]});
-	const user = await models.User.findByPk(userId);
+	const user = await models.User.findOne({where: {id: userId}});
 
 	if (!event) {
 		return res.status(404).json({msg: "Event not found"})

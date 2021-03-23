@@ -15,16 +15,41 @@ export default function App({ Component, pageProps }: AppProps): React.ReactElem
     }
   }, []);
 
-  const darkTheme = createMuiTheme({
+  const theme = createMuiTheme({
+    typography: {
+      button: {
+        textTransform: 'none',
+        background: 'var(--bg)',
+        color: 'var(--fg)'
+      }
+    },
+    overrides: {
+      MuiListItem: {
+        root: {
+          "&$selected": {
+            backgroundColor: "var(--button)",
+            "&:hover": {
+              backgroundColor: "var(--button)",
+            },
+          },
+        },
+        button: {
+          "&:hover": {
+            backgroundColor: "var(--button)",
+          },
+        },
+      },
+    },
     palette: {
-      type: 'dark',
+      // type: 'dark',
     },
   });
   return (
-    <UserProvider user={user}>
-      <ThemeProvider theme={darkTheme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </UserProvider>
+    <ThemeProvider theme={theme}>
+      <UserProvider user={user}>
+          <Component {...pageProps} />
+      </UserProvider>
+    </ThemeProvider>
+
   );
 }

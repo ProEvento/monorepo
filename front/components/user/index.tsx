@@ -2,7 +2,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-
+import Link from "next/link"
 
 type Props = {
     imgURL?: string,
@@ -10,13 +10,13 @@ type Props = {
     lastName?: string
 }
 
-const User = ({imgURL, firstName, lastName}: Props) => {
+const User = ({imgURL, firstName, lastName, username}: Props) => {
     return (
         <ListItem>
             <ListItemAvatar>
                 <Avatar></Avatar>
             </ListItemAvatar>
-            <ListItemText primary={firstName + " " + lastName}></ListItemText>
+            <ListItemText primary={<Link href={`/user/${username}`}>{firstName + " " + lastName}</Link>}></ListItemText>
         </ListItem>
     )
 }

@@ -52,6 +52,7 @@ async function search(req: Request, res: Response) {
 			order: [
 				['time', sort === "ascending" ? "ASC" : "DESC"]
 			],
+			include: [{ model: models.User, as: "host"}, { model: models.User, as: "attendees"}],
 			where: { 
 				[Op.or]: [
 				{

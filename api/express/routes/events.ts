@@ -264,10 +264,7 @@ export default {
 	createEventByUser,
 	joinEvent,
 	leaveEvent,
-<<<<<<< HEAD
 	startEvent,
-	endEvent
-=======
+	endEvent,
 	getEventAttendees
->>>>>>> b2864348f9505b6009dd145c3a06882f87191fe4
 };

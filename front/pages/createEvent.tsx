@@ -4,6 +4,8 @@ import CreateEventComponent from '@components/createEvent'
 import { withUserProp } from '@lib/withUserProp';
 import { CustomUserContext } from 'types';
 
+export const getServerSideProps = withPageAuthRequired();
+
 const CreateEvent = ({ userContext}: { userContext: CustomUserContext}) => {
   return (
     <Page header={false} activePage={"Create Event"} title={"Make your own Event!"} userContext={userContext}>
@@ -12,4 +14,4 @@ const CreateEvent = ({ userContext}: { userContext: CustomUserContext}) => {
   )
 }
 
-export default withPageAuthRequired(withUserProp(CreateEvent))
+export default withUserProp(CreateEvent)

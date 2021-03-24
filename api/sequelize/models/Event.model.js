@@ -30,6 +30,14 @@ const Event = sequelize.define(
    picture: {
       type: DataTypes.STRING,
       allowNull:true
+   },
+   started: {
+      type: DataTypes.BOOLEAN,
+      deafultValue: false
+   },
+   ended: {
+      type: DataTypes.BOOLEAN,
+      deafultValue: false
    }
 }, { 
   timestamps: true,

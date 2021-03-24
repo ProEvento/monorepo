@@ -3,6 +3,8 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../lib/withUserProp';
 import { CustomUserContext } from '../types';
 
+export const getServerSideProps = withPageAuthRequired();
+
 const Explore = ({ userContext }: { userContext: CustomUserContext }) => {
   const { user, error, isLoading } = userContext;  
 
@@ -13,4 +15,4 @@ const Explore = ({ userContext }: { userContext: CustomUserContext }) => {
   )
 }
 
-export default withPageAuthRequired(withUserProp(Explore))
+export default withUserProp(Explore)

@@ -5,25 +5,24 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
 import { CustomUserContext } from '../../types';
 import {EventType, UserType} from '../../../api/types'
-import {  GetServerSideProps } from 'next'
+import { GetServerSideProps } from 'next'
 import makeServerCall from '../../lib/makeServerCall';
-import Moment from 'moment';
 import {Grid, Button} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react'
 import Link from 'next/link';
 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const data = await makeServerCall({ apiCall: `events/${context.params.event}`, method: "GET" })
-  return { 
-    props: {
-      event : data
-     }
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async (context) => {
+    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true }, method: "GET" })
+    return { 
+      props: {
+        event: data
+      }
+    }
   }
-}
-
-
+})
 
 //have username -> make call to see if attending?
 
@@ -41,7 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   }),
 );
-Moment.locale('en');
 
 
 const Event = ({event, userContext, targetUser}: { userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
@@ -58,7 +56,7 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
     makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
 
-  
+  console.log(event)
   const openAttendEvent = ((e) => {
 
   })
@@ -80,20 +78,24 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
     }
   } 
   var dateEvent = new Date(event.time)
+  console.log(Date.now(),  dateEvent.getTime())
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
       <h1>Hello {userContext.user.username}</h1>
       <h1>{event.title}</h1>
-      <h4> {Moment(event.time).format('LT ddd MMM YY')} </h4>
+      <h4>{dateEvent.toLocaleDateString("en-US")} {dateEvent.toLocaleTimeString("en-US")}</h4>
       {event.priv
         ? <h5>Private Event </h5>
         : <h5>Open Event</h5>
       }
-      <h5>Hosted By: {event.User_id}</h5>
+      <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>
       <h4>{event.description}</h4>
+      {event && event.attendees.length && <div><strong>Attendees:</strong> {event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName}, `)}</div>}
+      <br />
+      <br />
       {attend &&
         <Button disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
-        <a>Join Meeting</a>
+          <a>Join Meeting</a>
         </Button>
       }
       {attend
@@ -101,9 +103,10 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
+
     </Page>
   )
 }
 
 
-export default withPageAuthRequired(withUserProp(Event))
+export default withUserProp(Event)

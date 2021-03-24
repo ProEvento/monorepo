@@ -1,5 +1,4 @@
 import Page from '@components/page'
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../lib/withUserProp';
 import { CustomUserContext } from '../types';
 

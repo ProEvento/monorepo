@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {  GetServerSideProps } from 'next'
+import {  GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { CustomUserContext } from '../../types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
@@ -19,20 +19,22 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-export const getServerSideProps: GetServerSideProps = async (context) => { 
-  const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
-    queryParameters: { 
-      username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
-    },
-  })
-  const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
-  return { 
-    props: {
-      targetUser : data,
-      followerData: followers
-     }
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async (context: GetServerSidePropsContext) => { 
+    const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
+      queryParameters: { 
+        username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
+      },
+    })
+    const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
+    return { 
+      props: {
+        targetUser : data,
+        followerData: followers
+      }
+    }
   }
-}
+})
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -205,4 +207,4 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   )
 }
 
-export default withPageAuthRequired(withUserProp(User))
+export default withUserProp(User)

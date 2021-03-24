@@ -19,7 +19,12 @@ export default async (request: VercelRequest, response: VercelResponse) => {
   }
 
 
-  const resp = await fetch("http://localhost:8080/api/users/signup", { method: "POST", body: JSON.stringify(user), headers: {'Content-Type': 'application/json'} })
+  const resp = await fetch("http://localhost:8080/api/users/signup", { method: "POST", body: JSON.stringify(user),
+  headers: {
+    'Content-Type': 'application/json',
+    "Authorization": process.env.PROEVENTO_SECRET
+  })
+
   const data = await resp.json()
   response.status(resp.status).send(data)
 }

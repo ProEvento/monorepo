@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 function makeHandlerAwareOfAsyncErrors(handler: Function) {
 	return async function(req: Request, res: Response, next: NextFunction) {
+
 		try {
 			await handler(req, res);
 		} catch (error) {
@@ -38,6 +39,17 @@ function makeHandlerAwareOfAsyncErrors(handler: Function) {
 		}
 	};
 }
+
+async function handleProeventoSecret (req: Request, res: Response, next: NextFunction) {
+	const secret = req.headers.authorization;
+	if (secret === process.env.PROEVENTO_SECRET) {
+		next()
+	} else {
+		throw new Error('Not authorized.')
+	}
+}
+
+app.use(handleProeventoSecret);
 
 app.get('/', (req, res) => {
 	res.send(`
@@ -131,8 +143,19 @@ app.post(
 
 app.get(
 	`/api/events/getByTitle`,
-	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+	makeHandlerAwareOfAsyncErrors(routes.events.getByTitle)
 )
+
+app.put(
+	`/api/events/startEvent`,
+	makeHandlerAwareOfAsyncErrors(routes.events.startEvent)
+)
+
+app.put(
+	`/api/events/endEvent`,
+	makeHandlerAwareOfAsyncErrors(routes.events.endEvent)
+)
+
 
 
 

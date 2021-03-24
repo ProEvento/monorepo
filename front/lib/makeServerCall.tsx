@@ -3,7 +3,13 @@ const makeServerCall = async ({ apiCall, method, queryParameters, bodyParameters
         method : "POST", 
         body: JSON.stringify({ method, queryParameters, bodyParameters })
     });
-    return await res.json()
+
+    try {
+        return await res.json()
+    } catch (e) {
+        return { error: e } 
+    }
+    
 }
 
 export default makeServerCall

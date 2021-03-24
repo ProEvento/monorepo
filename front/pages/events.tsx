@@ -23,6 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+export const getServerSideProps = withPageAuthRequired();
+
 const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   const { user, error, isLoading } = userContext;
   const [events, setEvents] = useState([]);
@@ -58,4 +60,4 @@ const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   )
 }
 
-export default withPageAuthRequired(withUserProp(EventsPage))
+export default withUserProp(EventsPage)

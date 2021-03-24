@@ -75,8 +75,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
       title,
       description,
       priv,
-      time: "2021-04-19 20:39:58",
-      //time: (new Date(date)).toISOString(),
+      time: (new Date(date)).toISOString(),
       userId: user.id,
       User_id: user.id.toString()
     }

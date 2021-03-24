@@ -39,13 +39,62 @@ async function getEventsForUser(req: Request, res: Response) {
 
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);
+
+	const { attending } = req.query
+	if (!attending) {
+		const event = await models.Event.findByPk(id, { include: { model: models.User, as: "host" }});
+		if (event) {
+			res.status(200).json(event);
+		} else {
+			res.status(404).send('404 - Not found');
+		}
+	} else {
+		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }]});
+		if (event) {
+			res.status(200).json(event);
+		} else {
+			res.status(404).send('404 - Not found');
+		}
+	}
+
+};
+
+async function startEvent(req: Request, res: Response) {
+	const id = req.query.id;
+	if (!id) {
+		throw new Error("Missing id")
+	}
+	//@ts-ignore
 	const event = await models.Event.findByPk(id);
+	//@ts-ignore
+	console.log(id, event.title)
 	if (event) {
+		// @ts-ignore
+		event.started = true
+		await event.save();
 		res.status(200).json(event);
 	} else {
 		res.status(404).send('404 - Not found');
 	}
 };
+
+async function endEvent(req: Request, res: Response) {
+	const id = req.query.id;
+	if (!id) {
+		throw new Error("Missing id")
+	}
+	//@ts-ignore
+	const event = await models.Event.findByPk(id);
+	if (event) {
+		// @ts-ignore
+		event.ended = true
+		await event.save();
+		res.status(200).json(event);
+	} else {
+		res.status(404).send('404 - Not found');
+	}
+};
+
 
 async function leaveEvent(req: Request, res: Response) {
 	const { userId } = req.query;
@@ -195,5 +244,7 @@ export default {
 	getEventsForUser,
 	createEventByUser,
 	joinEvent,
-	leaveEvent
+	leaveEvent,
+	startEvent,
+	endEvent
 };

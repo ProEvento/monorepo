@@ -12,6 +12,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react'
 import Link from 'next/link';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
+import {TextField} from '@material-ui/core';
 
 
 
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const Event = ({event, userContext, targetUser}: { attendees:any, userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
-
+  const [username, setUsername] = useState("")
   let noAttendees = true; 
   if(event.attendees.length > 0){
     noAttendees = false; 
@@ -84,9 +85,25 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       console.log("success")
       attend = true; 
     }
-  } 
+  }
   var dateEvent = new Date(event.time)
   console.log(Date.now(),  dateEvent.getTime())
+
+  const inviteUser = async () => {
+    const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
+      queryParameters: {
+        username: username
+      }
+    })
+
+    console.log("TargetUser, " , targetUser.username)
+    const data = await makeServerCall({ apiCall: `users/notifications/${targetUser.id}`, method: "POST", 
+    queryParameters: { 
+      text: `You've been invited to https://localhost:3000/event/${event.id} by ${targetUser.username}!`
+      },
+    })
+  };
+
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
        
@@ -110,6 +127,10 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
+      <form>
+          <TextField onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
+          <Button onClick={inviteUser}  color="primary">Invite User</Button>
+      </form>
       <h3>Attendees</h3>
 
       {noAttendees &&

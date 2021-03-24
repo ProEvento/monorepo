@@ -10,6 +10,9 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     apiURL.search = new URLSearchParams(queryParameters).toString();
     const res = await fetch(apiURL.toString(), {
         method: method,
+        headers: {
+          "Authorization": process.env.PROEVENTO_SECRET
+        }
     })
   const data = await res.json();
   response.status(res.status).send(data);

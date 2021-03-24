@@ -17,7 +17,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
-    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true }, method: "GET" })
+    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true, topic: true }, method: "GET" })
     return { 
       props: {
         event: data
@@ -55,7 +55,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   if(event.attendees.length > 0){
     noAttendees = false; 
   }
-  var tags = false; 
+  var tags = true; 
 
   const styles = useStyles()
   // console.log(targetUser)
@@ -74,11 +74,10 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
   })
   // console.log(userContext.user)
-  if(event.Topic_id != null){
-    tags = true
-    console.log(event.Topic_id.title)
-
-  }
+  // if(event.topic != null){
+  //   tags = true
+  //   console.log(event.topic.title)
+  // }
 
   useEffect(() => {
     if (user)
@@ -108,7 +107,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         ? <h5>Private Event </h5>
         : <h5>Open Event</h5>
       }
-      <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>
+      {event.host && <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>}
       <h4>{event.description}</h4>
       <br />
       <br />  
@@ -128,8 +127,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       }
     
     {event.attendees && <div>{event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName} `)}</div>}
-    {tags &&
-      <h5>Tag: {event.Topic_id.title}</h5>
+    {event.Topic &&
+      <h5>Topic: {event.Topic.title}</h5>
     }
     </Page>
   )

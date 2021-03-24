@@ -42,14 +42,15 @@ async function getById(req: Request, res: Response) {
 
 	const { attending } = req.query
 	if (!attending) {
-		const event = await models.Event.findByPk(id, { include: { model: models.User, as: "host" }});
+		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.Topic}]});
 		if (event) {
 			res.status(200).json(event);
 		} else {
 			res.status(404).send('404 - Not found');
 		}
 	} else {
-		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }]});
+		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }, {model: models.Topic}]});
+		console.log(event ? event.toJSON() : "event is nyull")
 		if (event) {
 			res.status(200).json(event);
 		} else {

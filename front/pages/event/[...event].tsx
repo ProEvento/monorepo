@@ -11,6 +11,8 @@ import {Grid, Button} from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react'
 import Link from 'next/link';
+import ButtonGroup from '@material-ui/core/ButtonGroup'
+
 
 
 export const getServerSideProps = withPageAuthRequired({
@@ -42,13 +44,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-const Event = ({event, userContext, targetUser}: { userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
+
+
+const Event = ({event, userContext, targetUser}: { attendees:any, userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
+
+  let noAttendees = true; 
+  if(event.attendees.length > 0){
+    noAttendees = false; 
+  }
   const styles = useStyles()
   // console.log(targetUser)
   var attend = false; 
   const [events, setEvents] = useState([]);
   const { user, error, isLoading } = userContext;
-
   const leaveEvent = () => {
     makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
@@ -62,7 +70,6 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
   })
   // console.log(userContext.user)
 
-
   useEffect(() => {
     if (user)
       makeServerCall({ apiCall: `events/getEventsForUser/${user.id}`, method: "GET" }).then((data) => {
@@ -70,6 +77,7 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       });
   }, [user])
   // console.log(events)
+  
 
   for (var index in events){
     if(events[index].id == event.id){
@@ -81,8 +89,9 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
   console.log(Date.now(),  dateEvent.getTime())
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
-      <h1>Hello {userContext.user.username}</h1>
+       
       <h1>{event.title}</h1>
+
       <h4>{dateEvent.toLocaleDateString("en-US")} {dateEvent.toLocaleTimeString("en-US")}</h4>
       {event.priv
         ? <h5>Private Event </h5>
@@ -90,7 +99,6 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       }
       <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>
       <h4>{event.description}</h4>
-      {event.attendees && <div><strong>Attendees:</strong> {event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName}, `)}</div>}
       <br />
       <br />  
       {attend &&
@@ -102,6 +110,14 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
         ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
+      <h3>Attendees</h3>
+
+      {noAttendees &&
+        <h5>No Attendees</h5>
+      }
+    
+    {event.attendees && <div>{event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName} `)}</div>}
+
 
 
     </Page>

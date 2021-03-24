@@ -11,10 +11,8 @@
 2. Add them to `front/` and `api/`
 3. In `api/`, `yarn`
 4. In `api/` `yarn add sequelize-cli`
-5. In `api/`, `sequelize-cli db:create`
-6. In `api/`, `sequelize-cli db:migrate` <-- run this every time you `git pull`
-7. `yarn` <-- run this every time you `git pull`
-8. `yarn start`
+5. `yarn` <-- run this every time you `git pull`
+6. `yarn start`
 
 To create a model:
 

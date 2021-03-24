@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 Moment.locale('en');
 
 
-    
+
 
 const Event = ({attendees, event, userContext, targetUser}: { attendees:any, userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
 // const [open, setOpen] = useState(false);
@@ -67,7 +67,10 @@ const Event = ({attendees, event, userContext, targetUser}: { attendees:any, use
 //   setAttendees([]);
 // };
   const usersAttending = attendees
-  
+  var noAttendees = true; 
+  if(attendees.length != 0){
+    noAttendees = false; 
+  }
   const styles = useStyles()
   // console.log(targetUser)
   var attend = false; 
@@ -129,9 +132,15 @@ const Event = ({attendees, event, userContext, targetUser}: { attendees:any, use
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
       <h3>Attendees</h3>
-        {usersAttending.map(topic => {
-          return <div>{topic.firstName}</div>
-        })}
+
+      {noAttendees &&
+        <h5>No Attendees</h5>
+      }
+    
+      {usersAttending.map(topic => {
+        return <div>{topic.firstName}</div>
+      })}
+
     </Page>
   )
 }

@@ -73,7 +73,8 @@ async function getNotificationsForUser(req: Request, res: Response) {
 
 async function addNotificationToUser(req: Request, res: Response) {
 	const id = getIdParam(req);
-	const { text } = req.body;
+	
+	const { text } = req.query;
 
 	const user = await models.User.findOne({where: { id: id }})
 	if (user) {

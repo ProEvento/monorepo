@@ -290,6 +290,5 @@ export default {
 	leaveEvent,
 	startEvent,
 	endEvent,
-	getEventAttendees,
 	addTopic
 };

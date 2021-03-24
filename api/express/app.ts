@@ -43,6 +43,7 @@ function makeHandlerAwareOfAsyncErrors(handler: Function) {
 
 async function handleProeventoSecret (req: Request, res: Response, next: NextFunction) {
 	const secret = req.headers.authorization;
+	console.log(process.env.PROEVENTO_SECRET, secret, secret === process.env.PROEVENTO_SECRET)
 	if (secret === process.env.PROEVENTO_SECRET) {
 		next()
 	} else {

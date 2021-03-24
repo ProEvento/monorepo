@@ -67,7 +67,6 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   }
 
   const topicChange = (e: any) => {
-    console.log(e)
     setTopic(e)
   }
 

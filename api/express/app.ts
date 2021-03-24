@@ -110,6 +110,11 @@ app.get(
 )
 
 app.get(
+	`/api/events/getEventAttendees/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventAttendees)
+)
+
+app.get(
 	`/api/events/getAttending/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsAttending)
 )

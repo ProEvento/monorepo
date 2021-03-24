@@ -141,6 +141,25 @@ async function getEventsAttending(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not not found."});
 	}
 };
+
+async function getEventAttendees(req: Request, res: Response) {
+	const { query } = req;
+	const id = getIdParam(req);
+	console.log("in geteventattendee ", id)
+	const event = await models.Event.findOne({
+		where: {
+			id: id
+		}
+	});
+	if (event) {
+		//@ts-ignore
+		res.status(200).json(await event.getAttendees());
+	} else {
+		res.status(404).json({ msg: "Event not not found."});
+	}
+};
+
+
 async function create(req: Request, res: Response) {
 	if (req.body.id) {
 		res.status(400).send(`Bad request: ID should not be provided, since it is determined automatically by the database.`)
@@ -195,5 +214,6 @@ export default {
 	getEventsForUser,
 	createEventByUser,
 	joinEvent,
-	leaveEvent
+	leaveEvent,
+	getEventAttendees
 };

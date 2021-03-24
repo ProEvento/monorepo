@@ -21,6 +21,7 @@ const routes = {
 	users: require('./routes/users').default,
 	events: require('./routes/events').default,
 	search: require('./routes/search').default,
+	topics: require('./routes/topics').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -161,6 +162,17 @@ app.put(
 	makeHandlerAwareOfAsyncErrors(routes.events.endEvent)
 )
 
+app.post(
+	`/api/events/setTopic`,
+	makeHandlerAwareOfAsyncErrors(routes.events.addTopic)
+)
+
+// Topics
+
+app.get(
+	`/api/topics/getByTitle/:title`,
+	makeHandlerAwareOfAsyncErrors(routes.topics.getByTitle)
+)
 
 
 

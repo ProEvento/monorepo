@@ -46,22 +46,28 @@ const useStyles = makeStyles((theme: Theme) =>
 const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   const router = useRouter();
   const { user } = userContext;
-  console.log(user)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [picture, setPicture] = useState("")
   const [priv, setPriv] = useState(false)
   const [response, setResponse] = useState("")
   const [date, setDate] = useState<number>(-1)
+  const [topic, setTopic] = useState("pokemon")
 
   const classes = useStyles();
 
   const fields: FormEntry[] = [
     { name: "Title", key: "title", type: "text", set: setTitle, value: title, required: true },
     { name: "Description", key: "description", type: "multitext", rows: 5, set: setDescription, value: description, required: true },
+    { name: "Event Image URL", key: "picture", type: "text", set: setPicture, value: picture, required: false },
   ];
 
   const handleChange = (e: string) => {
     setDate(e)
+  }
+
+  const topicChange = (e: any) => {
+    setTopic(e)
   }
 
   const handleClick = () => { 
@@ -69,22 +75,29 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   }
   
   const submit = async (e: any) => {
-      console.log(userContext)
-    e.preventDefault();
-    const toSend = {
-      title,
-      description,
-      priv,
-      time: (new Date(date)).toISOString(),
-      userId: user.id,
-      User_id: user.id.toString()
-    }
-    console.log(toSend)
-    const data = await makeServerCall({ apiCall: "events/createEventByUser", method: "POST", 
-        queryParameters: toSend,
-    })
+      e.preventDefault();
+
+      //const topicModel = await makeServerCall({ apiCall: `topics/getByTitle/${topic}`, method: "GET"})
+      const toSend = {
+        title,
+        description,
+        priv,
+        picture,
+        time: (new Date(date)).toISOString(),
+        userId: user.id,
+        User_id: user.id.toString()
+      }
+      const data = await makeServerCall({ apiCall: "events/createEventByUser", method: "POST", 
+          queryParameters: toSend,
+      })
       if (data.msg === "success") {
-        console.log(data.event)
+        const addTopic = {
+          id : data.event.id,
+          searchTitle : topic
+        }
+        const eventData = await makeServerCall({ apiCall: "events/setTopic", method: "POST", 
+          queryParameters: addTopic,
+        })
         router.push(`/event/${data.event.id}`)
       } else {
         // it didnt work
@@ -100,7 +113,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   return (
     <form className={classes.root}>
         <div className={classes.row}>
-          <Typography variant="h6">👋, {user.name}! Please provide some information about your event.</Typography>
+          <Typography variant="h6">Please provide some information about your event.</Typography>
         </div>  
         {response && response !== "success" && <Typography variant="h6">‼️{response}‼️</Typography>}
         <div className={classes.row}>
@@ -112,11 +125,29 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         <div className={classes.row}>
           <ControlledTextField entry={fields[1]} />
         </div>
+        <div className={classes.row}>
+          <ControlledTextField entry={fields[2]} />
+        </div>
         
         <div>
+            Date:
             <Datetime onChange={handleChange}/>
         </div>
-
+        <br></br>
+        <br></br>
+        <div>
+          Pick a topic: {" "}
+          <select value={topic} onChange={(e) => { topicChange(e.target.value) }}>
+            <option value="pokemon">Pokemon</option>
+            <option value="art">Art</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="math">Math</option>
+            <option value="politics">Politics</option>
+            <option value="science">Science</option>
+            <option value="social">Social</option>
+          </select>
+        </div>
+        <br></br>
         <div className={classes.row}>
             Private
           <input onClick={handleClick} checked={priv} type="checkbox" />

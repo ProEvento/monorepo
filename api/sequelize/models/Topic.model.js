@@ -11,9 +11,6 @@ const Topic = sequelize.define(
       type: DataTypes.STRING, 
       allowNull:false
    }, 
-   Event_id: {
-      type: DataTypes.INTEGER
-   }, 
    User_id: {
       type: DataTypes.INTEGER
    }
@@ -26,12 +23,13 @@ const Topic = sequelize.define(
 );
 
 Topic.associate = function(models) {
-   Topic.belongsTo(models.Event, {
-   foreignKey: 'Event_id',
-   target: 'id'
+   Topic.hasMany(models.Event, {
+      foreignKey: 'Topic_id',
+      target: 'id',
+      type: DataTypes.INTEGER
    });
-
 }
+
 
 return Topic;
 };

@@ -158,7 +158,6 @@ async function getByTitle(req: Request, res: Response) {
 };
 async function createEventByUser(req: Request, res: Response) {
 	const { userId, ...event } = req.query;
-	console.log(req.query)
 	const user = await models.User.findOne({ where: {
 		id: userId
 	}});
@@ -205,6 +204,30 @@ async function getEventAttendees(req: Request, res: Response) {
 		res.status(200).json(await event.getAttendees());
 	} else {
 		res.status(404).json({ msg: "Event not not found."});
+	}
+};
+
+async function addTopic(req: Request, res: Response) {
+	const id = req.query.id
+	const searchTitle = req.query.searchTitle
+	console.log(req)
+	const event = await models.Event.findOne({
+		where: {
+			id: id
+		}
+	})
+
+	const topic = await models.Topic.findOne({
+		where: {
+			title: searchTitle
+		}
+	})
+
+	if (event && searchTitle) {
+		//@ts-ignore
+		res.status(200).json(await topic.addEvent(event));
+	} else {
+		res.status(404).json({ msg: "User not found."});
 	}
 };
 
@@ -266,5 +289,6 @@ export default {
 	leaveEvent,
 	startEvent,
 	endEvent,
-	getEventAttendees
+	getEventAttendees,
+	addTopic
 };

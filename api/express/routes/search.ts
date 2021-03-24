@@ -8,14 +8,10 @@ async function search(req: Request, res: Response) {
     // type: "event" | "user",
     const { type } = req.params
 	// query: string comma seperated terms, sort: "ascending" | "descending"
-	const { query, sort }  = req.query
+	const { query, sort, start, end }  = req.query
 
-    if (!query || typeof query !== 'string') {
-        res.status(500).json({ msg: "Requires query"})
-    }
+	const terms = query ? query!.toString().split(",") : ""
 
-	const terms = query!.toString().split(",")
-    console.log(`%${terms}%`)
 	if (type === "user") {
 		const results = await models.User.findAll({
 			where: { 
@@ -46,6 +42,7 @@ async function search(req: Request, res: Response) {
 				},
 			]}
 		})
+		console.log(results)
 		res.status(200).json({results});
 	} else if (type === "event") {
 		const results = await models.Event.findAll({
@@ -72,6 +69,27 @@ async function search(req: Request, res: Response) {
 		});
 		res.status(200).json({results});
 
+	} else if (type === "event_date") {
+		//@ts-ignore
+		const startDate = new Date(start)
+		startDate.setHours(0)
+		startDate.setMinutes(0)
+		//@ts-ignore
+		const endDate = new Date(end)
+		endDate.setHours(23)
+		endDate.setMinutes(59)
+		const results = await models.Event.findAll({
+			order: [
+				['time', "ASC"]
+			],
+			include: [{ model: models.User, as: "host"}, { model: models.User, as: "attendees"}],
+			where: { 
+				time: {
+					[Op.between] : [startDate.toString(), endDate.toString()]
+				}
+			}	
+		});
+		res.status(200).json({results});
 	} else {
 		return res.status(404).json({ msg: "Invalid search type"})
 	}

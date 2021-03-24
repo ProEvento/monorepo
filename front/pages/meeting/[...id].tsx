@@ -65,7 +65,7 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
         return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>This event hasn't started yet. Check out the <Link href="/explore">Explore page to find another</Link> or wait for the host to start.</Page>
       else
         return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
-          <Typography align="center" style={{marginTop: 300}}><Button onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Event</Button></Typography>
+          <Typography align="center" style={{marginTop: 300}}><Button onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Meeting</Button></Typography>
         </Page>
     }
     
@@ -142,7 +142,8 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     } else if (token && connecting) {
         render = <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (token && !connecting && room) {
-        render = <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}><Room roomName={roomName} room={room} handleLogout={handleLogout} description={event.description}/></Page>
+        render = <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
+          <Room roomName={roomName} room={room} handleLogout={handleLogout} description={event.description}/></Page>
     } else {
         render = (
             <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>

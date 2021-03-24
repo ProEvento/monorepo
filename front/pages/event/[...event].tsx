@@ -90,9 +90,9 @@ const Event = ({event, userContext, targetUser}: { userContext: CustomUserContex
       }
       <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>
       <h4>{event.description}</h4>
-      {event && event.attendees.length && <div><strong>Attendees:</strong> {event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName}, `)}</div>}
+      {event.attendees && <div><strong>Attendees:</strong> {event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName}, `)}</div>}
       <br />
-      <br />
+      <br />  
       {attend &&
         <Button disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
           <a>Join Meeting</a>

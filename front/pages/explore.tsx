@@ -15,6 +15,8 @@ import makeServerCall from '@lib/makeServerCall';
 
 // Simple tabs: https://material-ui.com/components/tabs/#centered
 
+export const getServerSideProps = withPageAuthRequired();
+
 const Explore = ({ userContext }: { userContext: CustomUserContext }) => {
   const { user, error, isLoading } = userContext;  
   const tabs = SimpleTabs();
@@ -111,5 +113,4 @@ function SimpleTabs() {
 }
 
 
-
-export default withPageAuthRequired(withUserProp(Explore))
+export default withUserProp(Explore)

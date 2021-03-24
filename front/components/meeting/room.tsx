@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Participant from "./participant";
 import styles from "./room.module.css";
 
-const Room = ({ roomName, room, handleLogout }) => {
+const Room = ({ roomName, room, handleLogout, description }) => {
   const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ const Room = ({ roomName, room, handleLogout }) => {
   return (
     <div className={styles.room}>
       <h2>Room: {roomName}</h2>
+      <h4>{description}</h4>
       <div className={styles['local-participant']}>
         {room ? (
           <Participant

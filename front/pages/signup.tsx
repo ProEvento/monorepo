@@ -2,6 +2,8 @@ import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Page from '@components/page'
 import SignupComponent from '@components/signup'
 
+export const getServerSideProps = withPageAuthRequired();
+
 const Signup = () => {
   const userContext = useUser();  
   return (
@@ -11,4 +13,4 @@ const Signup = () => {
   )
 }
 
-export default withPageAuthRequired(Signup)
+export default Signup

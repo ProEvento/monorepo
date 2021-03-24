@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import {Avatar, Button} from '@material-ui/core';
 import EventIcon from '@material-ui/icons/Event';
 import Typography from '@material-ui/core/Typography';
 import { DBUser, User } from 'types';
 import Link from '@components/link'
+import { DataUsageOutlined } from '@material-ui/icons';
+import makeServerCall from '@lib/makeServerCall';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,19 +40,32 @@ const containerStyles = makeStyles((theme: Theme) =>
 
 
 const getAttendeeAvatars = (attendees: DBUser[]) => {
-  return attendees.map((e) => <Avatar alt={e.username} key={e.id} src={e.picture}>{!e.picture && `${e.firstName[0]}${e.lastName[0]}`}</Avatar>)
+  const mapped = attendees.map((e) => <Avatar alt={e.username} key={e.id} src={e.picture}>{!e.picture && `${e.firstName[0]}${e.lastName[0]}`}</Avatar>)
+  if (mapped.length < 3) {
+    return mapped;
+  } else {
+    return mapped.slice(0, 2);
+  }
 }
-const Item = ({ title, dateTime, host, attendees }: { title: string, dateTime: number, host: DBUser | User, attendees: DBUser[] }) => {
+
+const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
+  const [response, setResponse] = useState("")
   const classes = containerStyles();
   const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const options = { weekday: "long", year: 'numeric', month: 'long', day: 'numeric' };
+  const { time, title, description, host, attendees, id } = event;
+  const date = new Date(time)
+
+  const isHost = user.username === (host ? host.username : user.username);
+  const isAttending = !!attendees.find((attendee) => attendee.username === user.username)
+
   return (
     <ListItem className={classes.root}>
       <Typography variant="h5">
-        {days[(new Date(dateTime)).getDay()]} 
+        {days[date.getDay()]} 
         <ListItemAvatar>
-        <Avatar>
-          <EventIcon />
+        <Avatar style={{fontSize: 20}}>
+          {date.getDate()}
         </Avatar>
       </ListItemAvatar>
       </Typography>
@@ -60,22 +75,26 @@ const Item = ({ title, dateTime, host, attendees }: { title: string, dateTime: n
           <React.Fragment>
             <Typography variant="h6">
               {/* @ts-expect-error */}
-              {(new Date(dateTime)).toLocaleDateString("en-US", options)}
+              {date.toLocaleDateString("en-US", options)}
             </Typography>
             <Typography variant="caption">
-              Hosted by <Link href={`/user/${host.username}`}>{host.firstName} {host.lastName}</Link>
+              Hosted by {host.username === user.username ? 'you' : <Link href={`/user/${host.username}`}>{host.firstName} {host.lastName}</Link>}
             </Typography>
           </React.Fragment>
         }
       />
-      <ListItemText primary={<>{getAttendeeAvatars(attendees)}</>}/>
+      <ListItemText primary={<div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{getAttendeeAvatars(attendees)}</div>}/>
+        {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
+        {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
+        {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>}
+        <a href={`/event/${id}`}><Button style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a>
     </ListItem>
     )
 }
 
-const Event = ({title, dateTime, host, attendees} : {title: string, dateTime: number, host: DBUser | User, attendees: DBUser[]}) => {
+const Event = ({user, event,  cancelEvent, joinEvent, leaveEvent } : {user: User, event: any, cancelEvent: Function, joinEvent: Function, leaveEvent: Function }) => {
     const classes = useStyles();
-    return (<Item host={host} title={title} dateTime={dateTime} attendees={attendees} />)
+    return (<Item user={user} event={event} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} />)
 }
 
 export default Event

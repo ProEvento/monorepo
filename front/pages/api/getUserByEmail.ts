@@ -5,7 +5,8 @@ export default async (request: VercelRequest, response: VercelResponse) => {
   const res = await fetch(`http://localhost:8080/api/users/getByEmail?email=${email}`, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": process.env.PROEVENTO_SECRET
     }
   })
 

@@ -20,6 +20,7 @@ const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
 const routes = {
 	users: require('./routes/users').default,
 	events: require('./routes/events').default,
+	search: require('./routes/search').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -30,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 function makeHandlerAwareOfAsyncErrors(handler: Function) {
 	return async function(req: Request, res: Response, next: NextFunction) {
+
 		try {
 			await handler(req, res);
 		} catch (error) {
@@ -37,6 +39,17 @@ function makeHandlerAwareOfAsyncErrors(handler: Function) {
 		}
 	};
 }
+
+async function handleProeventoSecret (req: Request, res: Response, next: NextFunction) {
+	const secret = req.headers.authorization;
+	if (secret === process.env.PROEVENTO_SECRET) {
+		next()
+	} else {
+		throw new Error('Not authorized.')
+	}
+}
+
+app.use(handleProeventoSecret);
 
 app.get('/', (req, res) => {
 	res.send(`
@@ -46,10 +59,34 @@ app.get('/', (req, res) => {
 
 // Custom API routes
 
+// Search
+
+app.get(
+	`/api/search/:type`,
+	makeHandlerAwareOfAsyncErrors(routes.search.search)
+)
+
+// Users
 
 app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
+)
+app.get(
+	`/api/users/followers/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getFollowers)
+)
+app.get(
+	`/api/users/following/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getFollowing)
+)
+app.delete(
+	`/api/users/removeFollower`,
+	makeHandlerAwareOfAsyncErrors(routes.users.removeFollower)
+)
+app.put(
+	`/api/users/addFollower`,
+	makeHandlerAwareOfAsyncErrors(routes.users.addFollower)
 )
 
 app.get(
@@ -58,14 +95,13 @@ app.get(
 )
 
 app.get(
-	`/api/events/getByTitle`,
+	`/api/users/getByUsername`,
 	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
 )
 
-
 app.get(
-	`/api/users/getByUsername`,
-	makeHandlerAwareOfAsyncErrors(routes.users.getByUsername)
+	`/api/users/topics/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getTopics)
 )
 
 app.get(
@@ -85,10 +121,48 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
 )
 
+app.get(
+	`/api/events/getEventAttendees/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventAttendees)
+)
+
+app.get(
+	`/api/events/getAttending/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventsAttending)
+)
+
 app.post(
 	`/api/events/createEventByUser`,
 	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
 )
+
+app.post(
+	`/api/events/joinEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.joinEvent)
+)
+
+app.post(
+	`/api/events/leaveEvent/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.events.leaveEvent)
+)
+
+app.get(
+	`/api/events/getByTitle`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getByTitle)
+)
+
+app.put(
+	`/api/events/startEvent`,
+	makeHandlerAwareOfAsyncErrors(routes.events.startEvent)
+)
+
+app.put(
+	`/api/events/endEvent`,
+	makeHandlerAwareOfAsyncErrors(routes.events.endEvent)
+)
+
+
+
 
 // Twilio token
 app.get('/api/token', (req, res) => {

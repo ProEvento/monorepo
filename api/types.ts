@@ -1,5 +1,5 @@
 export type UserType = {
-    // readonly id: string,
+    readonly id: string,
     firstName: string,
     lastName: string,
 	email: string,
@@ -7,10 +7,12 @@ export type UserType = {
     linkedin: string,
     bio: string,
     twitter: string,
-    username: string
+    username: string,
+    picture: string
 }
 
 export type EventType = {
+    id: string,
     title: string,
     User_id: UserType, 
     priv: boolean,
@@ -18,5 +20,11 @@ export type EventType = {
     description: string,
     topics: string,
     meetingURL: string,
+    comments: string
+}
+
+export type AttendingType = {
+    eventId: string,
+    userId: string
     id: BigInteger
 }

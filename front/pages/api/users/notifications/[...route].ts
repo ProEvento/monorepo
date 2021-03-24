@@ -8,10 +8,12 @@ export default async (request: VercelRequest, response: VercelResponse) => {
 
     const apiURL = new URL(`http://localhost:8080/api/users/notifications/${route}`)
     apiURL.search = new URLSearchParams(queryParameters).toString(); 
-    console.log(apiURL.toString())
     const res = await fetch(apiURL.toString(), {
         method: method,
-        body: JSON.stringify(bodyParameters)
+        body: JSON.stringify(bodyParameters),
+        headers: {
+          "Authorization": process.env.PROEVENTO_SECRET
+        }
     })
 
   const data = await res.json();

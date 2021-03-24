@@ -123,8 +123,6 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
 
 }
 
-
-
 const ControlledTextField = ({entry}: { entry: FormEntry }) => {
   return <TextField onChange={(e) => { entry.set(e.target.value) }} required={entry.required} style={{margin: 'var(--gap-double)'}} variant={"outlined"} id={entry.key} label={entry.name} value={entry.value} multiline={entry.type === "multitext"} rows={entry.rows} />
 }

@@ -100,10 +100,6 @@ const Page = ({
 
   const Pages = [
     {
-      name: "Dashboard",
-      url: "/"
-    },
-    {
       name: "Explore",
       url: "/explore"
     },

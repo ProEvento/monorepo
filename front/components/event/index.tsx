@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import {Avatar, Button} from '@material-ui/core';
+import { AvatarGroup } from '@material-ui/lab';
 import EventIcon from '@material-ui/icons/Event';
 import Typography from '@material-ui/core/Typography';
 import { DBUser, User } from 'types';
@@ -41,11 +42,8 @@ const containerStyles = makeStyles((theme: Theme) =>
 
 const getAttendeeAvatars = (attendees: DBUser[]) => {
   const mapped = attendees.map((e) => <Avatar alt={e.username} key={e.id} src={e.picture}>{!e.picture && `${e.firstName[0]}${e.lastName[0]}`}</Avatar>)
-  if (mapped.length < 3) {
-    return mapped;
-  } else {
-    return mapped.slice(0, 2);
-  }
+  return <AvatarGroup max={4}>{mapped}</AvatarGroup>;
+  
 }
 
 const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {

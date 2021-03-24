@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
         maxWidth: 800,
         margin: "0 auto",
         marginTop: 'var(--gap-double)'
+    },
+    img: {
+      height: 100
     }
   }),
 );
@@ -52,6 +55,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   if(event.attendees.length > 0){
     noAttendees = false; 
   }
+  var tags = false; 
+
   const styles = useStyles()
   // console.log(targetUser)
   var attend = false; 
@@ -69,6 +74,11 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
   })
   // console.log(userContext.user)
+  if(event.Topic_id != null){
+    tags = true
+    console.log(event.Topic_id.title)
+
+  }
 
   useEffect(() => {
     if (user)
@@ -91,6 +101,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
        
       <h1>{event.title}</h1>
+      <img src={event.picture} className={styles.img} />
 
       <h4>{dateEvent.toLocaleDateString("en-US")} {dateEvent.toLocaleTimeString("en-US")}</h4>
       {event.priv
@@ -117,7 +128,9 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       }
     
     {event.attendees && <div>{event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName} `)}</div>}
-
+    {tags &&
+      <h5>Tag: {event.Topic_id.title}</h5>
+    }
     </Page>
   )
 }

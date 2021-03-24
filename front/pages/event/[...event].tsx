@@ -19,6 +19,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await makeServerCall({ apiCall: `events/${context.params.event}`, method: "GET" })
   const attenders = await makeServerCall({ apiCall: `events/getEventAttendees/${context.params.event}`, method: "GET" })
+  const host = await
   return { 
     props: {
       event : data,

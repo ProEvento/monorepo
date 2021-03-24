@@ -6,16 +6,21 @@ export default function useLocalStorage(
   initialValue: string = ''
 ): [string, Dispatch<string>] {
   const [value, setValue] = useState(
-    () => window.localStorage.getItem(key) || initialValue
+    () => typeof window !== 'undefined' ? window.localStorage.getItem(key) : initialValue
   );
 
   const setItem = (newValue: string) => {
     setValue(newValue);
-    window.localStorage.setItem(key, newValue);
+    if (typeof window !== 'undefined'){
+      window.localStorage.setItem(key, newValue);
+    }
   };
 
   useEffect(() => {
-    const newValue = window.localStorage.getItem(key);
+    const newValue = ''
+    if (typeof window !== 'undefined'){
+      const newValue = window.localStorage.getItem(key);
+    }
     if (value !== newValue) {
       setValue(newValue || initialValue);
     }

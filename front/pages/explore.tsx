@@ -2,7 +2,7 @@ import Page from '@components/page'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../lib/withUserProp';
 import { CustomUserContext } from '../types';
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -14,6 +14,8 @@ import TextField from '@material-ui/core/TextField';
 import makeServerCall from '@lib/makeServerCall';
 import Event from '@components/event'
 import User from '@components/user'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Simple tabs: https://material-ui.com/components/tabs/#centered
 
@@ -75,10 +77,14 @@ async function getUsers(value) {
   return data
 }
 
-async function getEvents(value) {
-  console.log(value)
-  const data = await makeServerCall({apiCall: "search/event", method: "GET", queryParameters: {query: value}})
-  return data
+async function getEvents(value: string) {
+  const data = await makeServerCall({apiCall: "search/event", method: "GET", queryParameters: {query: value }})
+  return data || []
+}
+
+async function getEventsByTime(start: Date, end: Date) {
+  const data = await makeServerCall({apiCall: "search/event_date", method: "GET", queryParameters: {start: start, end: end}})
+  return data || []
 }
 
 function SimpleTabs({ user }) {
@@ -86,6 +92,8 @@ function SimpleTabs({ user }) {
   const [search, setSearch] = React.useState('');
   const [value, setValue] = React.useState(0);
   const [results, setResults] = React.useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
     setResults([])
@@ -125,12 +133,12 @@ function SimpleTabs({ user }) {
 
 
 
-  console.log(results)
   return (
     <div className={classes.root}>
       <Tabs value={value} onChange={handleChange} aria-label="search">
         <Tab label="Search for Events" {...a11yProps(0)} />
         <Tab label="Search for Users" {...a11yProps(1)} />
+        <Tab label="Search for Events by Date" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <TextField style={{height: 50}} id="outlined-basic" label="Search for Events..." variant="outlined"  value={search} onChange={handleSearchChange}></TextField>
@@ -141,6 +149,14 @@ function SimpleTabs({ user }) {
         <TextField style={{height: 50}}  id="outlined-basic" label="Search for Users..." variant="outlined" value={search} onChange={handleSearchChange}></TextField>
         <Button style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getUsers(search)).results)}>Search</Button>
         {value === 1 && results.length > 0 && results.map((user) => <User username={user.username} imgURL={user.picture} firstName={user.firstName} lastName={user.lastName}/>)}
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Start Date:
+        <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+        End Date:
+        <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+        <Button style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getEventsByTime(startDate, endDate)).results)}>Search</Button>
+        {value === 2 && results.length > 0 && results.map((event) => <Event user={user} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} event={event}/>)}
       </TabPanel>
     </div>
   );

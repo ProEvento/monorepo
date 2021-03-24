@@ -75,7 +75,7 @@ const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
           <React.Fragment>
             <Typography variant="h6">
               {/* @ts-expect-error */}
-              {date.toLocaleDateString("en-US", options)}
+              {date.toLocaleDateString("en-US", options)} {date.toLocaleTimeString("en-US")}
             </Typography>
             <Typography variant="caption">
               Hosted by {host.username === user.username ? 'you' : <Link href={`/user/${host.username}`}>{host.firstName} {host.lastName}</Link>}

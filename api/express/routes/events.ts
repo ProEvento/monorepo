@@ -227,7 +227,7 @@ async function addTopic(req: Request, res: Response) {
 		//@ts-ignore
 		res.status(200).json(await topic.addEvent(event));
 	} else {
-		res.status(404).json({ msg: "User not found."});
+		res.status(404).json({ msg: "Topic or Event not found."});
 	}
 };
 

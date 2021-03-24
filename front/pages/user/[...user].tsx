@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {  GetServerSideProps, GetServerSidePropsContext } from 'next'
+import {  GetServerSideProps } from 'next'
 import { CustomUserContext } from '../../types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
@@ -19,22 +19,20 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async (context: GetServerSidePropsContext) => { 
-    const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
-      queryParameters: { 
-        username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
-      },
-    })
-    const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
-    return { 
-      props: {
-        targetUser : data,
-        followerData: followers
-      }
-    }
+export const getServerSideProps: GetServerSideProps = async (context) => { 
+  const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
+    queryParameters: { 
+      username: Array.isArray(context.params.user) ? context.params.user[0] : context.params.user 
+    },
+  })
+  const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
+  return { 
+    props: {
+      targetUser : data,
+      followerData: followers
+     }
   }
-})
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,10 +138,10 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   };
 
    return (
-    <Page header={false} activePage={"User Profile"} title={targetUser.firstName} userContext={userContext}>
+    <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>
       <Grid container direction="row" justify="space-around" alignItems="center" >
           <Avatar alt={targetUser.firstName} src={targetUser.picture} className={classes.large}></Avatar>
-          {isUserFollowing(userContext.user.username) ? <Button onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
+          {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
           <ButtonGroup size="small" aria-label="small outlined button group">
             <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
             <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Following Topics </Button>
@@ -160,7 +158,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                     <div>
                       <Grid container direction="row" justify="space-around" alignItems="center">
                         <Avatar alt={user.firstName} src={user.picture} className={classes.small}></Avatar>
-                        <h4>{user.firstName}</h4>
+                        <h4>{user.firstName} {user.lastName}</h4>
                       </Grid>
                     </div>
                 )})}
@@ -207,4 +205,4 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   )
 }
 
-export default withUserProp(User)
+export default withPageAuthRequired(withUserProp(User))

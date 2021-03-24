@@ -9,7 +9,6 @@ async function getAll(req: Request, res: Response) {
 
 async function getByTitle(req: Request, res: Response) {
     const { query } = req;
-    console.log(req)
 	const searchTitle = req.params.title;
 	const topic = await models.Topic.findOne({
 		where: {

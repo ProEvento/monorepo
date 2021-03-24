@@ -118,8 +118,6 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     
     {event.attendees && <div>{event.attendees.map((attendee) => `${attendee.firstName} ${attendee.lastName} `)}</div>}
 
-
-
     </Page>
   )
 }

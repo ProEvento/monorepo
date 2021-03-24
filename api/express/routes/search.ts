@@ -27,7 +27,7 @@ async function search(req: Request, res: Response) {
 					}
 				}, 
 				{
-					username: 
+					username:
 					{
 						[Op.like]: `%${terms}%`
 					}

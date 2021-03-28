@@ -9,11 +9,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Input from '@material-ui/core/Input';
+import {Input, Button} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import makeServerCall from '@lib/makeServerCall';
-
-// Simple tabs: https://material-ui.com/components/tabs/#centered
+import classes from '*.module.css';
+import { EventBusy } from '@material-ui/icons';
+import Event from '@components/event'
+import User from '@components/user'
+// Simple tabs, TabPanel, a11yProps, useStyles: https://material-ui.com/components/tabs/#centered
 
 export const getServerSideProps = withPageAuthRequired();
 
@@ -68,30 +71,39 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 async function getUsers(value) {
-  const data = await makeServerCall({apiCall: "search/user", method: "GET", queryParameters: {query: value}})
-  return (
-    <div>
-      {data}
-    </div>
-  )
+  const data = await makeServerCall({apiCall: "search/user", method: "GET", queryParameters: {query: value.split(" ").join(",")}})
+  console.log(data)
+  return data;
 }
 
 async function getEvents(value) {
-  const data = await makeServerCall({apiCall: "search/event", method: "GET", queryParameters: {query: value}})
-  return (
-    <div>
-      {data}
-    </div>
-  )
+  const data = await makeServerCall({apiCall: "search/event", method: "GET", queryParameters: {query: value.split(" ").join(",")}})
+  return data;
 }
+
 
 function SimpleTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [search, setSearch] = React.useState('');
+  const [results, setResults] = React.useState()
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  let data;
+
+  const handleSearchClick = async () => {
+    if (value === 0)
+      setResults(await getEvents(search))
+    else
+      setResults(await getUsers(search))
+  }
+  
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -101,13 +113,17 @@ function SimpleTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <TextField id="outlined-basic" label="Search for Events..." variant="outlined" onChange={event => {data = getEvents(event.target.value)}}></TextField>
-        {data}
+        <TextField id="outlined-basic" label="Search for Events..." variant="outlined" value={search} onChange={handleSearchChange}></TextField>
+        <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
+        
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <TextField id="outlined-basic" label="Search for Users..." variant="outlined" onChange={event => {data = getUsers(event.target.value)}}></TextField>
-        {data}
+        <TextField id="outlined-basic" label="Search for Users..." variant="outlined" value={search} onChange={handleSearchChange}></TextField>
+        <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
+        
+      
       </TabPanel>
+      
     </div>
   );
 }

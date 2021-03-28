@@ -163,6 +163,7 @@ async function getFollowing(req: Request, res: Response) {
 		res.status(404).json({ msg: "User not not found."});
 	}
 };
+
 async function removeFollower(req: Request, res: Response) {
 	const { userfollowed, unfollower} = req.query;
 

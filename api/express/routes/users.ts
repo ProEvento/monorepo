@@ -6,7 +6,7 @@ import { UserType } from '../../types'
 const { models } = db.sequelize;
 
 async function getAll(req: Request, res: Response) {
-	const users = await models.User.findAll({ include: models.Event });
+	const users = await models.User.findAll({ include: [{model: models.Event, as: 'attending'}] });
 	res.status(200).json(users);
 };
 

@@ -23,6 +23,10 @@ async function init() {
 	app.listen(PORT, () => {
 		console.log(`Express server started on port ${PORT}`);
 	});
+
+	return app
 }
 
-init();
+init()
+
+export default {init}

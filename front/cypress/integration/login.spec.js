@@ -15,6 +15,7 @@ context('Actions', () => {
       cy.get('#password').click().type('testuser123!')
       cy.get('button.c8b93fbb9').click()
       cy.get('#logoutButton').click()
+      
       // const auth0State = {
       //   nonce: "", cy.get('span#username')
       //   state: "some-random-state"

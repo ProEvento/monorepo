@@ -63,7 +63,7 @@ const Events = ({ user, events }) => {
     return (
         <section className={styles.root}>
             <section style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--gap-double)'}}>
-                <Link href="/createEvent"><Button className={styles.button}>create a new event</Button></Link>
+                <Link href="/createEvent"><Button id="newEvent" className={styles.button}>create a new event</Button></Link>
             </section>
             {/* @ts-ignore */}
             {error && error.msg}

@@ -3,17 +3,19 @@ const request = require('supertest')
 const app = require('../express/app')
 require('dotenv').config({ path: '.env.local' })
 
-const PORT = 8080
+const PORT = 8081
 
 
 let server;
 let req;
-beforeAll(async () => {
-    server = app.default.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    req = request(server)
+beforeAll(async (done) => {
+    server = app.default.listen(PORT, () => {
+        req = request(server)
+        done()
+    });
 });
 
-afterAll(async (done) => {
+afterAll((done) => {  
     server.close(done)
 })
 
@@ -26,7 +28,7 @@ describe("Users", () => {
       expect(response.body).toBeInstanceOf(Array);
     });
 
-    test("It should get a specific users profile by ID", async () => {
+    test("It should get a specific user's profile by ID", async () => {
         const response = await req.get(`/api/users/1`).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeInstanceOf(Object);
@@ -42,6 +44,13 @@ describe("Users", () => {
             "bio": "",
             "picture": null
           })
+    });
+
+    test("It should 404 getting a non-existant specific user's profile by ID", async () => {
+        const response = await req.get(`/api/users/0`).set("Authorization", process.env.PROEVENTO_SECRET);
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toBe("404 - Not found")
     });
 
     test("It should get a specific users profile by username", async () => {
@@ -61,6 +70,21 @@ describe("Users", () => {
             "picture": null
         })
     });
+
+    test("It should 500 getting a user if no username is provided to getByUsername", async () => {
+        const response = await req.get(`/api/users/getByUsername`).set("Authorization", process.env.PROEVENTO_SECRET);
+        expect(response.statusCode).toBe(500);
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toMatchObject({ msg: "Username in query required"})
+    });
+
+    test.only("It should 404 getting a user if a non-existant username is provided to getByUsername", async () => {
+        const response = await req.get(`/api/users/getByUsername?username=${Math.random().toString(18).substring(7)}`).set("Authorization", process.env.PROEVENTO_SECRET);
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toMatchObject({ msg: "User not found."})
+    });
+
 
     test("It should get topics a user is following", async () => {
         const response = await req.get(`/api/users/topics/1`).set("Authorization", process.env.PROEVENTO_SECRET);
@@ -88,7 +112,6 @@ describe("Users", () => {
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
     });
-
 
 });
 

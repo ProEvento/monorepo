@@ -129,7 +129,7 @@ const Page = ({
           </ListItem>
         ))}
         {!user && !error && !isLoading && 
-          <ListItem className={classes.listItem} component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
+          <ListItem id="loginButton" className={classes.listItem} component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
             <ListItemText  primaryTypographyProps={{variant: "h5"}} primary={"Login"} />
           </ListItem>}
       </List>

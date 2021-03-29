@@ -13,7 +13,7 @@ context('Actions', () => {
 
       cy.get('#username').click().type('jhaeju20@gmail.com')
       cy.get('#password').click().type('testuser123!')
-      cy.get('button.c8b93fbb9').click()
+      cy.get('button').first().click()
       cy.get('#logoutButton').click()
       
       // const auth0State = {

@@ -138,8 +138,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
       <form>
-          <TextField onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
-          <Button onClick={inviteUser}  color="primary">Invite User</Button>
+          <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
+          <Button id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button>
       </form>
       <h3>Attendees</h3>
 

@@ -77,6 +77,7 @@ describe("Users", () => {
         expect(response.body).toMatchObject({ msg: "Username in query required"})
     });
 
+
     test("It should 404 getting a user if a non-existant username is provided to getByUsername", async () => {
         const response = await req.get(`/api/users/getByUsername?username=${Math.random().toString(18).substring(7)}`).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(404);

@@ -35,8 +35,8 @@ context('Actions', () => {
       cy.get('body').click(0,0);
       cy.get('#save').click()
       cy.location('pathname').should('include', 'event')
-      cy.get('a[href*="events"]').first().click()
-      cy.get('a[href*="event/"]').first().click()
+      // cy.get('a[href*="events"]').first().click()
+      // cy.get('a[href*="event/"]').first().click()
       cy.wait(2000)
       cy.get('a[href*="meeting/"]').first().click()
       cy.get('#start').first().click()

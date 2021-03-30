@@ -89,6 +89,7 @@ describe("Events", () => {
     test("It should start an Event", async () => {
         const response = await req.put("/api/events/startEvent?id=" + id).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(200);
+        expect(response.body.started).toBe(true);
     });
 
     test("It should add a User as attending an Event", async () => {
@@ -113,6 +114,7 @@ describe("Events", () => {
     test("It should end an Event", async () => {
         const response = await req.put("/api/events/endEvent?id=" + id).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(200);
+        expect(response.body.ended).toBe(true);
     });
 
     test("It should delete an Event", async () => {

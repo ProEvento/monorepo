@@ -17,8 +17,6 @@ context('Actions', () => {
       cy.get('#password').click().type('testuser123!')
       cy.get('button[type*="submit"]').first().click()
       cy.get('#logoutButton').last().click()
-      
-      
     })
   })
   

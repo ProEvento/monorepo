@@ -57,6 +57,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     noAttendees = false; 
   }
   var tags = true; 
+  const router = useRouter();
 
   const styles = useStyles()
   // console.log(targetUser)
@@ -65,12 +66,28 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   const { user, error, isLoading } = userContext;
   const leaveEvent = () => {
     makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
+    location.reload(); 
   }
   const joinEvent = () => {
     makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
+    location.reload();
+  }
+  // const cancelEvent = () => {
+  //   makeServerCall({ apiCall: `events/${event.id}`, method: "DELETE", queryParameters: { userId: user.id } }).then((data) => console.log(data))
+  // }
+  const cancelEvent = () => {
+    makeServerCall({ apiCall: `events/${event.id}`, method: "DELETE" }).then((data) => {
+        if (data.msg.toLowerCase() === "success") {
+          router.push("/")
+          return <></>
+        } else {
+          
+        }
+    });
   }
 
-  console.log(event)
+
+  //console.log(event)
   const openAttendEvent = ((e) => {
 
   })
@@ -91,12 +108,12 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
   for (var index in events){
     if(events[index].id == event.id){
-      console.log("success")
+      //console.log("success")
       attend = true; 
     }
   }
   var dateEvent = new Date(event.time)
-  console.log(Date.now(),  dateEvent.getTime())
+  //console.log(Date.now(),  dateEvent.getTime())
 
   const inviteUser = async () => {
     const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
@@ -105,13 +122,17 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       }
     })
 
-    console.log("TargetUser, " , targetUser.username)
+    //console.log("TargetUser, " , targetUser.username)
     const data = await makeServerCall({ apiCall: `users/notifications/${targetUser.id}`, method: "POST", 
     queryParameters: { 
       text: `You've been invited to https://localhost:3000/event/${event.id} by ${userContext.user.username}!`
       },
     })
   };
+
+  const isHost = user.username === (event.host ? event.host.username : user.username);
+  console.log("are hosting event", isHost)
+  
 
   return (
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
@@ -133,13 +154,22 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
           <a>Join Meeting</a>
         </Button>
       }
-      {attend
-        ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
-        :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
+      {isHost && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel</Button>}
+
+    
+      {attend && !isHost &&
+          <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
       }
+      
+      {!attend &&
+        <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
+      }
+
+
+
       <form>
-          <TextField onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
-          <Button id="inviteButton" onClick={inviteUser}  color="primary">Invite User</Button>
+          <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
+          <Button id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button>
       </form>
       <h3>Attendees</h3>
 

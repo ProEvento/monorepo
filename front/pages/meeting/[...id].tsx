@@ -65,7 +65,7 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
         return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>This event hasn't started yet. Check out the <Link href="/explore">Explore page to find another</Link> or wait for the host to start.</Page>
       else
         return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
-          <Typography align="center" style={{marginTop: 300}}><Button id="startButton" onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Meeting</Button></Typography>
+          <Typography align="center" style={{marginTop: 300}}><Button id="start" onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Meeting</Button></Typography>
         </Page>
     }
     

@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
-  
 
-  
       it('.searchbyuser() -search users', () => {
           cy.visit('http://localhost:3000')
     

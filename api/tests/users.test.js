@@ -43,14 +43,13 @@ describe("Users", () => {
             "twitter": null,
             "bio": "",
             "picture": null
-          })
+        })
     });
 
     test("It should 404 getting a non-existant specific user's profile by ID", async () => {
         const response = await req.get(`/api/users/0`).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(404);
-        expect(response.body).toBeInstanceOf(Object);
-        expect(response.body).toBe("404 - Not found")
+        expect(response.text).toBe("404 - Not found")
     });
 
     test("It should get a specific users profile by username", async () => {
@@ -78,7 +77,7 @@ describe("Users", () => {
         expect(response.body).toMatchObject({ msg: "Username in query required"})
     });
 
-    test.only("It should 404 getting a user if a non-existant username is provided to getByUsername", async () => {
+    test("It should 404 getting a user if a non-existant username is provided to getByUsername", async () => {
         const response = await req.get(`/api/users/getByUsername?username=${Math.random().toString(18).substring(7)}`).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(404);
         expect(response.body).toBeInstanceOf(Object);

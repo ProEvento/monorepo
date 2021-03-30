@@ -12,12 +12,12 @@ context('Actions', () => {
     let random = Math.round(Math.random()* 1000000)
 
     it('.vist() - visit home', () => {
+      
+      // Sign up with first user
       cy.visit('http://localhost:3000')
       cy.get('#loginButton').last().click()
       cy.contains("Sign up").last().click()
       
-      
-
       cy.get('#username').click().type('testuser' + random)
       cy.get('#email').click().type('testuser' + random + '@gmail.com')
       cy.get('#password').click().type('testuser123!')
@@ -33,18 +33,20 @@ context('Actions', () => {
       cy.get("#twitter").click().type("twitteruser" + random)
       cy.get("#bio").click().type("rand bio")
       cy.get(".MuiButton-root").click()
-      cy.wait(5000)
-      cy.visit("http://localhost:3000/user/testuser" + random )
-      cy.get('h1').first().should('have.text', 'RandFirst')
-      cy.get('#logoutButton').last().click()
-
-      // Space
       
+      // Find event and join
+      cy.visit('http://localhost:3000/explore')
+      cy.get('#outlined-basic').last().type('Meeting120')
+      cy.get('#search').click()
+      cy.get('#visitButton').click()
+      cy.get('.makeStyles-button-1').click()
+      cy.reload()
+      cy.get('#joinButton').click()
 
+      cy.wait(10000)
+      cy.get('#logoutButton').last().click()
+      // Grab text and grab link to visit
 
-
-    //   cy.get('button[type*="submit"]').first().click()
-    //   cy.get('#logoutButton').last().click()
     })
   })
   

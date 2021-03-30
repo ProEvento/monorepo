@@ -8,9 +8,8 @@ context('Actions', () => {
 
     it('.vist() - visit home', () => {
       cy.visit('http://localhost:3000')
-
       cy.get('#loginButton').last().click()
-
+      cy.wait(200)
       cy.get('#username').click().type('jhaeju20@gmail.com')
       cy.get('#password').click().type('testuser123!')
       cy.get('button').first().click()
@@ -22,7 +21,25 @@ context('Actions', () => {
     //   cy.get('#logoutButton').click()
   
     })
-    it('.searchbydate() - visit home', () => {
+
+    it('.searchbyeventname() - visit home', () => {
+      cy.visit('http://localhost:3000')
+
+      cy.get('#loginButton').last().click()
+
+      // cy.get('#username').click().type('jhaeju20@gmail.com')
+      // cy.get('#password').click().type('testuser123!')
+      // cy.get('button.c8b93fbb9').click()
+      cy.get('a[href*="explore"]').first().click()
+      cy.get('#simple-tab-0').click(); 
+      cy.get('#outlined-basic').click().type('care') // expecting to find one event (care's party)
+      cy.get('#search').click()
+      cy.wait(2000)
+      cy.get('li:first').should('have.class', 'MuiListItem-root') // event's listed have this class 
+  
+    })
+
+    it('.searchbyuser() - visit home', () => {
         cy.visit('http://localhost:3000')
   
         cy.get('#loginButton').last().click()

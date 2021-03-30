@@ -27,22 +27,6 @@ context('Actions', () => {
       cy.get('h4').last().should('have.text', 'Maxwell Woehrmann')
       cy.get('#closeButton').click()
 
-
-      cy.get('#followingTopics').click()
-      cy.get('.topic').first().should('have.text', 'pokemon')
-      cy.get('#closeButton').click()
-      
-
-      cy.get('#eventsHosted').click()
-      cy.get('.eventsHosted').first().should('have.text', 'Yoyo max')
-      cy.get('#closeButton').click()
-
-
-      cy.get('#eventsAttending').click()
-      cy.get('.eventsAttending').first().should('have.text', 'Yoyo max')
-      cy.get('#closeButton').click()
-
-
       cy.get('#logoutButton').last().click()
 
     })

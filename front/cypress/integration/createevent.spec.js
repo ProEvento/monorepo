@@ -11,7 +11,7 @@ context('Actions', () => {
 
       cy.get('#loginButton').last().click()
 
-      cy.get('#username').click().type('jhaeju20@gmail.com')
+      cy.get('#username').click().type('testuser57588@gmail.com')
       cy.get('#password').click().type('testuser123!')
       cy.get('button').first().click()
       cy.get('a[href*="events"]').first().click()
@@ -24,26 +24,10 @@ context('Actions', () => {
       cy.get('[class="rdtPicker"]').click('center')
       cy.get('body').click(0,0);
       cy.get('#save').click()
+      cy.location('pathname').should('include', 'event')
+
       cy.wait(5000)
       cy.get('#logoutButton').click()
-
-    //   cy.get('form-control').click()
-      // const auth0State = {
-      //   nonce: "", cy.get('span#username')
-      //   state: "some-random-state"
-      // }
-    })
-    
-  
-    // it('.type() - type into a DOM element', () => {
-      
-    // })
-    
-    // it('.type() - type in login', () => {
-      
-    // })
-    
-    
-
+    })    
   })
   

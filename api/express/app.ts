@@ -27,8 +27,7 @@ const routes = {
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 function makeHandlerAwareOfAsyncErrors(handler: Function) {
 	return async function(req: Request, res: Response, next: NextFunction) {
@@ -43,11 +42,10 @@ function makeHandlerAwareOfAsyncErrors(handler: Function) {
 
 async function handleProeventoSecret (req: Request, res: Response, next: NextFunction) {
 	const secret = req.headers.authorization;
-	console.log(process.env.PROEVENTO_SECRET, secret, secret === process.env.PROEVENTO_SECRET)
 	if (secret === process.env.PROEVENTO_SECRET) {
 		next()
 	} else {
-		throw new Error('Not authorized.')
+		res.status(500).send("Not authorized.")
 	}
 }
 

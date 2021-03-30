@@ -91,11 +91,6 @@ describe("Events", () => {
         expect(response.statusCode).toBe(200);
     });
 
-    test("It should start an Event", async () => {
-        const response = await req.put("/api/events/startEvent?id=" + id).set("Authorization", process.env.PROEVENTO_SECRET);
-        expect(response.statusCode).toBe(200);
-    });
-
     test("It should add a User as attending an Event", async () => {
         const user = {
             userId : 4,

@@ -138,7 +138,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     <Page  header={false} activePage={"Event"} title={"Event"} userContext={userContext}>
        
       <h1>{event.title}</h1>
-      <img alt="flowerpic" id="pic" src={event.picture} className={styles.img} />
+      <img id="pic" src={event.picture} className={styles.img} />
 
       <h4>{dateEvent.toLocaleDateString("en-US")} {dateEvent.toLocaleTimeString("en-US")}</h4>
       {event.priv

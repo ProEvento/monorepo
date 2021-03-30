@@ -30,8 +30,8 @@ function makeid(length) {
         cy.get('body').click(0,0);
         cy.get('#save').click()
         cy.location('pathname').should('include', 'event')
-        cy.wait(5000)
-        cy.get('#logoutButton').click()
+        cy.wait(2000)
+        // cy.get('#logoutButton').click()
       })    
       it('.withpic() - show picture ', () => {
         cy.visit('http://localhost:3000')
@@ -52,7 +52,7 @@ function makeid(length) {
         cy.get('body').click(0,0);
         cy.get('#save').click()
         cy.location('pathname').should('include', 'event')
-        cy.get('[alt="flowerpic"]')
+        cy.get('#pic')
         .should('be.visible')
         .and(($img) => {
           // "naturalWidth" and "naturalHeight" are set when the image loads

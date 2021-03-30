@@ -107,7 +107,18 @@ describe("Events", () => {
         }
         const queryURL = new URLSearchParams(user).toString()
         const response = await req.post(`/api/events/joinEvent/` + id + `?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);
-        //console.log(response)
+        const attending = await req.get(`/api/events/getAttending/4`).set("Authorization", process.env.PROEVENTO_SECRET);
+        let flag = false;
+        let length = attending.body.length;
+        for (let i = 0; i < length; i++) {
+            if (attending.body[i]['id'] == id) {
+                expect(attending.body[i]['id']).toBe(id);
+                flag = true;
+            }
+        }
+        if(!flag){
+            expect(1).toBe(0);
+        }
         expect(response.statusCode).toBe(200);
     });
 
@@ -117,6 +128,13 @@ describe("Events", () => {
         }
         const queryURL = new URLSearchParams(user).toString()
         const response = await req.post(`/api/events/leaveEvent/` + id + `?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);
+        const attending = await req.get(`/api/events/getAttending/4`).set("Authorization", process.env.PROEVENTO_SECRET);
+        let length = attending.body.length;
+        for (let i = 0; i < length; i++) {
+            if (attending.body[i]['id'] == id) {
+                expect(1).toBe(0);
+            }
+        }
         expect(response.statusCode).toBe(200);
     });
 
@@ -129,6 +147,8 @@ describe("Events", () => {
     test("It should delete an Event", async () => {
       const response = await req.delete("/api/events/" + id).set("Authorization", process.env.PROEVENTO_SECRET);
       expect(response.statusCode).toBe(200);
+      const ev = await req.get(`/api/events/` + id).set("Authorization", process.env.PROEVENTO_SECRET);
+      expect(ev.statusCode).toBe(404);
     });
 
     test("It should 400 starting an Event before start date", async () => {

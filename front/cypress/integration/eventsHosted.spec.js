@@ -24,7 +24,9 @@ context('Actions', () => {
       cy.visit('http://localhost:3000/user/maxattack')
 
       cy.get('#eventsHosted').click()
-      cy.get('.eventsHosted').first().should('have.text', 'Yoyo max')
+      // cy.get('.eventsHosted').first().should('have.text', 'Yoyo max')
+      cy.get('.eventsHosted').its('length').should('be.gte',1)
+
       cy.get('#closeButton').click()
 
       cy.get('#logoutButton').last().click()

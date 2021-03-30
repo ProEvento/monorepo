@@ -76,6 +76,16 @@ describe("Events", () => {
         expect(response.statusCode).toBe(500);
     });
 
+    test("It should 404 adding a topic to a non-existent Event", async () => {
+        const addTopic = {
+            id : 0,
+            searchTitle : "pokemon"
+        }
+        const queryURL = new URLSearchParams(addTopic).toString()
+        const response = await req.post(`/api/events/setTopic?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);
+        expect(response.statusCode).toBe(404);
+    });
+
     test("It should start an Event", async () => {
         const response = await req.put("/api/events/startEvent?id=" + id).set("Authorization", process.env.PROEVENTO_SECRET);
         expect(response.statusCode).toBe(200);

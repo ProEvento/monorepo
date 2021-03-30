@@ -124,17 +124,17 @@ const Page = ({
       </div>
       <List className={classes.list}>
         {user && Pages.map(({ name, url }, index) => (
-          <ListItem className={classes.listItem} selected={name.toLowerCase() === activePage.toLowerCase()} component="a" href={url} button key={name}>
+          <ListItem id={url} className={classes.listItem} selected={name.toLowerCase() === activePage.toLowerCase()} component="a" href={url} button key={name}>
             <ListItemText  primaryTypographyProps={{variant: "h5"}} primary={name} />
           </ListItem>
         ))}
         {!user && !error && !isLoading && 
-          <ListItem className={classes.listItem} component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
+          <ListItem id="loginButton" className={classes.listItem} component="a" selected={activePage.toLowerCase() === "signup"}  href="/api/auth/login" button>
             <ListItemText  primaryTypographyProps={{variant: "h5"}} primary={"Login"} />
           </ListItem>}
       </List>
       <List>
-          {user && <ListItem className={classes.listItem}  component="a" href="/api/auth/logout" button>
+          {user && <ListItem id="logoutButton" className={classes.listItem}  component="a" href="/api/auth/logout" button>
             <ListItemText primaryTypographyProps={{variant: "h5"}} primary={"Logout"} />
           </ListItem>}
       </List>

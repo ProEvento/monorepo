@@ -85,7 +85,7 @@ const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
         {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
         {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
         {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>}
-        <a href={`/event/${id}`}><Button style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a>
+        <a href={`/event/${id}`}><Button id="visitButton" style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a>
     </ListItem>
     )
 }

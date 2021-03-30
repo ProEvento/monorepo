@@ -88,7 +88,7 @@ describe("Events", () => {
 
     test("It should add a User as attending an Event", async () => {
         const user = {
-            userId : 18,
+            userId : 4,
         }
         const queryURL = new URLSearchParams(user).toString()
         const response = await req.post(`/api/events/joinEvent/` + id + `?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);
@@ -98,7 +98,7 @@ describe("Events", () => {
 
     test("It should remove a User as attending an Event", async () => {
         const user = {
-            userId : 18,
+            userId : 4,
         }
         const queryURL = new URLSearchParams(user).toString()
         const response = await req.post(`/api/events/leaveEvent/` + id + `?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);

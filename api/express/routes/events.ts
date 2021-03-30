@@ -50,7 +50,7 @@ async function getById(req: Request, res: Response) {
 		}
 	} else {
 		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }, {model: models.Topic}]});
-		console.log(event ? event.toJSON() : "event is nyull")
+		//console.log(event ? event.toJSON() : "event is nyull")
 		if (event) {
 			res.status(200).json(event);
 		} else {
@@ -68,12 +68,19 @@ async function startEvent(req: Request, res: Response) {
 	//@ts-ignore
 	const event = await models.Event.findByPk(id);
 	//@ts-ignore
-	console.log(id, event.title)
+	//console.log(id, event.title)
 	if (event) {
-		// @ts-ignore
-		event.started = true
-		await event.save();
-		res.status(200).json(event);
+		//@ts-ignore
+		const dateEvent = new Date(event.time)
+		if(Date.now() >= dateEvent.getTime()){
+			// @ts-ignore
+			event.started = true
+			await event.save();
+			res.status(200).json(event);
+		}
+		else {
+			res.status(400).json({msg: 'Cannot start event before start time'});
+		}
 	} else {
 		res.status(404).send('404 - Not found');
 	}
@@ -194,7 +201,7 @@ async function getEventsAttending(req: Request, res: Response) {
 async function getEventAttendees(req: Request, res: Response) {
 	const { query } = req;
 	const id = getIdParam(req);
-	console.log("in geteventattendee ", id)
+	//console.log("in geteventattendee ", id)
 	const event = await models.Event.findOne({
 		where: {
 			id: id
@@ -211,7 +218,6 @@ async function getEventAttendees(req: Request, res: Response) {
 async function addTopic(req: Request, res: Response) {
 	const id = req.query.id
 	const searchTitle = req.query.searchTitle
-	console.log(req)
 	const event = await models.Event.findOne({
 		where: {
 			id: id

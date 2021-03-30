@@ -21,10 +21,13 @@ context('Actions', () => {
       cy.get('button[type*="submit"]').first().click()
 
       // Visit user, click following users, following topics, events hosted, events attending
-      cy.visit('http://localhost:3000/user/maxattack')
+      cy.visit('http://localhost:3000/user/elissaperdue')
 
       cy.get('#followingUsers').click()
-      cy.get('h4').last().should('have.text', 'Maxwell Woehrmann')
+      cy.wait(5000)
+      // cy.get('h4').last().should('have.text', 'Maxwell Woehrmann')
+      cy.get('[class="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiTypography-colorTextSecondary"]').its('length').should('be.gte',1)
+      // [class="form-control"]
       cy.get('#closeButton').click()
 
       cy.get('#logoutButton').last().click()

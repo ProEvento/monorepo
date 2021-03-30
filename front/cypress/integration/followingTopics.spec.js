@@ -24,7 +24,9 @@ context('Actions', () => {
       cy.visit('http://localhost:3000/user/maxattack')
 
       cy.get('#followingTopics').click()
-      cy.get('.topic').first().should('have.text', 'pokemon')
+      cy.get('.topic').its('length').should('be.gte',1)
+
+      // cy.get('.topic').first().should('have.text', 'pokemon')
       cy.get('#closeButton').click()
 
       cy.get('#logoutButton').last().click()

@@ -92,7 +92,7 @@ describe("Events", () => {
         }
         const queryURL = new URLSearchParams(user).toString()
         const response = await req.post(`/api/events/joinEvent/` + id + `?${queryURL}`).set("Authorization", process.env.PROEVENTO_SECRET);
-        console.log(response)
+        //console.log(response)
         expect(response.statusCode).toBe(200);
     });
 

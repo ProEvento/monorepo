@@ -50,7 +50,7 @@ async function getById(req: Request, res: Response) {
 		}
 	} else {
 		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }, {model: models.Topic}]});
-		console.log(event ? event.toJSON() : "event is nyull")
+		//console.log(event ? event.toJSON() : "event is nyull")
 		if (event) {
 			res.status(200).json(event);
 		} else {
@@ -68,7 +68,7 @@ async function startEvent(req: Request, res: Response) {
 	//@ts-ignore
 	const event = await models.Event.findByPk(id);
 	//@ts-ignore
-	console.log(id, event.title)
+	//console.log(id, event.title)
 	if (event) {
 		//@ts-ignore
 		const dateEvent = new Date(event.time)
@@ -201,7 +201,7 @@ async function getEventsAttending(req: Request, res: Response) {
 async function getEventAttendees(req: Request, res: Response) {
 	const { query } = req;
 	const id = getIdParam(req);
-	console.log("in geteventattendee ", id)
+	//console.log("in geteventattendee ", id)
 	const event = await models.Event.findOne({
 		where: {
 			id: id

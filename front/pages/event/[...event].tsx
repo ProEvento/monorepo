@@ -70,7 +70,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
   }
 
-  console.log(event)
+  //console.log(event)
   const openAttendEvent = ((e) => {
 
   })
@@ -91,12 +91,12 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
   for (var index in events){
     if(events[index].id == event.id){
-      console.log("success")
+      //console.log("success")
       attend = true; 
     }
   }
   var dateEvent = new Date(event.time)
-  console.log(Date.now(),  dateEvent.getTime())
+  //console.log(Date.now(),  dateEvent.getTime())
 
   const inviteUser = async () => {
     const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
@@ -105,7 +105,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       }
     })
 
-    console.log("TargetUser, " , targetUser.username)
+    //console.log("TargetUser, " , targetUser.username)
     const data = await makeServerCall({ apiCall: `users/notifications/${targetUser.id}`, method: "POST", 
     queryParameters: { 
       text: `You've been invited to https://localhost:3000/event/${event.id} by ${targetUser.username}!`

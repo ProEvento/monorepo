@@ -28,7 +28,7 @@ export const getServerSideProps = withPageAuthRequired();
 const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   const { user, error, isLoading } = userContext;
   const [events, setEvents] = useState([]);
-  console.log(userContext)
+  //console.log(userContext)
   if (isLoading) {
     return <div></div>;
   }

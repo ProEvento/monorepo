@@ -42,7 +42,7 @@ async function search(req: Request, res: Response) {
 				},
 			]}
 		})
-		console.log(results)
+		//console.log(results)
 		res.status(200).json({results});
 	} else if (type === "event") {
 		const results = await models.Event.findAll({

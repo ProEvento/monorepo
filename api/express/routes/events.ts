@@ -70,10 +70,17 @@ async function startEvent(req: Request, res: Response) {
 	//@ts-ignore
 	console.log(id, event.title)
 	if (event) {
-		// @ts-ignore
-		event.started = true
-		await event.save();
-		res.status(200).json(event);
+		//@ts-ignore
+		const dateEvent = new Date(event.time)
+		if(Date.now() >= dateEvent.getTime()){
+			// @ts-ignore
+			event.started = true
+			await event.save();
+			res.status(200).json(event);
+		}
+		else {
+			res.status(400).json({msg: 'Cannot start event before start time'});
+		}
 	} else {
 		res.status(404).send('404 - Not found');
 	}
@@ -211,7 +218,6 @@ async function getEventAttendees(req: Request, res: Response) {
 async function addTopic(req: Request, res: Response) {
 	const id = req.query.id
 	const searchTitle = req.query.searchTitle
-	console.log(req)
 	const event = await models.Event.findOne({
 		where: {
 			id: id

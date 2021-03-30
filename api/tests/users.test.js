@@ -1,10 +1,10 @@
 const request = require('supertest')
 
 const app = require('../express/app')
+
 require('dotenv').config({ path: '.env.local' })
 
 const PORT = 8081
-
 
 let server;
 let req;
@@ -113,5 +113,3 @@ describe("Users", () => {
     });
 
 });
-
-

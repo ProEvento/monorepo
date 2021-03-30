@@ -26,8 +26,17 @@ let id = undefined
 describe("Events", () => {
     test("It should get a specific event by ID", async () => {
         const response = await req.get(`/api/events/1`).set("Authorization", process.env.PROEVENTO_SECRET);
+        const expected = {
+            title: "title",
+            description : "fun fun fun fun fun time to zoom zoom zoom zoom join us :)",
+            priv : true,
+            picture : "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/close-up-of-tulips-blooming-in-field-royalty-free-image-1584131616.jpg?crop=1.00xw:0.798xh;0,0.202xh&resize=980:*",
+            time: "2020-03-26T18:10:10.000Z",
+            User_id: '3',
+        }
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toMatchObject(expected);
     });
 
     test("It should 404 getting an event with a non-existent ID", async () => {

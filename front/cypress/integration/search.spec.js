@@ -17,9 +17,7 @@ context('Actions', () => {
     })
     it('.searchByEventName() - search event name', () => {
       cy.visit('http://localhost:3000')
-
       cy.get('#loginButton').last().click()
-
       cy.get('#username').click().type('testuser57588@gmail.com')
       cy.get('#password').click().type('testuser123!')
       cy.get('button').first().click()

@@ -155,7 +155,7 @@ function SimpleTabs({ user }) {
         <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
         End Date:
         <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
-        <Button style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getEventsByTime(startDate, endDate)).results)}>Search</Button>
+        <Button id="search" style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getEventsByTime(startDate, endDate)).results)}>Search</Button>
         {value === 2 && results.length > 0 && results.map((event) => <Event user={user} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} event={event}/>)}
       </TabPanel>
     </div>

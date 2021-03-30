@@ -133,6 +133,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
           <a>Join Meeting</a>
         </Button>
       }
+
+  
       {attend
         ?  <Button onClick={leaveEvent} className={styles.button}>Unattend this event</Button>
         :  <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>

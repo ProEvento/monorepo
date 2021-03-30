@@ -2,6 +2,7 @@
 
 context('Actions', () => {
     beforeEach(() => {
+
     //   cy.clearLocalStorage()
     //   cy.clearCookies()
     })
@@ -33,8 +34,5 @@ context('Actions', () => {
       cy.get('#logoutButton').click()
 
     })
-    
-  
- 
   })
   

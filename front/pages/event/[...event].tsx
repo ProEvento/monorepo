@@ -125,7 +125,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     //console.log("TargetUser, " , targetUser.username)
     const data = await makeServerCall({ apiCall: `users/notifications/${targetUser.id}`, method: "POST", 
     queryParameters: { 
-      text: `You've been invited to https://localhost:3000/event/${event.id} by ${targetUser.username}!`
+      text: `You've been invited to https://localhost:3000/event/${event.id} by ${userContext.user.username}!`
       },
     })
   };
@@ -150,7 +150,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       <br />
       <br />  
       {attend &&
-        <Button disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
+        <Button id="joinButton" disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
           <a>Join Meeting</a>
         </Button>
       }

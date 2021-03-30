@@ -141,12 +141,12 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>
       <Grid container direction="row" justify="space-around" alignItems="center" >
           <Avatar alt={targetUser.firstName} src={targetUser.picture} className={classes.large}></Avatar>
-          {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
+          {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
           <ButtonGroup size="small" aria-label="small outlined button group">
-            <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
-            <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Following Topics </Button>
-            <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Events Hosted </Button>
-            <Button variant="outlined" color="primary" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Events Attending </Button>
+            <Button variant="outlined" color="primary" id="followingUsers" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
+            <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Following Topics </Button>
+            <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Events Hosted </Button>
+            <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Events Attending </Button>
           </ButtonGroup>
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -163,18 +163,18 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                     </div>
                 )})}
                 {followingTopics.map(topic => {
-                  return <div>{topic.title}</div>
+                  return <div className="topic">{topic.title}</div>
                 })}
                 {eventsHosted.map(event => {
-                  return <div>{event.title}</div>
+                  return <div className="eventsHosted">{event.title}</div>
                 })}
                 {eventsAttending.map(event => {
-                  return <div>{event.title}</div>
+                  return <div className="eventsAttending">{event.title}</div>
                 })}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary" autoFocus>
+              <Button id="closeButton" onClick={handleClose} color="primary" autoFocus>
                 Close
               </Button>
             </DialogActions>

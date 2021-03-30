@@ -16,6 +16,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "cypress-social-logins": "^1.11.2",
+    "dotenv": "^8.2.0",
     "moment": "^2.29.1",
     "next": "10.0.7",
     "react": "17.0.1",

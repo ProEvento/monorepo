@@ -72,12 +72,15 @@ async function search(req: Request, res: Response) {
 	} else if (type === "event_date") {
 		//@ts-ignore
 		const startDate = new Date(start)
-		startDate.setHours(0)
-		startDate.setMinutes(0)
+		startDate.setDate(startDate.getDate()-1)
+		startDate.setHours(23)
+		startDate.setMinutes(59)
+		startDate.setSeconds(59)
 		//@ts-ignore
 		const endDate = new Date(end)
 		endDate.setHours(23)
 		endDate.setMinutes(59)
+		endDate.setSeconds(59)
 		const results = await models.Event.findAll({
 			order: [
 				['time', "ASC"]

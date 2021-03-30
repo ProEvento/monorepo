@@ -21,8 +21,10 @@ context('Actions', () => {
       // Visit user, follow, then unfollow
       cy.visit('http://localhost:3000/user/maxattack')
       cy.get('#followButton').click()
+      cy.wait(1000)
       cy.visit('http://localhost:3000/user/maxattack')
       cy.get("#unfollowButton").click()
+      cy.wait(1000)
       cy.visit('http://localhost:3000/user/maxattack')
       cy.get('#followButton').should('have.text', 'Follow')
       cy.get('#logoutButton').last().click()

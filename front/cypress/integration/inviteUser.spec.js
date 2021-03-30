@@ -62,6 +62,7 @@ context('Actions', () => {
 
 
       // Create event
+      cy.wait(5000)
       cy.get('a[href*="events"]').first().click()
       cy.get('#newEvent').first().click()
       cy.get('#title').click().type('MyCoolEventForTestingPurposes')

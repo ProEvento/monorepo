@@ -134,7 +134,7 @@ const Page = ({
           </ListItem>}
       </List>
       <List>
-          {user && <ListItem className={classes.listItem}  component="a" href="/api/auth/logout" button>
+          {user && <ListItem id="logoutButton"className={classes.listItem}  component="a" href="/api/auth/logout" button>
             <ListItemText primaryTypographyProps={{variant: "h5"}} primary={"Logout"} />
           </ListItem>}
       </List>

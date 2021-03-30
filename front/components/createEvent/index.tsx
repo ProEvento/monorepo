@@ -152,7 +152,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
             Private
           <input onClick={handleClick} checked={priv} type="checkbox" />
         </div>
-        <Button onClick={submit} size="large" variant="contained" color="primary">Save & Go to ProEvento</Button>
+        <Button id="save" onClick={submit} size="large" variant="contained" color="primary">Save & Go to ProEvento</Button>
     </form>
     )
 

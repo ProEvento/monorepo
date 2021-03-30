@@ -142,7 +142,7 @@ function SimpleTabs({ user }) {
       </Tabs>
       <TabPanel value={value} index={0}>
         <TextField style={{height: 50}} id="outlined-basic" label="Search for Events..." variant="outlined"  value={search} onChange={handleSearchChange}></TextField>
-        <Button style={{marginLeft: 8, height: 50 }}  variant="contained" onClick={async () => setResults((await getEvents(search)).results)}>Search</Button>
+        <Button id="search" style={{marginLeft: 8, height: 50 }}  variant="contained" onClick={async () => setResults((await getEvents(search)).results)}>Search</Button>
         {value === 0 && results.length > 0 && results.map((event) => <Event user={user} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} event={event}/>)}
       </TabPanel>
       <TabPanel value={value} index={1}>

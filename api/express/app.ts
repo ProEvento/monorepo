@@ -85,6 +85,10 @@ app.delete(
 	`/api/users/removeFollower`,
 	makeHandlerAwareOfAsyncErrors(routes.users.removeFollower)
 )
+app.delete(
+	`/api/users/delete/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.remove)
+)
 app.put(
 	`/api/users/addFollower`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addFollower)

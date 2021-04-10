@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Event = ({event, userContext, targetUser}: { attendees:any, userContext: CustomUserContext, event:EventType, targetUser: UserType}) => {
   const [username, setUsername] = useState("")
+  const [badge, setBadge] = useState("")
   let noAttendees = true; 
   if(event.attendees.length > 0){
     noAttendees = false; 
@@ -130,6 +131,24 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     })
   };
 
+  const giveBadge = async () => {
+    const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
+      queryParameters: {
+        username: username
+      }
+    })
+
+    //console.log("TargetUser, " , targetUser.username)
+    const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
+    queryParameters: { 
+      text: `You've been given a badge ${badge} by ${userContext.user.username}!`
+      },
+    })
+    location.reload(); 
+
+  };
+
+
   const isHost = user.username === (event.host ? event.host.username : user.username);
   console.log("are hosting event", isHost)
   
@@ -164,7 +183,21 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       {!attend &&
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
-
+       <div>
+          Pick a Badge: {" "}
+          <select value={badge} onChange={(e) => { setBadge(e.target.value) }}>
+            <option value="Great Speaker">Great Speaker</option>
+            <option value="Fun">Fun</option>
+            <option value="Engaging">Engaging</option>
+            <option value="Informative">Informative</option>
+            <option value="Professional">Professional</option>
+            <option value="Exciting">Exciting</option>
+            <option value="Inspiring">Inspiring</option>
+          </select>
+        </div>
+      <form>
+          <Button id='giveBadge' onClick={giveBadge}  color="primary">Give Badge</Button>
+      </form>
 
 
       <form>

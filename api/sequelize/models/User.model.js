@@ -67,6 +67,12 @@ User.associate = function(models) {
       type: DataTypes.INTEGER
    });
 
+   User.hasMany(models.Badge, {
+      foreignKey: 'User_id',
+      target: 'id',
+      type: DataTypes.INTEGER
+   });
+
    User.hasMany(models.Notification, {
       foreignKey: 'User_id',
       target: 'id',

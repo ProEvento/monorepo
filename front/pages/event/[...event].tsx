@@ -132,9 +132,9 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   };
 
   const giveBadge = async () => {
-    const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
+    const targetUser = await makeServerCall({ apiCall: `users/badges/${event.host.id}`, method: "POST",
       queryParameters: {
-        username: username
+        text: "badge-test no name"
       }
     })
 
@@ -144,7 +144,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       text: `You've been given a badge ${badge} by ${userContext.user.username}!`
       },
     })
-    location.reload(); 
+    // location.reload(); 
 
   };
 

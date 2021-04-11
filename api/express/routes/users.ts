@@ -59,6 +59,8 @@ async function getByEmail(req: Request, res: Response) {
 	}
 };
 
+
+
 async function getNotificationsForUser(req: Request, res: Response) {
 	const id = getIdParam(req);
 
@@ -81,6 +83,22 @@ async function addNotificationToUser(req: Request, res: Response) {
 		//@ts-ignore
 		const notification = await user.createNotification({ text: text })
 		res.status(200).json(notification);
+	} else {
+		res.status(400).json({msg: "User not found."})
+	}
+}
+
+async function addBadgeToUser(req: Request, res: Response) {
+	const id = getIdParam(req);
+	
+	const { name, img } = req.query;
+	// print(req.)
+	// res.status(200).json(text);
+	const user = await models.User.findOne({where: { id: id }})
+	if (user) {
+		//@ts-ignore
+		const badge = await user.createBadge({ name: name, img: img })
+		res.status(200).json(badge);
 	} else {
 		res.status(400).json({msg: "User not found."})
 	}
@@ -258,5 +276,6 @@ export default {
 	getByEmail,
 	remove,
 	getNotificationsForUser,
-	addNotificationToUser
+	addNotificationToUser,
+	addBadgeToUser
 };

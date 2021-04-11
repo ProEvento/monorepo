@@ -71,7 +71,7 @@ async function getNotificationsForUser(req: Request, res: Response) {
 	} else {
 		res.status(400).json({msg: "User not found."})
 	}
-}
+};
 
 async function addNotificationToUser(req: Request, res: Response) {
 	const id = getIdParam(req);
@@ -86,23 +86,21 @@ async function addNotificationToUser(req: Request, res: Response) {
 	} else {
 		res.status(400).json({msg: "User not found."})
 	}
-}
+};
 
 async function addBadgeToUser(req: Request, res: Response) {
-	const id = getIdParam(req);
-	
-	const { name, img } = req.query;
+	const { host, text, img } = req.query;
 	// print(req.)
 	// res.status(200).json(text);
-	const user = await models.User.findOne({where: { id: id }})
+	const user = await models.User.findOne({where: { id: host }})
 	if (user) {
 		//@ts-ignore
-		const badge = await user.createBadge({ name: name, img: img })
+		const badge = await user.createBadge({ name: text, img: img })
 		res.status(200).json(badge);
 	} else {
 		res.status(400).json({msg: "User not found."})
 	}
-}
+};
 
 async function getById(req: Request, res: Response) {
 	const id = getIdParam(req);

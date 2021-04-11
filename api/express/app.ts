@@ -68,6 +68,7 @@ app.get(
 
 // Users
 
+
 app.post(
 	`/api/users/signup`,
 	makeHandlerAwareOfAsyncErrors(routes.users.signupUser),
@@ -119,9 +120,10 @@ app.post(
 )
 
 app.post(
-	`/api/users/badges/:id`,
+	`/api/users/badges`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addBadgeToUser)
 )
+
 
 // Events
 

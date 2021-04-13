@@ -83,7 +83,7 @@ async function getEvents(value: string) {
 }
 
 async function getEventsByTime(start: Date, end: Date) {
-  const data = await makeServerCall({apiCall: "search/event_date", method: "GET", queryParameters: {start: start, end: end}})
+  const data = await makeServerCall({apiCall: "search/event_date", method: "GET", queryParameters: {start: start.toISOString(), end: end.toISOString()}})
   return data || []
 }
 

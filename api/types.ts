@@ -3,12 +3,12 @@ export type UserType = {
     firstName: string,
     lastName: string,
 	email: string,
-    github: string,
-    linkedin: string,
-    bio: string,
-    twitter: string,
+    github?: string,
+    linkedin?: string,
+    bio?: string,
+    twitter?: string,
     username: string,
-    picture: string
+    picture?: string
 }
 
 export type EventType = {
@@ -20,7 +20,17 @@ export type EventType = {
     description: string,
     topics: string,
     meetingURL: string,
-    comments: string
+    comments: string,
+    picture: string,
+    Topic: TopicType,
+    host: UserType,
+    attendees: UserType[]
+}
+
+export type TopicType = {
+    title: string,
+    user: number,
+    User: UserType
 }
 
 export type AttendingType = {

@@ -15,7 +15,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Image from 'next/image'
-import CustomUserContext from '../../types'
+import {CustomUserContext} from '../../types'
 const drawerWidth = 325;
 
 const useStyles = makeStyles((theme) => ({

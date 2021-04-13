@@ -51,7 +51,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   const [picture, setPicture] = useState("")
   const [priv, setPriv] = useState(false)
   const [response, setResponse] = useState("")
-  const [date, setDate] = useState<number>(-1)
+  const [date, setDate] = useState<Date>(new Date())
   const [topic, setTopic] = useState("pokemon")
 
   const classes = useStyles();
@@ -63,7 +63,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   ];
 
   const handleChange = (e: string) => {
-    setDate(e)
+    setDate(new Date(e))
   }
 
   const topicChange = (e: any) => {
@@ -83,7 +83,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         description,
         priv,
         picture,
-        time: (new Date(date)).toISOString(),
+        time: date.toISOString(),
         userId: user.id,
         User_id: user.id.toString()
       }

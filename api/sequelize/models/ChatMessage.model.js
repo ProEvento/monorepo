@@ -24,5 +24,5 @@ const ChatMessage = sequelize.define(
        ChatMessage.belongsTo(models.Chat, { as: "chat", foreignKey: "chat" })
     }
 
-    return Chat;
+    return ChatMessage;
 };

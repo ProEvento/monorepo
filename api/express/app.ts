@@ -124,6 +124,11 @@ app.post(
 	makeHandlerAwareOfAsyncErrors(routes.users.addBadgeToUser)
 )
 
+app.get(
+	`/api/users/badges`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getUsersBadges)
+)
+
 
 // Events
 

@@ -88,6 +88,17 @@ async function addNotificationToUser(req: Request, res: Response) {
 	}
 };
 
+async function getUsersBadges(req: Request, res: Response) {
+	const { id } = req.query;
+	const user = await models.User.findOne({where: { id: id }})
+	if (user) {
+		//@ts-ignore
+		res.status(200).json(await user.getBadges())
+	} else {
+		res.status(400).json({msg: "User not found."})
+	}
+};
+
 async function addBadgeToUser(req: Request, res: Response) {
 	const { host, text, img } = req.query;
 	// print(req.)
@@ -275,5 +286,6 @@ export default {
 	remove,
 	getNotificationsForUser,
 	addNotificationToUser,
-	addBadgeToUser
+	addBadgeToUser,
+	getUsersBadges
 };

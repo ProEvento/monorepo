@@ -22,6 +22,7 @@ const routes = {
 	events: require('./routes/events').default,
 	search: require('./routes/search').default,
 	topics: require('./routes/topics').default,
+	groups: require('./routes/groups').default,
 	// items: require('./routes/<item>').default,
 };
 

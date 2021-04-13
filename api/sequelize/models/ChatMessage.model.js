@@ -20,9 +20,9 @@ const ChatMessage = sequelize.define(
 );
 
     ChatMessage.associate = function(models) {  
-       ChatMessage.belongsTo(models.User, { as: "author", foreignKey: "author" })
-       ChatMessage.belongsTo(models.Chat, { as: "chat", foreignKey: "chat" })
+       ChatMessage.belongsTo(models.User, { as: "author" })
+       ChatMessage.belongsTo(models.Chat)
     }
 
-    return Chat;
+    return ChatMessage;
 };

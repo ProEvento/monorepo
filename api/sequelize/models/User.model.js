@@ -112,6 +112,9 @@ User.associate = function(models) {
       target: 'id',
       through: 'ChatUsers'
    });
+
+   User.belongsToMany(models.Group, { through: "Users_Groups"})
+   User.hasMany(models.Group)
    
 }
 

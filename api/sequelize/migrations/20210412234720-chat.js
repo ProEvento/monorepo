@@ -30,5 +30,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     await queryInterface.dropTable('ChatMessages');
+    await queryInterface.dropTable('Chats');
   }
 };

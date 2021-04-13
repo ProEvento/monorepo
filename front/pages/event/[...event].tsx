@@ -139,14 +139,15 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         text : badge,
         img : "test-img"
     }})
+    const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
+    queryParameters: { 
+      text: `You've been given a badge ${badge} by ${userContext.user.username}!`
+      },
+    })
+
+    location.reload();
+
   };
-    // //console.log("TargetUser, " , targetUser.username)
-    // const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
-    // queryParameters: { 
-    //   text: `You've been given a badge ${badge} by ${userContext.user.username}!`
-    //   },
-    // })
-    // // location.reload(); 
 
 
 
@@ -185,22 +186,26 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       {!attend &&
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
-       <div>
-          Pick a Badge: {" "}
-          <select value={badge} onChange={(e) => { setBadge(e.target.value) }}>
-            <option value="Great Speaker">Great Speaker</option>
-            <option value="Fun">Fun</option>
-            <option value="Engaging">Engaging</option>
-            <option value="Informative">Informative</option>
-            <option value="Professional">Professional</option>
-            <option value="Exciting">Exciting</option>
-            <option value="Inspiring">Inspiring</option>
-          </select>
-        </div>
-      <form>
-          <Button id='giveBadge' onClick={giveBadge}  color="primary">Give Badge</Button>
-      </form>
 
+      {attend &&
+       <div>
+         <div>
+            Pick a Badge: {" "}
+            <select value={badge} onChange={(e) => { setBadge(e.target.value) }}>
+              <option value="Great Speaker">Great Speaker</option>
+              <option value="Fun">Fun</option>
+              <option value="Engaging">Engaging</option>
+              <option value="Informative">Informative</option>
+              <option value="Professional">Professional</option>
+              <option value="Exciting">Exciting</option>
+              <option value="Inspiring">Inspiring</option>
+            </select>
+          </div>
+        <form>
+            <Button id='giveBadge' onClick={giveBadge} disabled={Date.now() < dateEvent.getTime() || Date.now() > dateEvent.getTime()+3600000}  color="primary">Give Badge</Button>
+        </form>
+       </div>
+      }
 
       <form>
           <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />

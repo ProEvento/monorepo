@@ -13,6 +13,7 @@ import React from 'react'
 import Link from 'next/link';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import {TextField} from '@material-ui/core';
+import { hostname } from "os";
 
 
 
@@ -132,25 +133,26 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   };
 
   const giveBadge = async () => {
-    const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
-      queryParameters: {
-        username: username
-      }
-    })
-
-    //console.log("TargetUser, " , targetUser.username)
-    const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
-    queryParameters: { 
-      text: `You've been given a badge ${badge} by ${userContext.user.username}!`
-      },
-    })
-    location.reload(); 
-
+    const giveBadge = await makeServerCall({ apiCall: `users/badges`, method: "POST",
+    queryParameters: {
+        host : event.host.id,
+        text : badge,
+        img : "test-img"
+    }})
   };
+    // //console.log("TargetUser, " , targetUser.username)
+    // const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
+    // queryParameters: { 
+    //   text: `You've been given a badge ${badge} by ${userContext.user.username}!`
+    //   },
+    // })
+    // // location.reload(); 
+
+
 
 
   const isHost = user.username === (event.host ? event.host.username : user.username);
-  console.log("are hosting event", isHost)
+  // console.log("are hosting event", isHost)
   
 
   return (

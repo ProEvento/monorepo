@@ -105,6 +105,14 @@ User.associate = function(models) {
       target: 'id',
       through: 'FollowersTable'
    });
+
+   User.belongsToMany(models.Chat, {
+      as: 'chats',
+      foreignKey: 'chats',
+      target: 'id',
+      through: 'ChatUsers'
+   });
+   
 }
 
 return User;

@@ -8,7 +8,14 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      TWILIO_ACCOUNT_SID: 123456789
+      TWILIO_API_KEY_SID: 123456789
+      TWILIO_API_KEY_SECRET: abcdefg
+      DB_USERNAME: fake
+      DB_PASSWORD: alsofake
+      DB_HOST: morefake
+      DB_NAME: something
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]

@@ -26,6 +26,9 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE
+      },
+      Host_id: {
+        type: Sequelize.INTEGER
       }
     });
   },

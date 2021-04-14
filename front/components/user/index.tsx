@@ -6,8 +6,9 @@ import Link from "next/link"
 
 type Props = {
     imgURL?: string,
-    firstName?: string,
-    lastName?: string
+    firstName: string,
+    lastName: string,
+    username: string
 }
 
 const User = ({imgURL, firstName, lastName, username}: Props) => {

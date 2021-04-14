@@ -19,7 +19,7 @@ export type Auth0User = {
         profile?: string;
         picture?: string;
         website?: string;
-        email?: string;
+        email: string;
         email_verified?: boolean;
         gender?: string;
         birthdate?: string;
@@ -36,8 +36,9 @@ export type DBUser = {
         github: string,
         linkedin: string,
         bio: string,
-        twitterHandle: string,
+        twitter: string,
         username: string,
         id: string,
-        picture?: string
+        picture?: string,
+        notifications: []
 }

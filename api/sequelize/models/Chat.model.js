@@ -16,7 +16,8 @@ const Chat = sequelize.define(
     timestamps: true,
     paranoid: true,
     freezeTableName: true,
-    tableName: 'Chats'
+    tableName: 'Chats',
+    
     }
 );
 

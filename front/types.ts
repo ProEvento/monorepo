@@ -42,3 +42,22 @@ export type DBUser = {
         picture?: string,
         notifications: []
 }
+
+export type Chat = {
+        //Custom
+        id: number,
+        title: string,
+        group?: number,
+        messages: Message[],
+        members: DBUser[]
+}
+
+export type Message = {
+        //Custom
+        id: number,
+        text: string,
+        chatId: number,
+        authorId: number,
+        author: DBUser,
+        createdAt: number,
+}

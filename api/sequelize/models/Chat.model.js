@@ -22,8 +22,8 @@ const Chat = sequelize.define(
 );
 
     Chat.associate = function(models) {
-        Chat.belongsToMany(models.User, { through: "ChatUsers" })
-        Chat.hasMany(models.ChatMessage)
+        Chat.belongsToMany(models.User, { through: "ChatUsers", as: "members" })
+        Chat.hasMany(models.ChatMessage, { as: "messages" })
         // Chat.belongsTo(models.UserGroup, { as: "group"})
     }
 

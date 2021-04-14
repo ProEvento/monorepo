@@ -110,7 +110,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   }
 
   const getBadges = async (targetUser: UserType) => {
-    console.log("CALLED GET BADGES")
     const earnedBadges = await makeServerCall({ apiCall: `users/badges`, method: "GET" ,
     queryParameters: { 
       id: targetUser.id
@@ -152,12 +151,26 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setBadges([]);
   };
 
+  const handleMessage = async (targetUser) => {
+
+    // find chat between two
+    const events = await makeServerCall({ apiCall: `chats`, method: "GET" })
+
+    const response = await makeServerCall({ apiCall: `chats/getDM/${userContext.user.id}`, method: "GET" , 
+    queryParameters: {
+      targetId : targetUser.id,
+    }})
+
+    window.location.href = `http://localhost:3000/chats/${response.id}`
+  }
+
    return (
     <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>
       <Grid container direction="row" justify="space-around" alignItems="center" >
           <Avatar alt={targetUser.firstName} src={targetUser.picture} className={classes.large}></Avatar>
           {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
           <ButtonGroup size="small" aria-label="small outlined button group">
+            <Button variant="outlined" color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Message </Button>
             <Button variant="outlined" color="primary" id="followingUsers" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
             <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
             <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>

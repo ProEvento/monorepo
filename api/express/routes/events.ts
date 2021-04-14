@@ -68,6 +68,11 @@ async function startEvent(req: Request, res: Response) {
 	const event = await models.Event.findByPk(id);
 	//@ts-ignore
 	console.log(id, event.title)
+	//@ts-ignore
+	const attendees = await event.getAttendees();
+	for (const user of attendees) {
+		await user.creatNotification({text: "Your event " + event.title + " is starting now! Join here: /event/" + event.id})
+	}
 	if (event) {
 		// @ts-ignore
 		event.started = true

@@ -108,7 +108,6 @@ User.associate = function(models) {
 
    User.belongsToMany(models.Chat, {
       as: 'chats',
-      foreignKey: 'chats',
       target: 'id',
       through: 'ChatUsers'
    });

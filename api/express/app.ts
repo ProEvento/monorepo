@@ -23,6 +23,7 @@ const routes = {
 	search: require('./routes/search').default,
 	topics: require('./routes/topics').default,
 	groups: require('./routes/groups').default,
+	chats: require('./routes/chat').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -190,6 +191,17 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.topics.getByTitle)
 )
 
+
+// Chat
+
+app.post(
+	`/api/chats/sendMessage/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.chats.sendMessage)
+)
+app.get(
+	`/api/chats/getDM/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.chats.getDM)
+)
 
 
 // Twilio token

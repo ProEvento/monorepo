@@ -96,6 +96,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
   }
 
   const joinGroup = async () => {
+    console.log("Group joined")
     await makeServerCall({ apiCall: `groups/addUserToGroup`, method: "POST", queryParameters: { userId: user.id, groupId: group.id } }).then((data) => console.log(data))
     location.reload();
   }
@@ -139,6 +140,13 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
       }
   }
 
+  const handleMessage = async () => {
+    // find chat between two
+    const response = await makeServerCall({ apiCall: `chats/getGroupchat/${group.id}`, method: "GET" })
+
+    window.location.href = `http://localhost:3000/chats/${response.id}`
+  }
+
   return (
     <Page header={false} activePage={"Group"} title={group.name} userContext={userContext}>
        
@@ -152,7 +160,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
       <h4>{group.description}</h4>
       <br />
       <br />  
-    
+      <Button variant="outlined" color="primary" id="messageUser" onClick={() => {handleMessage()}}> Message </Button>
       {inGroup && !isOwner &&
           <Button onClick={leaveGroup} className={styles.button}>Leave Group</Button>
       }
@@ -179,9 +187,11 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
               {group.users &&  group.users.length > 1 && <div>{group.users.map((attendee) => <User key={attendee.username} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
 
 {isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
+            
           </div>
           <div>
             {inGroup && <div>
+              
               <InputLabel>Invite users:</InputLabel>
               <TextField id="search" onChange={(e) => {setSearch(e.target.value) }} label="Search for users..." value={search} />
               {/*@ts-ignore*/}

@@ -63,6 +63,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const [eventsHosted, setEventsHosted] = useState([]);
   const [eventsAttending, setEventsAttending] = useState([]); 
   const [badgesReceived, setBadges] = useState([]); 
+  const [groups, setGroups] = useState([]); 
   const [dialogTitle, setDialogTitle] = useState("");
   
   const isUserFollowing = (targetUsername: string)  => {
@@ -120,6 +121,14 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setBadges(earnedBadges);
   }
 
+  const getGroups = async (targetUser: UserType) => {
+    const groupData = await makeServerCall({ apiCall: `groups/getGroupsForUser`, method: "GET" , 
+    queryParameters: {
+      userId: targetUser.id
+    }})
+    setGroups(groupData);
+  }
+
 
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -136,6 +145,8 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       getHosted(targetUser)
     } else if (option == "Badges") {
       getBadges(targetUser)
+    } else if (option == "Groups") {
+      getGroups(targetUser)
     } else {
       getAttending(targetUser)
     }
@@ -151,6 +162,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setEventsHosted([]);
     setEventsAttending([]);
     setBadges([]);
+    setGroups([]);
   };
 
   const deleteAccount = async () => {
@@ -161,8 +173,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const handleMessage = async (targetUser) => {
 
     // find chat between two
-    const events = await makeServerCall({ apiCall: `chats`, method: "GET" })
-
     const response = await makeServerCall({ apiCall: `chats/getDM/${userContext.user.id}`, method: "GET" , 
     queryParameters: {
       targetId : targetUser.id,
@@ -182,6 +192,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
             <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
             <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
             <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
+            <Button variant="outlined" color="primary" id="groups" onClick={() => {handleClickOpen(targetUser, "Groups")}}> Groups </Button>
             <Button variant="outlined" color="primary" id="badgesReceived" onClick={() => {handleClickOpen(targetUser, "Badges")}}> Badges </Button>
           </ButtonGroup>
           
@@ -209,6 +220,9 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                 })}
                 {badgesReceived.map(badge => {
                   return <div className="badgesReceived">{badge.name}</div>
+                })}
+                {groups.map(group => {
+                  return <div className="groups">{group.name}</div>
                 })}
               </DialogContentText>
             </DialogContent>

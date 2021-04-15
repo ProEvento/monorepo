@@ -86,7 +86,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
         const mapped = categories.map((e) => `${e.name}`)
         return mapped.join(", ");
     } else {
-        return categories[0].name
+        return categories[0] ? categories[0].name : ""
     }
   }
 

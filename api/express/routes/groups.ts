@@ -63,6 +63,9 @@ async function create(req: Request, res: Response) {
     await Chat.addMember(Creator);
 
     //@ts-ignore
+    await Chat.setGroup(Group)
+
+    //@ts-ignore
     const FinalGroup = await models.Group.findByPk(Group.id, { include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories"}]})
 
     res.json({ msg: "success", group: FinalGroup })

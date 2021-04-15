@@ -5,7 +5,7 @@ const { models } = db.sequelize;
 import { Model, Op, useInflection } from "sequelize"
 
 async function search(req: Request, res: Response) {
-    // type: "event" | "user",
+    // type: "event" | "user" | "event_date" | "groups",
     const { type } = req.params
 	// query: string comma seperated terms, sort: "ascending" | "descending"
 	const { query, sort, start, end }  = req.query

@@ -18,6 +18,7 @@ import makeServerCall from '../../lib/makeServerCall';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Image from 'next/image'
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
@@ -233,6 +234,13 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
         <li><i>Twitter: {targetUser.twitter}</i></li>
 
       </ul>
+      <Divider/>
+      <h2>Badges</h2>
+      <Image width={63} height={78} src="/badges/fun.png" />
+      <Image width={63} height={78} src="/badges/educational.png" />
+      <Image width={63} height={78} src="/badges/exciting.png" />
+
+
     </Page>
   )
 }

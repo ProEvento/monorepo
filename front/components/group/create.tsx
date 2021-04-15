@@ -142,12 +142,11 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
         setResponse("Logo must be a valid URL or empty.");
         return;
     }
-      console.log("toSend", toSend)
       const data = await makeServerCall({ apiCall: "groups", method: "POST", 
           queryParameters: toSend,
       })
-        console.log(data)
       if (data.msg === "success") {
+        
         router.push(`/groups/${data.group.id}`)
       } else {
         // it didnt work

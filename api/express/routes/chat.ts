@@ -21,10 +21,7 @@ async function getById(req: Request, res: Response) {
 
 async function getDM(req: Request, res: Response) {
     const id = getIdParam(req);
-    console.log("User ID: " , id)
     const {targetId} = req.query;
-
-    console.log("Target ID: " , targetId)
     let chat = null;
     // const Chats = await models.Chat.findAll({ include: [{model: models.User, as: "members", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}, {model: models.Group, as: "group", attributes: ['id', 'name']}, {model: models.ChatMessage, as: "messages", include: [{model: models.User, as: "author", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}]}] });
     const Chats = await models.Chat.findAll({ include: [{model: models.User, as: "members", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}, {model: models.ChatMessage, as: "messages", include: [{model: models.User, as: "author", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}]}] });
@@ -37,6 +34,9 @@ async function getDM(req: Request, res: Response) {
         //@ts-ignore
         // if (chatObj.group != null) continue;
 
+        // Only look for chats with2 users
+        if (chatObj.members.size != 2) continue
+        
         //@ts-ignore
         for (const member of chatObj.members) {
             if (member.id == id) containsUser = true;
@@ -64,6 +64,15 @@ async function getDM(req: Request, res: Response) {
         //@ts-ignore
         chat.addMember(targetUser)
     }
+	res.status(200).json(chat);
+};
+
+async function getGroupchat(req: Request, res: Response) {
+    const id = getIdParam(req);
+
+    // const Chats = await models.Chat.findAll({ include: [{model: models.User, as: "members", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}, {model: models.Group, as: "group", attributes: ['id', 'name']}, {model: models.ChatMessage, as: "messages", include: [{model: models.User, as: "author", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}]}] });
+    const chat = await models.Chat.findOne({ where: { groupId: id}, include: [{model: models.User, as: "members", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}, {model: models.ChatMessage, as: "messages", include: [{model: models.User, as: "author", attributes: ['username', 'id', 'picture', 'firstName', 'lastName']}]}] });
+
 	res.status(200).json(chat);
 };
 
@@ -128,6 +137,7 @@ export default {
     getAll,
     getById,
     getDM,
+    getGroupchat,
     sendMessage,
     create
 };

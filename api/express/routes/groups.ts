@@ -63,6 +63,10 @@ async function create(req: Request, res: Response) {
     await Chat.addMember(Creator);
 
     //@ts-ignore
+    await Chat.setGroup(Group)
+
+
+    //@ts-ignore
     const FinalGroup = await models.Group.findByPk(Group.id, { include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories"}]})
 
     res.json({ msg: "success", group: FinalGroup })
@@ -111,8 +115,12 @@ async function addUserToGroup(req: Request, res: Response) {
         //@ts-ignore
         await Group.addUser(User);
         //@ts-ignore
-        const Chat = await Group.getChat();
-        await Chat.addUser(User);
+        const Chat = await models.Chat.findOne({ where: { groupId } })
+        console.log("user: " , User)
+        console.log("group: " , Group)
+        console.log("chat: ", Chat)
+        //@ts-ignore
+        await Chat.addMember(User);
         return res.status(200).json({ msg: "success"})
     }
 };

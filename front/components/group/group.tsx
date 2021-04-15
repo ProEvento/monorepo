@@ -55,6 +55,13 @@ const Item = ({ user, group }) => {
 //   const isHost = user.username === (host ? host.username : user.username);
 //   const isAttending = !!attendees.find((attendee) => attendee.username === user.username)
 
+  const handleMessage = async () => {
+    // find chat between two
+    const response = await makeServerCall({ apiCall: `chats/getGroupchat/${group.id}`, method: "GET" })
+
+    window.location.href = `http://localhost:3000/chats/${response.id}`
+  }
+
   return (
     <ListItem className={classes.root}>
       <ListItemText 
@@ -67,6 +74,7 @@ const Item = ({ user, group }) => {
             <Typography variant="caption">
               created by <Link href={`/user/${owner.username}`}>{owner.username}</Link> on {new Date(createdAt).toLocaleTimeString("en-US")}
             </Typography>
+            
           </React.Fragment>
         }
       />
@@ -74,6 +82,7 @@ const Item = ({ user, group }) => {
         {/* {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
         {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
         {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>} */}
+        <Button variant="outlined" color="primary" id="messageUser" onClick={() => {handleMessage()}}> Message </Button>
         <Link href={`/groups/${group.id}`}><Button id="visitButton" style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></Link>
     </ListItem>
     )

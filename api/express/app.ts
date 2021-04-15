@@ -229,6 +229,11 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.chats.getDM)
 )
 
+app.get(
+	`/api/chats/getGroupchat/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.chats.getGroupchat)
+)
+
 
 // Twilio token
 app.get('/api/token', (req, res) => {

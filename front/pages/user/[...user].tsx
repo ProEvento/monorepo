@@ -19,6 +19,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Image from 'next/image'
+import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
@@ -60,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const User = ({targetUser, userContext, followerData, badgesData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>, badgesData: Array<any>}) => {
+  const router = useRouter();
   const classes = useStyles();
   const { user: contextUser, error, isLoading } = userContext;
   const [followers, setFollowers] = useState(followerData);
@@ -70,6 +72,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
   const [eventsHosted, setEventsHosted] = useState([]);
   const [eventsAttending, setEventsAttending] = useState([]); 
   const [badgesReceived, setBadges] = useState(badgesData); 
+  const [groups, setGroups] = useState([]); 
   const [dialogTitle, setDialogTitle] = useState("");
   
   const isUserFollowing = (targetUsername: string)  => {
@@ -127,6 +130,14 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
     setBadges(earnedBadges);
   }
 
+  const getGroups = async (targetUser: UserType) => {
+    const groupData = await makeServerCall({ apiCall: `groups/getGroupsForUser`, method: "GET" , 
+    queryParameters: {
+      userId: targetUser.id
+    }})
+    setGroups(groupData);
+  }
+
 
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -141,6 +152,8 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
       getFollowingTopics(targetUser)
     } else if (option == "Events Hosted") {
       getHosted(targetUser)
+    } else if (option == "Groups") {
+      getGroups(targetUser)
     } else {
       getAttending(targetUser)
     }
@@ -155,13 +168,17 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
     setFollowingTopics([]);
     setEventsHosted([]);
     setEventsAttending([]);
+    setGroups([]);
   };
+
+  const deleteAccount = async () => {
+    await makeServerCall({ apiCall: `users/${userContext.user.id}`, method: "DELETE" })
+    router.push("/signup");
+  }
 
   const handleMessage = async (targetUser) => {
 
     // find chat between two
-    const events = await makeServerCall({ apiCall: `chats`, method: "GET" })
-
     const response = await makeServerCall({ apiCall: `chats/getDM/${userContext.user.id}`, method: "GET" , 
     queryParameters: {
       targetId : targetUser.id,
@@ -181,6 +198,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
             <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
             <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
             <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
+            <Button variant="outlined" color="primary" id="groups" onClick={() => {handleClickOpen(targetUser, "Groups")}}> Groups </Button>
           </ButtonGroup>
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -207,6 +225,9 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
                 })}
                 {badgesReceived.map(badge => {
                   return <Image width={76} height={110} src={badge.img} />
+                })}
+                {groups.map(group => {
+                  return <div className="groups">{group.name}</div>
                 })}
               </DialogContentText>
             </DialogContent>
@@ -244,7 +265,8 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
           return <Image width={76} height={110} src={badge.img} />
       })}
 
-
+      <Divider/>
+      {userContext.user.id === targetUser.id && <Button style={{marginTop: 14}} onClick={deleteAccount} variant="contained" color="secondary">Delete account</Button>}
     </Page>
   )
 }

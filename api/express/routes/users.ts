@@ -38,8 +38,8 @@ async function signupUser(req: Request, res: Response) {
 	if (count !== 0) {
 		return res.status(500).json({ msg: "User already exists"}).end()
 	}
-	await models.User.create(req.body);
-	res.status(201).json({ msg: "success"})
+	const u = await models.User.create(req.body);
+	res.status(201).json({ msg: "success", user: u})
 };
 
 async function getByEmail(req: Request, res: Response) {

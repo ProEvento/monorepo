@@ -134,6 +134,7 @@ function SimpleTabs({ user }) {
         makeServerCall({ apiCall: `events/getUserTopicEvents`, method: "GET",  queryParameters: { id: user.id } }).then((data) => {
             const cleaned = []
             const today = new Date()
+            console.log(data)
             for (const event of data) {
                 const { time, title, description, host, attendees, id } = event
                 let dupe = false

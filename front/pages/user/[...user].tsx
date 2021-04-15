@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import {  GetServerSideProps } from 'next'
 import { CustomUserContext } from '../../types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -20,6 +21,13 @@ import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Image from 'next/image'
 import { useRouter } from 'next/router';
+import Chip from '@material-ui/core/Chip';
+import PeopleIcon from '@material-ui/icons/People';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import EventIcon from '@material-ui/icons/Event';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import PersonIcon from '@material-ui/icons/Person';
+
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
@@ -55,7 +63,19 @@ const useStyles = makeStyles((theme) => ({
   large: {
     width: theme.spacing(25),
     height: theme.spacing(25),
-    marginBlockEnd: '1000'
+    marginBlockEnd: '1000',
+    marginRight: 64,
+    marginLeft: 48
+  },
+  buttons: {
+    display: 'flex',
+    // justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+    marginTop: 24,
+    maxWidth: 600
   }
 
 }));
@@ -138,7 +158,16 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
     setGroups(groupData);
   }
 
+  useEffect(() => {
+    getFollowingTopics(targetUser)
+    getFollowingUsers(targetUser)
+    getAttending(targetUser)
+    getHosted(targetUser)
+    getBadges(targetUser)
+    getGroups(targetUser)
+  }, [])
 
+  console.log(followingTopics, eventsAttending)
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -146,17 +175,6 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
   let title = "";
 
   const handleClickOpen = (targetUser, option) => {
-    if (option == "Following Users") {
-      getFollowingUsers(targetUser)
-    } else if (option == "Following Topics") {
-      getFollowingTopics(targetUser)
-    } else if (option == "Events Hosted") {
-      getHosted(targetUser)
-    } else if (option == "Groups") {
-      getGroups(targetUser)
-    } else {
-      getAttending(targetUser)
-    }
     setDialogTitle(option)
     setOpen(true);
     
@@ -164,11 +182,6 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
 
   const handleClose = () => {
     setOpen(false);
-    setFollowingUsers([]);
-    setFollowingTopics([]);
-    setEventsHosted([]);
-    setEventsAttending([]);
-    setGroups([]);
   };
 
   const deleteAccount = async () => {
@@ -189,23 +202,61 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
 
    return (
     <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>
-      <Grid container direction="row" justify="space-around" alignItems="center" >
+      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <Avatar alt={targetUser.firstName} src={targetUser.picture} className={classes.large}></Avatar>
-          {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
-          <ButtonGroup size="small" aria-label="small outlined button group">
-            <Button variant="outlined" color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Message </Button>
-            <Button variant="outlined" color="primary" id="followingUsers" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
-            <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
-            <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
-            <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
-            <Button variant="outlined" color="primary" id="groups" onClick={() => {handleClickOpen(targetUser, "Groups")}}> Groups </Button>
-          </ButtonGroup>
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 400}}>
+              <Typography variant="h1" style={{fontWeight: 500, fontSize: 40}}>{targetUser.firstName}</Typography>
+              <div>
+              {userContext.user.id == targetUser.id ? <div></div> : 
+                isUserFollowing(userContext.user.username) ? 
+                  <Button variant="contained" style={{height: 32, marginTop: 8}} color="secondary" id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button>
+                  : 
+                  <Button variant="contained" style={{height: 32, marginTop: 8}}  color="primary" id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
+                  <Button variant="outlined" style={{height: 32, marginTop: 8, marginLeft: 8}}  color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Send Message </Button>
+                </div>
+            </div>
+
+            <div className={classes.buttons}>
+            <Chip
+              icon={<PersonIcon/>}
+              label={`Following ${followingUsers.length} users`}
+              clickable
+              onClick={() => handleClickOpen(targetUser, "Following Users")}
+            />
+            <Chip
+              icon={<LibraryBooksIcon/>}
+              label={`Following ${followingTopics.length} topics`}
+              clickable
+              onClick={() => handleClickOpen(targetUser, "Following Topics")}
+            />
+            <Chip
+              icon={<ScheduleIcon/>}
+              label={`Hosting/hosted ${eventsHosted.length} events`}
+              clickable
+              onClick={() => handleClickOpen(targetUser, "Events Hosted")}
+            />
+            <Chip
+              icon={<EventIcon/>}
+              label={`Attending ${eventsAttending.length} events`}
+              clickable
+              onClick={() => handleClickOpen(targetUser, "Events Attending")}
+            />
+            <Chip
+              icon={<PeopleIcon/>}
+              label={`In ${groups.length} groups`}
+              clickable
+              onClick={() => handleClickOpen(targetUser, "Groups")}
+            />
+            </div>
+          </div>
+
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
             <DialogTitle id="responsive-dialog-title">{targetUser.firstName}'s {dialogTitle}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                {followingUsers.map(user => {
+                {dialogTitle === "Following Users" && followingUsers.map(user => {
                   return (
                     <div>
                       <Grid container direction="row" justify="space-around" alignItems="center">
@@ -214,16 +265,16 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
                       </Grid>
                     </div>
                 )})}
-                {followingTopics.map(topic => {
+                {dialogTitle === "Following Topics" && followingTopics.map(topic => {
                   return <div className="topic">{topic.title}</div>
                 })}
-                {eventsHosted.map(event => {
+                {dialogTitle === "Events Hosted" && eventsHosted.map(event => {
                   return <div className="eventsHosted">{event.title}</div>
                 })}
-                {eventsAttending.map(event => {
+                {dialogTitle === "Events Attending" && eventsAttending.map(event => {
                   return <div className="eventsAttending">{event.title}</div>
                 })}
-                {groups.map(group => {
+                {dialogTitle === "Groups" && groups.map(group => {
                   return <div className="groups">{group.name}</div>
                 })}
               </DialogContentText>
@@ -235,31 +286,29 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
             </DialogActions>
           </Dialog>
           
-      </Grid>
+      </div>
 
       <div>
         
         
       </div>
-      <h1>{targetUser.firstName}</h1>
 
       <div>
         <h2>Bio</h2>
         <p>{targetUser.bio}</p>
       </div>
       
-      <Divider/>
-      <h2>Social Media Links</h2>
+      {(targetUser.linkedin || targetUser.github || targetUser.twitter) && <Divider/>}
+      {(targetUser.linkedin || targetUser.github || targetUser.twitter) && <h2>Social Media Links</h2>}
       <ul>
-        <li><i>Linkedin {targetUser.linkedin}</i></li>
-        <li><i>Github: {targetUser.github}</i></li>
-        <li><i>Twitter: {targetUser.twitter}</i></li>
-
+        {targetUser.linkedin && <li><i>Linkedin {targetUser.linkedin}</i></li>}
+        {targetUser.github && <li><i>Github: {targetUser.github}</i></li>}
+        {targetUser.twitter && <li><i>Twitter: {targetUser.twitter}</i></li>}
       </ul>
       <Divider/>
       <h2>Badges</h2>
       {badgesReceived.map(badge => {
-          return <Image width={76} height={110} src={badge.img} />
+          return <Image width={76} alt={badge.name} height={110} src={badge.img} />
       })}
 
       <Divider/>

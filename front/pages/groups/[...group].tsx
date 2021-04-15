@@ -176,20 +176,20 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
           {/* <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
           <Button id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button> */}
       </form>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-          <div>
-          <h3>Members</h3>
+      <div style={{display: 'flex', flexWrap: 'wrap'}}>
+          <div style={{marginBottom: 24}}>
+           <h3>Members</h3>
 
-        {group.users && group.users.length === 1 &&
-          <h5>No members are currently in this group.</h5>
-        }
+          {group.users && group.users.length === 1 &&
+            <h5>No members are currently in this group.</h5>
+          }
+                
+            {group.users &&  group.users.length > 1 && <div>{group.users.map((attendee) => <User key={attendee.username} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
+
+            {isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
               
-              {group.users &&  group.users.length > 1 && <div>{group.users.map((attendee) => <User key={attendee.username} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
-
-{isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
-            
           </div>
-          <div>
+          <div style={{marginLeft: 24, marginBottom: 24}}>
             {inGroup && <div>
               
               <InputLabel>Invite users:</InputLabel>

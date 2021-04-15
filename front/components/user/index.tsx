@@ -4,6 +4,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import makeServerCall from '../../lib/makeServerCall';
+import Typography from '@material-ui/core/Typography';
 
 import Link from "next/link"
 
@@ -29,16 +30,45 @@ const inviteUser = async (username, group) => {
     })
   };
 
-
 const User = ({imgURL, firstName, lastName, username, group}: Props) => {
     return (
-        <ListItem>
-            <ListItemAvatar>
-                <Avatar></Avatar>
-            </ListItemAvatar>
+        <li className="grid-container">
+            <div className="avatar"><Avatar src={imgURL} style={{height: 86, width: 86, marginLeft: 24, marginRight: 24}} alt={`${firstName} ${lastName}`}></Avatar></div>
+            <div className="info">
+            <Typography variant="h5" style={{color: 'black', fontSize: 25, }}>{firstName} {lastName}</Typography>
+            <Typography variant="h6" style={{color: 'black', fontSize: 20, fontStyle: 'italic', fontWeight: 300}}>{username}</Typography>
+            </div>
+            <div className="buttons">
+                {group && <Button onClick={async () => await inviteUser(username, group)} variant="contained">Invite User</Button>} 
+                <Link href={`/user/${username}`}><Button variant="contained">Visit user</Button></Link>
+            </div>
+            <style jsx>{`
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: 0.7fr 1.6fr 0.7fr;
+                    grid-template-rows: 1fr 1fr 1fr;
+                    gap: 0px 0px;
+                    grid-template-areas:
+                        "avatar info buttons"
+                        "avatar info buttons"
+                        "avatar info buttons";
+                    color: #535353;
+                    padding: var(--gap-double) 0px;
+                    background: #FFFFFF;
+                    border: 1px solid #000000;
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    margin-bottom: 24px;
+                    max-width: 700px;
+                    margin-top: var(--gap);
+                    margin-bottom: var(--gap);
+                }    
 
-            <ListItemText secondary={group && <Button onClick={async () => await inviteUser(username, group)} variant="contained">Invite User</Button>} primary={<Link href={`/user/${username}`}>{firstName + " " + lastName}</Link>}></ListItemText>
-        </ListItem>
+                .avatar { grid-area: avatar; }
+                .info { grid-area: info; }
+                .buttons { grid-area: buttons; }
+            `}</style>
+        </li>
     )
 }
 

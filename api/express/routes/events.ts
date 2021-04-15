@@ -328,7 +328,7 @@ async function getUserTopicEvents(req: Request, res: Response) {
 			//@ts-ignore
 			if (event.Topic && topic.title === event.Topic.title){
 				//@ts-ignore
-				if (event.host.id != userId){
+				if (event.host && event.host.id != userId){
 					result.push(event)
 				}
 			}

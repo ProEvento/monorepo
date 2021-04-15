@@ -60,6 +60,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const [followingTopics, setFollowingTopics] = useState([]);
   const [eventsHosted, setEventsHosted] = useState([]);
   const [eventsAttending, setEventsAttending] = useState([]); 
+  const [badgesReceived, setBadges] = useState([]); 
   const [dialogTitle, setDialogTitle] = useState("");
   
   const isUserFollowing = (targetUsername: string)  => {
@@ -108,6 +109,16 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setEventsHosted(events);
   }
 
+  const getBadges = async (targetUser: UserType) => {
+    const earnedBadges = await makeServerCall({ apiCall: `users/badges`, method: "GET" ,
+    queryParameters: { 
+      id: targetUser.id
+    },
+    })
+    setBadges(earnedBadges);
+  }
+
+
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -121,6 +132,8 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       getFollowingTopics(targetUser)
     } else if (option == "Events Hosted") {
       getHosted(targetUser)
+    } else if (option == "Badges") {
+      getBadges(targetUser)
     } else {
       getAttending(targetUser)
     }
@@ -135,7 +148,21 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setFollowingTopics([]);
     setEventsHosted([]);
     setEventsAttending([]);
+    setBadges([]);
   };
+
+  const handleMessage = async (targetUser) => {
+
+    // find chat between two
+    const events = await makeServerCall({ apiCall: `chats`, method: "GET" })
+
+    const response = await makeServerCall({ apiCall: `chats/getDM/${userContext.user.id}`, method: "GET" , 
+    queryParameters: {
+      targetId : targetUser.id,
+    }})
+
+    window.location.href = `http://localhost:3000/chats/${response.id}`
+  }
 
    return (
     <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>
@@ -143,10 +170,12 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
           <Avatar alt={targetUser.firstName} src={targetUser.picture} className={classes.large}></Avatar>
           {userContext.user.id == targetUser.id ? <div></div> : isUserFollowing(userContext.user.username) ? <Button id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button> : <Button id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
           <ButtonGroup size="small" aria-label="small outlined button group">
+            <Button variant="outlined" color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Message </Button>
             <Button variant="outlined" color="primary" id="followingUsers" onClick={() => {handleClickOpen(targetUser, "Following Users")}}> Following Users </Button>
-            <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Following Topics </Button>
-            <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Events Hosted </Button>
-            <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Events Attending </Button>
+            <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
+            <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
+            <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
+            <Button variant="outlined" color="primary" id="badgesReceived" onClick={() => {handleClickOpen(targetUser, "Badges")}}> Badges </Button>
           </ButtonGroup>
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -170,6 +199,9 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                 })}
                 {eventsAttending.map(event => {
                   return <div className="eventsAttending">{event.title}</div>
+                })}
+                {badgesReceived.map(badge => {
+                  return <div className="badgesReceived">{badge.name}</div>
                 })}
               </DialogContentText>
             </DialogContent>

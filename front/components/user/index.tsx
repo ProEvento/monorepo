@@ -9,9 +9,9 @@ import Link from "next/link"
 
 type Props = {
     imgURL?: string,
-    firstName?: string,
-    lastName?: string,
-    username?: string,
+    firstName: string,
+    lastName: string,
+    username: string,
     group?: object,
 }
 

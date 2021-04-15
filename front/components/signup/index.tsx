@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Signup = ({ userContext }: { userContext: UserContext}) => {
   const router = useRouter();
   const { user } = userContext;
-  const [lastName, setLastName] = useState(user.family_name ?? "")
+  const [lastName, setLastName] = useState(user.family_name.toString() ?? "")
   const [firstName, setFirstName] = useState(user.name ?? user.nickname ?? "" )
   const [linkedin, setLinkedin] = useState("")
   const [github, setGithub] = useState("")

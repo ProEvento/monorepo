@@ -19,7 +19,7 @@ export type Auth0User = {
         profile?: string;
         picture?: string;
         website?: string;
-        email?: string;
+        email: string;
         email_verified?: boolean;
         gender?: string;
         birthdate?: string;
@@ -36,8 +36,28 @@ export type DBUser = {
         github: string,
         linkedin: string,
         bio: string,
-        twitterHandle: string,
+        twitter: string,
         username: string,
         id: string,
-        picture?: string
+        picture?: string,
+        notifications: []
+}
+
+export type Chat = {
+        //Custom
+        id: number,
+        title: string,
+        group?: number,
+        messages: Message[],
+        members: DBUser[]
+}
+
+export type Message = {
+        //Custom
+        id: number,
+        text: string,
+        chatId: number,
+        authorId: number,
+        author: DBUser,
+        createdAt: number,
 }

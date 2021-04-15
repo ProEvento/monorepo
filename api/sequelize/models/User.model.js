@@ -107,7 +107,7 @@ User.associate = function(models) {
    });
 
    User.belongsToMany(models.Chat, {
-      as: 'users',
+      as: 'chats',
       target: 'id',
       through: 'ChatUsers'
    });

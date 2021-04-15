@@ -23,6 +23,7 @@ const routes = {
 	search: require('./routes/search').default,
 	topics: require('./routes/topics').default,
 	groups: require('./routes/groups').default,
+	chats: require('./routes/chat').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -68,6 +69,7 @@ app.get(
 )
 
 // Users
+
 
 app.post(
 	`/api/users/signup`,
@@ -118,6 +120,17 @@ app.post(
 	`/api/users/notifications/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.users.addNotificationToUser)
 )
+
+app.post(
+	`/api/users/badges`,
+	makeHandlerAwareOfAsyncErrors(routes.users.addBadgeToUser)
+)
+
+app.get(
+	`/api/users/badges`,
+	makeHandlerAwareOfAsyncErrors(routes.users.getUsersBadges)
+)
+
 
 // Events
 
@@ -198,6 +211,17 @@ app.post(
 app.post(
 	`/api/groups/removeUserFromGroup`,
 	makeHandlerAwareOfAsyncErrors(routes.groups.removeUserFromGroup)
+)
+
+// Chat
+
+app.post(
+	`/api/chats/sendMessage/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.chats.sendMessage)
+)
+app.get(
+	`/api/chats/getDM/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.chats.getDM)
 )
 
 

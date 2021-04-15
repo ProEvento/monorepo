@@ -17,7 +17,6 @@ import { getEnabledCategories } from "node:trace_events";
 import { Label } from "@material-ui/icons";
 import User from '@components/user'
 
-
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
     const data = await makeServerCall({ apiCall: `groups/${context.params.group}`, method: "GET" })
@@ -57,7 +56,7 @@ async function getUsers(value) {
 
 const Group = ({group, userContext}: { userContext: CustomUserContext, group:any}) => {
   const [search, setSearch] = useState("")
-  const [results, setResults] = useState<User[]>([])
+  const [results, setResults] = useState([])
   const [badge, setBadge] = useState("")
   const [inGroup, setInGroup] = useState(false)
   const [invited, setInvited] = useState(false)

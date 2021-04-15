@@ -137,7 +137,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         <div>
           Pick a topic: {" "}
           <select value={topic} onChange={(e) => { topicChange(e.target.value) }}>
-            {topics.map(top => <option value={top}>{top}</option>)}
+            {topics.map(top => <option key={top} value={top}>{top}</option>)}
           </select>
         </div>
         <br></br>

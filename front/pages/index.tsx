@@ -13,7 +13,7 @@ const Home = ({ userContext }: { userContext: CustomUserContext}) => {
       </Page>
     )
   } else {
-    router.push(`/user/${userContext.user.username}`)
+    router.push(`/feed`)
     return (<Page header={false} activePage={"Dashboard"} title={`Welcome!`} userContext={userContext}>
       Welcome to ProEvento! Please Sign Up on the left to get started!
     </Page>)

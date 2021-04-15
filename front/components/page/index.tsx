@@ -114,6 +114,10 @@ const Page = ({
     {
       name: "My Groups",
       url: "/groups"
+    },
+    {
+      name: "My Feed",
+      url: "/feed"
     }
   ]
 

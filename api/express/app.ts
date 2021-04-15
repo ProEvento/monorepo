@@ -184,6 +184,16 @@ app.post(
 	makeHandlerAwareOfAsyncErrors(routes.events.addTopic)
 )
 
+app.get(
+	`/api/events/getUserGroupEvents`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getUserGroupEvents)
+)
+
+app.get(
+	`/api/events/getUserTopicEvents`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getUserTopicEvents)
+)
+
 // Topics
 
 app.get(

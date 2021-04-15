@@ -72,7 +72,7 @@ async function startEvent(req: Request, res: Response) {
 	//@ts-ignore
 	const attendees = await event.getAttendees();
 	for (const user of attendees) {
-		await user.createNotification({text: "Your event " + event.title + " is starting now! Join here: <a href='/event/'" + event.id + ">click me</a>"});
+		await user.createNotification({text: "Your event " + event.title + " is starting now! Join here: <a href='/event/" + event.id + "'>click me</a>"});
 	}
 	if (event) {
 		//@ts-ignore

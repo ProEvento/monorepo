@@ -18,6 +18,7 @@ import makeServerCall from '../../lib/makeServerCall';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Image from 'next/image'
 import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
@@ -27,13 +28,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   })
   const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
+  const badgesData = await makeServerCall({ apiCall: `users/badges`, method: "GET" ,
+  queryParameters: { 
+    id: data.id
+  },
+  })
   return { 
     props: {
       targetUser : data,
-      followerData: followers
+      followerData: followers,
+      badgesData: badgesData
      }
   }
 }
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const User = ({targetUser, userContext, followerData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>}) => {
+const User = ({targetUser, userContext, followerData, badgesData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>, badgesData: Array<any>}) => {
   const router = useRouter();
   const classes = useStyles();
   const { user: contextUser, error, isLoading } = userContext;
@@ -62,7 +71,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const [followingTopics, setFollowingTopics] = useState([]);
   const [eventsHosted, setEventsHosted] = useState([]);
   const [eventsAttending, setEventsAttending] = useState([]); 
-  const [badgesReceived, setBadges] = useState([]); 
+  const [badgesReceived, setBadges] = useState(badgesData); 
   const [groups, setGroups] = useState([]); 
   const [dialogTitle, setDialogTitle] = useState("");
   
@@ -143,8 +152,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       getFollowingTopics(targetUser)
     } else if (option == "Events Hosted") {
       getHosted(targetUser)
-    } else if (option == "Badges") {
-      getBadges(targetUser)
     } else if (option == "Groups") {
       getGroups(targetUser)
     } else {
@@ -161,7 +168,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setFollowingTopics([]);
     setEventsHosted([]);
     setEventsAttending([]);
-    setBadges([]);
     setGroups([]);
   };
 
@@ -193,7 +199,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
             <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
             <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
             <Button variant="outlined" color="primary" id="groups" onClick={() => {handleClickOpen(targetUser, "Groups")}}> Groups </Button>
-            <Button variant="outlined" color="primary" id="badgesReceived" onClick={() => {handleClickOpen(targetUser, "Badges")}}> Badges </Button>
           </ButtonGroup>
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -217,9 +222,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                 })}
                 {eventsAttending.map(event => {
                   return <div className="eventsAttending">{event.title}</div>
-                })}
-                {badgesReceived.map(badge => {
-                  return <div className="badgesReceived">{badge.name}</div>
                 })}
                 {groups.map(group => {
                   return <div className="groups">{group.name}</div>
@@ -254,6 +256,11 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
         <li><i>Twitter: {targetUser.twitter}</i></li>
 
       </ul>
+      <Divider/>
+      <h2>Badges</h2>
+      {badgesReceived.map(badge => {
+          return <Image width={76} height={110} src={badge.img} />
+      })}
 
       <Divider/>
       {userContext.user.id === targetUser.id && <Button style={{marginTop: 14}} onClick={deleteAccount} variant="contained" color="secondary">Delete account</Button>}

@@ -137,7 +137,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     queryParameters: {
         host : event.host.id,
         text : badge,
-        img : "test-img"
+        img : `/badges/${badge}.png`
     }})
     const data = await makeServerCall({ apiCall: `users/notifications/${event.host.id}`, method: "POST", 
     queryParameters: { 
@@ -161,7 +161,6 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
        
       <h1>{event.title}</h1>
       <img id="pic" src={event.picture} className={styles.img} />
-
       <h4>{dateEvent.toLocaleDateString("en-US")} {dateEvent.toLocaleTimeString("en-US")}</h4>
       {event.priv
         ? <h5>Private Event </h5>
@@ -187,26 +186,26 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
-      {attend && !isHost &&
+      {attend &&
        <div>
          <div>
             Pick a Badge: {" "}
             <select value={badge} onChange={(e) => { setBadge(e.target.value) }}>
-              <option value="Great Speaker">Great Speaker</option>
-              <option value="Fun">Fun</option>
-              <option value="Engaging">Engaging</option>
-              <option value="Informative">Informative</option>
-              <option value="Professional">Professional</option>
-              <option value="Exciting">Exciting</option>
-              <option value="Inspiring">Inspiring</option>
-              <option value="Educational">Educational</option>
-              <option value="Talented">Talented</option>
-              <option value="Organized">Organized</option>
-              <option value="Considerate">Considerate</option>
+              <option value="greathost">Great Host</option>
+              <option value="fun">Fun</option>
+              <option value="engaging">Engaging</option>
+              <option value="informative">Informative</option>
+              <option value="professional">Professional</option>
+              <option value="exciting">Exciting</option>
+              <option value="inspirational">Inspiring</option>
+              <option value="educational">Educational</option>
+              <option value="talented">Talented</option>
+              <option value="organized">Organized</option>
+              <option value="considerate">Considerate</option>
             </select>
           </div>
         <form>
-            <Button id='giveBadge' onClick={giveBadge} disabled={Date.now() < dateEvent.getTime() || Date.now() > dateEvent.getTime()+3600000}  color="primary">Give Badge</Button>
+            <Button id='giveBadge' onClick={giveBadge}  color="primary">Give Badge</Button>
         </form>
        </div>
       }

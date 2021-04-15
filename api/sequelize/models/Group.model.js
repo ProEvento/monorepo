@@ -30,6 +30,13 @@ module.exports = (sequelize, DataTypes) => {
       target: 'id',
     })
 
+    Group.belongsToMany(models.GroupCategory, {
+      through: "Group_Categories",
+      as: 'categories',
+      target: 'id',
+      foreignKey: 'category'
+    })
+
     Group.belongsTo(models.User, {
       as: 'owner',
       foreignKey: 'User_id',
@@ -37,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       constraints: false
    });
+
 
   };
 

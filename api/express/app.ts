@@ -178,6 +178,27 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.topics.getByTitle)
 )
 
+// Groups
+
+app.get(
+	`/api/groups/getCategories`,
+	makeHandlerAwareOfAsyncErrors(routes.groups.getCategories)
+)
+
+app.get(
+	`/api/groups/getGroupsForUser`,
+	makeHandlerAwareOfAsyncErrors(routes.groups.getGroupsForUser)
+)
+
+app.post(
+	`/api/groups/addUserToGroup`,
+	makeHandlerAwareOfAsyncErrors(routes.groups.addUserToGroup)
+)
+
+app.post(
+	`/api/groups/removeUserFromGroup`,
+	makeHandlerAwareOfAsyncErrors(routes.groups.removeUserFromGroup)
+)
 
 
 // Twilio token

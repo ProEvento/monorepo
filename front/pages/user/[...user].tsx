@@ -27,13 +27,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   })
   const followers = await makeServerCall({ apiCall: `users/followers/${data.id}`, method: "GET" });
+  const badgesData = await makeServerCall({ apiCall: `users/badges`, method: "GET" ,
+  queryParameters: { 
+    id: data.id
+  },
+  })
   return { 
     props: {
       targetUser : data,
-      followerData: followers
+      followerData: followers,
+      badgesData: badgesData
      }
   }
 }
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const User = ({targetUser, userContext, followerData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>}) => {
+const User = ({targetUser, userContext, followerData, badgesData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>, badgesData: Array<any>}) => {
   const classes = useStyles();
   const { user: contextUser, error, isLoading } = userContext;
   const [followers, setFollowers] = useState(followerData);
@@ -61,7 +69,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
   const [followingTopics, setFollowingTopics] = useState([]);
   const [eventsHosted, setEventsHosted] = useState([]);
   const [eventsAttending, setEventsAttending] = useState([]); 
-  const [badgesReceived, setBadges] = useState([]); 
+  const [badgesReceived, setBadges] = useState(badgesData); 
   const [dialogTitle, setDialogTitle] = useState("");
   
   const isUserFollowing = (targetUsername: string)  => {
@@ -133,8 +141,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       getFollowingTopics(targetUser)
     } else if (option == "Events Hosted") {
       getHosted(targetUser)
-    } else if (option == "Badges") {
-      getBadges(targetUser)
     } else {
       getAttending(targetUser)
     }
@@ -175,7 +181,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
             <Button variant="outlined" color="primary" id="followingTopics" onClick={() => {handleClickOpen(targetUser, "Following Topics")}}> Topics </Button>
             <Button variant="outlined" color="primary" id="eventsHosted" onClick={() => {handleClickOpen(targetUser, "Events Hosted")}}> Hosting </Button>
             <Button variant="outlined" color="primary" id="eventsAttending" onClick={() => {handleClickOpen(targetUser, "Events Attending")}}> Attending </Button>
-            <Button variant="outlined" color="primary" id="badgesReceived" onClick={() => {handleClickOpen(targetUser, "Badges")}}> Badges </Button>
           </ButtonGroup>
           
           <Dialog fullScreen={fullScreen} open={open} onClose={handleClose} aria-labelledby="responsive-dialog-title">
@@ -236,7 +241,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       <Divider/>
       <h2>Badges</h2>
       {badgesReceived.map(badge => {
-                  return <Image width={76} height={110} src={badge.img} />
+          return <Image width={76} height={110} src={badge.img} />
       })}
 
 

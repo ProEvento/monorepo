@@ -24,8 +24,28 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Group.associate = function (models) {
-    Group.belongsToMany(models.User, { through: "Users_Groups" })
-    Group.belongsTo(models.User, { as: "host" })
+    Group.belongsToMany(models.User, {
+      through: "Users_Groups",
+      as: 'users',
+      target: 'id',
+    })
+
+    Group.belongsToMany(models.GroupCategory, {
+      through: "Group_Categories",
+      as: 'categories',
+      target: 'id',
+      foreignKey: 'category'
+    })
+
+    Group.belongsTo(models.User, {
+      as: 'owner',
+      foreignKey: 'User_id',
+      target: 'id',
+      type: DataTypes.INTEGER,
+      constraints: false
+   });
+
+
   };
 
   return Group;

@@ -112,9 +112,18 @@ User.associate = function(models) {
       through: 'ChatUsers'
    });
 
-   User.belongsToMany(models.Group, { through: "Users_Groups"})
-   User.hasMany(models.Group)
-   
+   User.belongsToMany(models.Group, {       
+      through: "Users_Groups",
+      as: 'groups',
+      target: 'id',
+   });
+
+   User.hasMany(models.Group, {
+      as: 'owned',
+      foreignKey: 'User_id',
+      target: 'id',
+      constraints: false
+   });
 }
 
 return User;

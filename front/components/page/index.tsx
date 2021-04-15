@@ -110,6 +110,10 @@ const Page = ({
     {
       name: "My Events",
       url: "/events"
+    },
+    {
+      name: "My Groups",
+      url: "/groups"
     }
   ]
 

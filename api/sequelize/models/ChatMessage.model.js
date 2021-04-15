@@ -21,7 +21,7 @@ const ChatMessage = sequelize.define(
 
     ChatMessage.associate = function(models) {  
        ChatMessage.belongsTo(models.User, { as: "author" })
-       ChatMessage.belongsTo(models.Chat)
+       ChatMessage.belongsTo(models.Chat, { constraints: false })
     }
 
     return ChatMessage;

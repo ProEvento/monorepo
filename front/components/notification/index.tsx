@@ -122,7 +122,7 @@ export default function Notifications({ notifications }) {
                           <span
                             id="notification-message"
                           >
-                            <Typography id="notificationText" gutterBottom>{message.text}</Typography>
+                            <Typography id="notificationText" gutterBottom dangerouslySetInnerHTML={{__html: message.text}}></Typography>
                           </span>
 
                           {message.createdAt && (

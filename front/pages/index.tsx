@@ -38,7 +38,9 @@ const Home = ({ userContext }: { userContext: CustomUserContext}) => {
 export function ResponsiveDialog() {
   const [open, setOpen] = React.useState(false);
   let [dialogInc, setDialogInc] = React.useState(0);
-  let [dialogText, setDialogText] = React.useState("ProEvento allows you to attend events about topics that interest you.");
+  let [dialogText, setDialogText] = React.useState(`We’re so glad you’re joining our community!
+
+  Let’s first introduce you to ProEvento and all of our cool features and benefits.`);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const handleClickOpen = () => {
@@ -48,22 +50,24 @@ export function ResponsiveDialog() {
   const handleClose = () => {
     setDialogInc(++dialogInc);
     if (dialogInc === 1) {
-      setDialogText("You can follow other users and see what events they've been attending.")
+      setDialogText(`We’re so glad you’re joining our community!
+
+      Let’s first introduce you to ProEvento and all of our cool features and benefits.`)
     }
     else if (dialogInc === 2) {
-      setDialogText("You can also search for events and user groups. Once you sign up, you can choose the topics that interest you. Enjoy the app!");
+      setDialogText(`At proevento, you’ll be able to connect with others that share your interests, form chats, create user groups, organize events, and form new connections!`);
     }
     if (dialogInc === 3) {
       setOpen(false);
       setDialogInc(0);
-      setDialogText("ProEvento allows you to attend events about topics that interest you.");
+      setDialogText("ProEvento allows you to follow topics in order to find events and new people. Click Sign Up in the sidebar to get started!");
     }
   };
 
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        View App Benefits
+        Or Click Me to Learn More
       </Button>
       <Dialog
         fullScreen={fullScreen}

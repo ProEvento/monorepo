@@ -3,6 +3,13 @@ import { UserContext } from "@auth0/nextjs-auth0";
 import {TextField, Button, Typography} from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
+import topics from '../../topics.json';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
+import makeServerCall from '../../lib/makeServerCall';
 
 type FormEntry = {
   name: string,
@@ -34,14 +41,32 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       flexBasis: '100%',
       flex: 1
-    }
+    },
+    chips: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    chip: {
+      margin: 2,
+    },
   }),
 );
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 const Signup = ({ userContext }: { userContext: UserContext}) => {
   const router = useRouter();
   const { user } = userContext;
-  const [lastName, setLastName] = useState(user.family_name.toString() ?? "")
+  const [lastName, setLastName] = useState(user.family_name ?? "")
   const [firstName, setFirstName] = useState(user.name ?? user.nickname ?? "" )
   const [linkedin, setLinkedin] = useState("")
   const [github, setGithub] = useState("")
@@ -49,6 +74,7 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
   const [username, setUsername] = useState("")
   const [bio, setBio] = useState("")
   const [response, setResponse] = useState("")
+  const [tops, setTopics] = useState([])
 
   const classes = useStyles();
   const fields: FormEntry[] = [
@@ -61,7 +87,11 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
     { name: "Bio (500 character max)", key: "bio", type: "multitext", rows: 5, set: setBio, value: bio },
   ];
 
-  const submit = (e: any) => {
+  const handleChange = (event) => {
+    setTopics(event.target.value);
+  };
+
+  const submit = async (e: any) => {
     e.preventDefault();
     const toSend = {
       lastName,
@@ -81,12 +111,18 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
       body: JSON.stringify(toSend)
     };
 
-    let resp = null;
-    fetch('/api/userSignup', requestOptions)
-      .then(response => response.json())
-      .then(data => { 
-        setResponse(data.msg)
-      });
+    const response = await fetch('/api/userSignup', requestOptions);
+
+    const data = await response.json();
+    setResponse(data.msg)
+
+    var addTopic = {
+      id : data.user.id,
+      searchTitles : JSON.stringify(tops)
+    }
+    const d = await makeServerCall({ apiCall: "topics/addTopicsByUser", method: "POST", queryParameters: addTopic});
+    if (d && d.msg === "Added all topics") {}
+    else{ console.log("failed to follow topics")}
   }
 
   if (response.toLowerCase() === "success") {
@@ -116,7 +152,29 @@ const Signup = ({ userContext }: { userContext: UserContext}) => {
           <ControlledTextField entry={fields[5]} />
           <ControlledTextField entry={fields[6]} />
         </div>
-
+        <div>
+          Pick some topics to follow: {" "}
+          <br></br>
+          <Select
+            labelId="demo-mutiple-checkbox-label"
+            id="demo-mutiple-checkbox"
+            multiple
+            value={tops}
+            onChange={handleChange}
+            input={<Input />}
+            renderValue={(selected) => selected.join(', ')}
+            MenuProps={MenuProps}
+          >
+          {topics.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={tops.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+          </Select> 
+        </div>
+        <br></br>
+        <br></br>
         <Button onClick={submit} size="large" variant="contained" color="primary">Save & Go to ProEvento</Button>
     </form>
     )

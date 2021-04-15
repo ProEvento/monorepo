@@ -8,6 +8,7 @@ import Datetime from "react-datetime";
 import makeServerCall from '../../lib/makeServerCall';
 import { withUserProp } from "@lib/withUserProp";
 import { CustomUserContext } from "types";
+import topics from '../../topics.json';
 
 type FormEntry = {
   name: string,
@@ -51,8 +52,8 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   const [picture, setPicture] = useState("")
   const [priv, setPriv] = useState(false)
   const [response, setResponse] = useState("")
-  const [date, setDate] = useState<Date>(new Date())
-  const [topic, setTopic] = useState("pokemon")
+  const [date, setDate] = useState<number>(-1)
+  const [topic, setTopic] = useState(topics[0])
 
   const classes = useStyles();
 
@@ -63,7 +64,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   ];
 
   const handleChange = (e: string) => {
-    setDate(new Date(e))
+    setDate(e)
   }
 
   const topicChange = (e: any) => {
@@ -76,14 +77,12 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   
   const submit = async (e: any) => {
       e.preventDefault();
-
-      //const topicModel = await makeServerCall({ apiCall: `topics/getByTitle/${topic}`, method: "GET"})
       const toSend = {
         title,
         description,
         priv,
         picture,
-        time: date.toISOString(),
+        time: (new Date(date)).toISOString(),
         userId: user.id,
         User_id: user.id.toString()
       }
@@ -138,13 +137,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         <div>
           Pick a topic: {" "}
           <select value={topic} onChange={(e) => { topicChange(e.target.value) }}>
-            <option value="pokemon">Pokemon</option>
-            <option value="art">Art</option>
-            <option value="entertainment">Entertainment</option>
-            <option value="math">Math</option>
-            <option value="politics">Politics</option>
-            <option value="science">Science</option>
-            <option value="social">Social</option>
+            {topics.map(top => <option value={top}>{top}</option>)}
           </select>
         </div>
         <br></br>

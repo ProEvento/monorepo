@@ -18,6 +18,7 @@ import makeServerCall from '../../lib/makeServerCall';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useEffect, useState } from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   const data = await makeServerCall({ apiCall: "users/getByUsername", method: "GET", 
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const User = ({targetUser, userContext, followerData}: { userContext: CustomUserContext, targetUser: UserType, followerData: Array<any>}) => {
+  const router = useRouter();
   const classes = useStyles();
   const { user: contextUser, error, isLoading } = userContext;
   const [followers, setFollowers] = useState(followerData);
@@ -151,6 +153,11 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setBadges([]);
   };
 
+  const deleteAccount = async () => {
+    await makeServerCall({ apiCall: `users/${userContext.user.id}`, method: "DELETE" })
+    router.push("/signup");
+  }
+
   const handleMessage = async (targetUser) => {
 
     // find chat between two
@@ -233,6 +240,9 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
         <li><i>Twitter: {targetUser.twitter}</i></li>
 
       </ul>
+
+      <Divider/>
+      {userContext.user.id === targetUser.id && <Button style={{marginTop: 14}} onClick={deleteAccount} variant="contained" color="secondary">Delete account</Button>}
     </Page>
   )
 }

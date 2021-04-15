@@ -105,7 +105,7 @@ const Page = ({
     },
     {
       name: "Profile",
-      url: `/user/${user ? user.username : ''}`
+      url: user && user.username ? `/user/${user.username}` : `/`
     },
     {
       name: "My Events",

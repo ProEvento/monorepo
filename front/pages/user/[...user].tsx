@@ -149,7 +149,6 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
     setFollowingTopics([]);
     setEventsHosted([]);
     setEventsAttending([]);
-    setBadges([]);
   };
 
   const handleMessage = async (targetUser) => {
@@ -202,7 +201,7 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
                   return <div className="eventsAttending">{event.title}</div>
                 })}
                 {badgesReceived.map(badge => {
-                  return <div className="badgesReceived">{badge.name}</div>
+                  return <Image width={76} height={110} src={badge.img} />
                 })}
               </DialogContentText>
             </DialogContent>
@@ -236,9 +235,9 @@ const User = ({targetUser, userContext, followerData}: { userContext: CustomUser
       </ul>
       <Divider/>
       <h2>Badges</h2>
-      <Image width={63} height={78} src="/badges/fun.png" />
-      <Image width={63} height={78} src="/badges/educational.png" />
-      <Image width={63} height={78} src="/badges/exciting.png" />
+      {badgesReceived.map(badge => {
+                  return <Image width={76} height={110} src={badge.img} />
+      })}
 
 
     </Page>

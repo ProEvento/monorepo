@@ -191,6 +191,11 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.topics.getByTitle)
 )
 
+app.post(
+	`/api/topics/addTopicsByUser`,
+	makeHandlerAwareOfAsyncErrors(routes.topics.addTopicsByUser)
+)
+
 // Groups
 
 app.get(

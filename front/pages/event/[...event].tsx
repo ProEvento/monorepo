@@ -187,7 +187,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
-      {attend &&
+      {attend && !isHost &&
        <div>
          <div>
             Pick a Badge: {" "}

@@ -29,9 +29,9 @@ const Chat = sequelize.define(
             constraints: false
         });
 
-        Chat.hasMany(models.ChatMessage, { constraints: false })
+        Chat.hasMany(models.ChatMessage, { constraints: false, as: "messages" })
 
-        // Chat.belongsTo(models.UserGroup, { as: "group"})
+        Chat.belongsTo(models.Group, { as: "group" })
     }
 
     return Chat;

@@ -26,7 +26,8 @@ async function create(req: Request, res: Response) {
         return res.status(400).json({msg: "Missing required field."});
     }
 
-    const Creator = await models.User.findOne({ where: { id: creatorId }})
+    //@ts-ignore
+    const Creator = await models.User.findByPk(parseInt(creatorId))
 
     //@ts-ignore
     const Group = await models.Group.create({ logo, name, description })
@@ -57,6 +58,10 @@ async function create(req: Request, res: Response) {
         
     }
 
+    const Chat = await models.Chat.create({ title: `Chat for ${name}` });
+    //@ts-ignore
+    await Chat.addMember(Creator);
+
     //@ts-ignore
     const FinalGroup = await models.Group.findByPk(Group.id, { include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories"}]})
 
@@ -76,11 +81,9 @@ async function getGroupsForUser(req: Request, res: Response) {
         return res.status(404).json({ message: "User not found."})
     }
 
-    console.log(User)
-
     //@ts-ignore
-    const Groups = await User.getGroups();
-
+    const Groups = await User.getGroups({ include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories"}]});
+    console.log(Groups[0])
     return res.json(Groups);
 }
 
@@ -107,6 +110,9 @@ async function addUserToGroup(req: Request, res: Response) {
     } else {
         //@ts-ignore
         await Group.addUser(User);
+        //@ts-ignore
+        const Chat = await Group.getChat();
+        await Chat.addUser(User);
         return res.status(200).json({ msg: "success"})
     }
 };
@@ -122,6 +128,9 @@ async function removeUserFromGroup(req: Request, res: Response) {
     if (await Group.hasUser(User)) {
         //@ts-ignore
         await Group.removeUser(User);
+        //@ts-ignore
+        const Chat = await Group.getChat();
+        await Chat.removeUser(User);
         return res.status(200).json({ msg: "success"})
     } else {
         return res.status(400).json({ msg: "User not in group"});

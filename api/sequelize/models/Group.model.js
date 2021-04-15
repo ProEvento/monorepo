@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       constraints: false
    });
 
+   Group.hasOne(models.Chat, {
+     as: "chat",
+   })
+
 
   };
 

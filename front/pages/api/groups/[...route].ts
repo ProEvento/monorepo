@@ -7,7 +7,6 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     const { route } = request.query;
     const apiURL = new URL(`http://localhost:8080/api/groups/${Array.isArray(route) ? route.join("/") : route}`)
     apiURL.search = new URLSearchParams(queryParameters).toString(); 
-    console.log(apiURL)
     const res = await fetch(apiURL.toString(), {
         method: method,
         body: JSON.stringify(bodyParameters),

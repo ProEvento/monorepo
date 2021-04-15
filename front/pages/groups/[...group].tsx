@@ -153,8 +153,6 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
       <h4>{group.description}</h4>
       <br />
       <br />  
-
-
     
       {inGroup && !isOwner &&
           <Button onClick={leaveGroup} className={styles.button}>Leave Group</Button>
@@ -163,7 +161,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
       {invited && !inGroup &&
         <Button onClick={joinGroup} className={styles.button}>Join Group</Button>}
       
-      {!inGroup &&
+      {!inGroup && !invited &&
         <Button onClick={requestToJoin} className={styles.button}>Request to join</Button>
       }
     
@@ -171,20 +169,29 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
           {/* <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
           <Button id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button> */}
       </form>
-      <h3>Members</h3>
-      <InputLabel>Invite users:</InputLabel>
-      <TextField id="search" onChange={(e) => {setSearch(e.target.value) }} label="Search for users..." value={search} />
-     {/*@ts-ignore*/}
-      <Button onClick={async () => setResults((await getUsers(search)).results)} variant="contained" color="primary">Search</Button>
-      {results && <div>{results.map((attendee) => <User group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+          <div>
+          <h3>Members</h3>
 
-      {group.users && group.users.length === 1 &&
-        <h5>No members are currently in this group.</h5>
-      }
-    
-    {group.users &&  group.users.length > 1 && <div>{group.users.map((attendee) => `${attendee.firstName} ${attendee.lastName} `)}</div>}
+        {group.users && group.users.length === 1 &&
+          <h5>No members are currently in this group.</h5>
+        }
+              
+              {group.users &&  group.users.length > 1 && <div>{group.users.map((attendee) => <User key={attendee.username} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
 
-          {isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
+{isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
+          </div>
+          <div>
+          <InputLabel>Invite users:</InputLabel>
+        <TextField id="search" onChange={(e) => {setSearch(e.target.value) }} label="Search for users..." value={search} />
+      {/*@ts-ignore*/}
+        <Button onClick={async () => setResults((await getUsers(search)).results)} variant="contained" color="primary">Search</Button>
+        {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
+
+          </div>
+       
+
+      </div>
 
     </Page>
   )

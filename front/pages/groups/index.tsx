@@ -30,27 +30,17 @@ const GroupsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   }
 
   useEffect(() => {
-    // if (user)
-    //   makeServerCall({ apiCall: `events/getEventsForUser/${user.id}`, method: "GET" }).then((data) => {
-    //     const cleaned = []
-    //     for (const event of data) {
-    //       const { time, title, description, host, attendees, id } = event
-    //       let dupe = false
-    //       for (const item of cleaned) {
-    //         if (item.id === id) dupe = true
-    //       }
-    //       if (!dupe)
-    //         cleaned.push({ host: host ? host : user, time, title, description, attendees, id})
-    //       dupe = false
-    //     }
-    //     setEvents([...cleaned])
-    //   });
+    if (user)
+      makeServerCall({ apiCall: `groups/getGroupsForUser`, queryParameters: { userId: user.id }, method: "GET" }).then((data) => {
+        console.log(data)
+        setGroups(data)
+      });
   }, [user])
 
   const classes = useStyles();
 
   return (
-    <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
+    <Page header={false} activePage={"My Groups"} title={user ? `Welcome, ${user.name}!` : "My Groups"} userContext={userContext}>
         <GroupPage user={userContext.user} groups={groups} />
     </Page>
   )

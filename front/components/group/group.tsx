@@ -8,7 +8,7 @@ import { AvatarGroup } from '@material-ui/lab';
 import EventIcon from '@material-ui/icons/Event';
 import Typography from '@material-ui/core/Typography';
 import { DBUser, User } from 'types';
-import Link from '@components/link'
+import Link from 'next/link'
 import { DataUsageOutlined } from '@material-ui/icons';
 import makeServerCall from '@lib/makeServerCall';
 
@@ -61,11 +61,11 @@ const Item = ({ user, group }) => {
         primary={<Typography variant="h5">{name}</Typography>}
         secondary={
           <React.Fragment>
-            <Typography variant="caption">
-              {description}
+            <Typography variant="caption" style={{marginRight: 4, width: "100%", display: "block"}}>
+              {description} 
             </Typography>
             <Typography variant="caption">
-              Created by {owner.name} on {new Date(createdAt).toLocaleTimeString("en-US")}
+              created by <Link href={`/user/${owner.username}`}>{owner.username}</Link> on {new Date(createdAt).toLocaleTimeString("en-US")}
             </Typography>
           </React.Fragment>
         }
@@ -74,7 +74,7 @@ const Item = ({ user, group }) => {
         {/* {isHost && <Button onClick={() => cancelEvent(id)} color="secondary" variant="contained">Cancel</Button>}
         {isAttending && !isHost && <Button onClick={() => leaveEvent(id)} variant="contained" color="secondary">Leave</Button>}
         {!isHost && !isAttending && <Button variant="contained" onClick={() => joinEvent(id)}>Join</Button>} */}
-        {/* <a href={`/event/${id}`}><Button id="visitButton" style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></a> */}
+        <Link href={`/groups/${group.id}`}><Button id="visitButton" style={{marginLeft: 'var(--gap)'}} variant="contained">Visit</Button></Link>
     </ListItem>
     )
 }

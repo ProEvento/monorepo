@@ -186,7 +186,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
-      {attend &&
+      {attend && !isHost &&
        <div>
          <div>
             Pick a Badge: {" "}
@@ -205,7 +205,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
             </select>
           </div>
         <form>
-            <Button id='giveBadge' onClick={giveBadge}  color="primary">Give Badge</Button>
+        <Button id='giveBadge' onClick={giveBadge} disabled={Date.now() < dateEvent.getTime() || Date.now() > dateEvent.getTime()+3600000}  color="primary">Give Badge</Button>
         </form>
        </div>
       }

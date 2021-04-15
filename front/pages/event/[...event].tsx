@@ -199,6 +199,10 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
               <option value="Professional">Professional</option>
               <option value="Exciting">Exciting</option>
               <option value="Inspiring">Inspiring</option>
+              <option value="Educational">Educational</option>
+              <option value="Exciting">Exciting</option>
+              <option value="Organized">Organized</option>
+              <option value="Considerate">Considerate</option>
             </select>
           </div>
         <form>

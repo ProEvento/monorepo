@@ -133,11 +133,6 @@ export const withUserProp = (Component: any) => {
          <CircularProgress />
          </div>
      }
-     if (!user.isLoading && user.user === undefined) {
-       return <div>
-         {responsiveDialog}
-       </div>
-     }
     return <Component userContext={mergedUser} {...props} />;
   };
 };

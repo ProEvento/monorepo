@@ -54,6 +54,9 @@ const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
   const { time, title, description, host, attendees, id } = event;
   const date = new Date(time)
 
+  console.log("xyz")
+  console.log(user)
+  console.log(host)
   const isHost = user.username === (host ? host.username : user.username);
   const isAttending = !!attendees.find((attendee) => attendee.username === user.username)
 

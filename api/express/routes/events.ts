@@ -5,6 +5,7 @@ const { models } = db.sequelize;
 import { query, Request, Response } from "express"
 import { Model, Op, useInflection } from "sequelize"
 import { createDecipher } from 'crypto';
+import Events from 'twilio/lib/rest/Events';
 
 async function getAll(req: Request, res: Response) {
 	const events = await models.Event.findAll({include: models.User});
@@ -287,6 +288,56 @@ async function remove(req: Request, res: Response) {
 	res.status(200).json({ msg: "Success"});
 };
 
+async function getUserGroupEvents(req: Request, res: Response) {
+	const userId = getIdParam(req);
+	const user = await models.User.findOne({ where: {
+		id: userId
+	}})
+	if (!user) {
+		return res.status(404).json({ msg: "User not found."})
+	}
+
+	//@ts-ignore
+	const groups = await user.getGroups({ include: [{ model: models.User, as: "users", include: { model: models.Event, as: "hosting", include: [{ model: models.User, as: "attendees"}, { model: models.User, as: "host"}]}}]});
+
+	var events: any[] = [];
+	for (const group of groups) {
+		for (const u of group.users){
+			if (u.id != userId){
+				events = [...events, ...u.hosting]
+			}
+		}
+    }
+	res.status(200).json(events);
+};
+
+async function getUserTopicEvents(req: Request, res: Response) {
+	const userId = getIdParam(req);
+	const user = await models.User.findOne({ where: {
+		id: userId
+	}})
+	if (!user) {
+		return res.status(404).json({ msg: "User not found."})
+	}
+	var result: any[] = [];
+	//@ts-ignore
+	const topics = await user.getTopics()
+	const events = await models.Event.findAll({include: [{ model: models.User, as: "attendees"}, { model: models.User, as: "host"}, { model: models.Topic, as: "Topic"}]});
+	for (const topic of topics){
+		for (const event of events){
+			//@ts-ignore
+			if (event.Topic && topic.title === event.Topic.title){
+				//@ts-ignore
+				if (event.host.id != userId){
+					result.push(event)
+				}
+			}
+		}
+	}
+
+	res.status(200).json(result);
+};
+
 
 export default {
 	getAll,
@@ -297,6 +348,8 @@ export default {
 	getByTitle,
 	getEventsAttending,
 	getEventsForUser,
+	getUserGroupEvents,
+	getUserTopicEvents,
 	createEventByUser,
 	joinEvent,
 	leaveEvent,

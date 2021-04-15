@@ -187,7 +187,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
       }
 
-      {attend &&
+      {attend && !isHost &&
        <div>
          <div>
             Pick a Badge: {" "}
@@ -200,7 +200,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
               <option value="Exciting">Exciting</option>
               <option value="Inspiring">Inspiring</option>
               <option value="Educational">Educational</option>
-              <option value="Exciting">Exciting</option>
+              <option value="Talented">Talented</option>
               <option value="Organized">Organized</option>
               <option value="Considerate">Considerate</option>
             </select>

@@ -181,14 +181,15 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
 {isOwner && <Button onClick={deleteGroup} color="secondary" variant="contained">Delete Group</Button>}
           </div>
           <div>
-          <InputLabel>Invite users:</InputLabel>
-        <TextField id="search" onChange={(e) => {setSearch(e.target.value) }} label="Search for users..." value={search} />
-      {/*@ts-ignore*/}
-        <Button onClick={async () => setResults((await getUsers(search)).results)} variant="contained" color="primary">Search</Button>
-        {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
-
+            {inGroup && <div>
+              <InputLabel>Invite users:</InputLabel>
+              <TextField id="search" onChange={(e) => {setSearch(e.target.value) }} label="Search for users..." value={search} />
+              {/*@ts-ignore*/}
+              <Button onClick={async () => setResults((await getUsers(search)).results)} variant="contained" color="primary">Search</Button>
+              {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
+            </div>}
           </div>
-       
+
 
       </div>
 

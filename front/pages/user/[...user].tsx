@@ -223,9 +223,6 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
                 {eventsAttending.map(event => {
                   return <div className="eventsAttending">{event.title}</div>
                 })}
-                {badgesReceived.map(badge => {
-                  return <Image width={76} height={110} src={badge.img} />
-                })}
                 {groups.map(group => {
                   return <div className="groups">{group.name}</div>
                 })}

@@ -76,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
     },
     marginTop: 24,
     maxWidth: 600
+  },
+  badge: {
+    border: 5,
+    margin: 8
   }
 
 }));
@@ -316,10 +320,13 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
       </ul>
       <Divider/>
       <h2>Badges</h2>
-      {badgesReceived.map(badge => {
-          return <Image width={76} alt={badge.name} height={110} src={badge.img} />
-      })}
-
+      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>    
+        {badgesReceived.map(badge => {
+          return <div className={classes.badge}><Image width={71.25} alt={badge.name} height={116.25} src={badge.img}/></div>
+        })}
+      </div>
+  
+      <br />
       <Divider/>
       {userContext.user.id === targetUser.id && <Button style={{marginTop: 14}} onClick={deleteAccount} variant="contained" color="secondary">Delete account</Button>}
     </Page>

@@ -111,6 +111,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
       userfollowed : targetUser.username,
       unfollower : user.username
     }})
+    location.reload()
   }
 
   const addFollower = async (targetUser: UserType, user: UserType) => {
@@ -119,6 +120,8 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
       userfollowed : targetUser.username,
       follower : user.username
     }})
+    location.reload()
+
   }
 
   const getFollowingTopics = async (targetUser: UserType) => {
@@ -208,12 +211,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 400}}>
               <Typography variant="h1" style={{fontWeight: 500, fontSize: 40}}>{targetUser.firstName}</Typography>
               <div>
-              {userContext.user.id == targetUser.id ? <div></div> : 
-                isUserFollowing(userContext.user.username) ? 
-                  <Button variant="contained" style={{height: 32, marginTop: 8}} color="secondary" id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button>
-                  : 
-                  <Button variant="contained" style={{height: 32, marginTop: 8}}  color="primary" id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
-                  <Button variant="outlined" style={{height: 32, marginTop: 8, marginLeft: 8}}  color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Send Message </Button>
+ 
                 </div>
             </div>
 
@@ -248,6 +246,17 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
               clickable
               onClick={() => handleClickOpen(targetUser, "Groups")}
             />
+
+            </div>
+            <div>
+            {userContext.user.id == targetUser.id ? <div></div> : 
+              isUserFollowing(userContext.user.username) ? 
+                <Button variant="contained" style={{height: 32, marginTop: 8}} color="secondary" id="unfollowButton" onClick={() => {removeFollower(targetUser, userContext.user)}}>Unfollow</Button>
+                : 
+                <Button variant="contained" style={{height: 32, marginTop: 8}}  color="primary" id="followButton" onClick={() => {addFollower(targetUser, userContext.user)}}>Follow</Button>}
+
+            <Button variant="outlined" style={{height: 32, marginTop: 8, marginLeft: 8}}  color="primary" id="messageUser" onClick={() => {handleMessage(targetUser)}}> Send Message </Button>
+
             </div>
           </div>
 

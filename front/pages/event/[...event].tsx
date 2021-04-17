@@ -83,12 +83,12 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   var attend = false; 
   const [events, setEvents] = useState([]);
   const { user, error, isLoading } = userContext;
-  const leaveEvent = () => {
-    makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
+  const leaveEvent = async () => {
+    await makeServerCall({ apiCall: `events/leaveEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
     location.reload(); 
   }
-  const joinEvent = () => {
-    makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
+  const joinEvent = async () => {
+    await makeServerCall({ apiCall: `events/joinEvent/${event.id}`, method: "POST", queryParameters: { userId: user.id } }).then((data) => console.log(data))
     location.reload();
   }
   // const cancelEvent = () => {
@@ -104,6 +104,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         }
     });
   }
+
 
 
   //console.log(event)
@@ -236,7 +237,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       <br />
 
       {attend &&
-        <Button id="joinButton" disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
+        <Button variant="outlined" id="joinButton" disabled={Date.now() < dateEvent.getTime()} href={`/meeting/${event.id}`} > 
           <a>Join Meeting</a>
         </Button>
       }
@@ -281,7 +282,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         <form>
         <div style={{display: 'flex', flexDirection: 'column'}}>
         <TextField id="username" onChange={(e) => {setUsername(e.target.value) }} label="Username" value={username} />
-        <Button id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button>
+        <br/>
+        <Button variant="outlined" id='sendinvite' onClick={inviteUser}  color="primary">Invite User</Button>
         </div>
 
         </form>
@@ -297,6 +299,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         {!attend &&
           <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>
         }
+
         {attend && !isHost &&
             <Button onClick={leaveEvent} color="secondary" variant="contained">Unattend this event</Button>
         }

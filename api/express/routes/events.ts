@@ -338,6 +338,35 @@ async function getUserTopicEvents(req: Request, res: Response) {
 	res.status(200).json(result);
 };
 
+async function getEventHashtag(req: Request, res: Response) {
+	const { id } = req.query;
+	const user = await models.User.findOne({where: { id: id }})
+	if (user) {
+		//@ts-ignore
+		res.status(200).json(await user.getBadges())
+	} else {
+		res.status(400).json({msg: "User not found."})
+	}
+};
+
+async function addHashtag(req: Request, res: Response) {
+	const { id, text } = req.query;
+	// print(req.)
+	// res.status(200).json(text);
+	const event = await models.Event.findOne({
+		where: {
+			id: id
+		}
+	})
+	if (event) {
+		//@ts-ignore
+		const hashtag = await event.createHashtag({ title: text})
+		res.status(200).json(hashtag);
+	} else {
+		res.status(400).json({msg: "Event not found."})
+	}
+};
+
 
 export default {
 	getAll,
@@ -355,5 +384,6 @@ export default {
 	leaveEvent,
 	startEvent,
 	endEvent,
-	addTopic
+	addTopic,
+	addHashtag
 };

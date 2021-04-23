@@ -10,11 +10,11 @@ module.exports = {
      */
     return queryInterface.addColumn(
       'Hashtags', // name of Source model
-      'User_id', // name of the key we're adding 
+      'Event_id', // name of the key we're adding 
       {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users', // name of Target model
+          model: 'Events', // name of Target model
           key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
@@ -26,7 +26,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     return queryInterface.removeColumn(
       'Hashtags', // name of the Target model
-      'User_id' // key we want to remove
+      'Event_id' // key we want to remove
     );
   }
 };

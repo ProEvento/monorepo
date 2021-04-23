@@ -150,6 +150,11 @@ app.get(
 )
 
 app.post(
+	`/api/events/hashtag`,
+	makeHandlerAwareOfAsyncErrors(routes.events.addHashtag)
+)
+
+app.post(
 	`/api/events/createEventByUser`,
 	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
 )

@@ -38,7 +38,6 @@ export const getServerSideProps = withPageAuthRequired({
   }
 })
 
-//have username -> make call to see if attending?
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,6 +74,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   if(event.attendees.length > 0){
     noAttendees = false; 
   }
+
+
   var tags = true; 
   const router = useRouter();
 
@@ -224,6 +225,9 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       {event.Topic &&
         <h5>Topic: {event.Topic.title}</h5>
       }
+    
+
+      {/* <h5>Hashtags: {event.hashtags.title}</h5> */}
       </div>
       <br/>
       <Chip

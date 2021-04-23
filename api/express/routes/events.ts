@@ -43,14 +43,14 @@ async function getById(req: Request, res: Response) {
 
 	const { attending } = req.query
 	if (!attending) {
-		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.Topic}]});
+		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.Topic}, {model: models.Hashtag}]});
 		if (event) {
 			res.status(200).json(event);
 		} else {
 			res.status(404).send('404 - Not found');
 		}
 	} else {
-		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }, {model: models.Topic}]});
+		const event = await models.Event.findByPk(id, { include: [{ model: models.User, as: "host" }, {model: models.User, as: "attendees" }, {model: models.Topic}, {model: models.Hashtag}]});
 		//console.log(event ? event.toJSON() : "event is nyull")
 		if (event) {
 			res.status(200).json(event);
@@ -338,14 +338,14 @@ async function getUserTopicEvents(req: Request, res: Response) {
 	res.status(200).json(result);
 };
 
-async function getEventHashtag(req: Request, res: Response) {
+async function getEventHashtags(req: Request, res: Response) {
 	const { id } = req.query;
-	const user = await models.User.findOne({where: { id: id }})
-	if (user) {
+	const event = await models.Event.findOne({where: { id: id }})
+	if (event) {
 		//@ts-ignore
-		res.status(200).json(await user.getBadges())
+		res.status(200).json(await event.getHashtags())
 	} else {
-		res.status(400).json({msg: "User not found."})
+		res.status(400).json({msg: "Event not found."})
 	}
 };
 
@@ -385,5 +385,6 @@ export default {
 	startEvent,
 	endEvent,
 	addTopic,
-	addHashtag
+	addHashtag,
+	getEventHashtags
 };

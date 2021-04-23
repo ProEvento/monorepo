@@ -24,7 +24,12 @@ export type EventType = {
     picture: string,
     Topic: TopicType,
     host: UserType,
-    attendees: UserType[]
+    attendees: UserType[],
+    hashtags: HashtagType[]
+}
+
+export type HashtagType = {
+    title: string
 }
 
 export type TopicType = {

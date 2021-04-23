@@ -149,6 +149,11 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsAttending)
 )
 
+app.get(
+	`/api/events/hashtag`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventHashtags)
+)
+
 app.post(
 	`/api/events/hashtag`,
 	makeHandlerAwareOfAsyncErrors(routes.events.addHashtag)

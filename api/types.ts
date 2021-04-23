@@ -24,7 +24,8 @@ export type EventType = {
     picture: string,
     Topic: TopicType,
     host: UserType,
-    attendees: UserType[]
+    attendees: UserType[],
+    started: boolean
 }
 
 export type TopicType = {

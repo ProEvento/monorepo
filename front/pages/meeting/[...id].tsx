@@ -56,7 +56,6 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     }
 
     const dateEvent = new Date(event.time)
-    console.log(Date.now() < dateEvent.getTime(), Date.now(), dateEvent.getTime())
     if (Date.now() < dateEvent.getTime()) {
       return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>You're too early! Come back when the Event time has been reached.</Page>
     }
@@ -68,10 +67,7 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
           <Typography align="center" style={{marginTop: 300}}><Button id="start" onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Meeting</Button></Typography>
         </Page>
     }
-    
   
-    console.log(event)
-
     useEffect(() => {
       setConnecting(true)
       handleJoin()
@@ -134,7 +130,6 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
       };
     }
   }, [room, handleLogout]);
-    console.log(room, connecting, token)
 
     let render;
     if (!connecting && !token) {

@@ -54,7 +54,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
   const [response, setResponse] = useState("")
   const [date, setDate] = useState<number>(-1)
   const [topic, setTopic] = useState(topics[0])
-  const [hashtag, setHashtag] = useState("")
+  const [hashtags, setHashtags] = useState("")
 
 
   const classes = useStyles();
@@ -63,7 +63,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
     { name: "Title", key: "title", type: "text", set: setTitle, value: title, required: true },
     { name: "Description", key: "description", type: "multitext", rows: 5, set: setDescription, value: description, required: true },
     { name: "Event Image URL", key: "picture", type: "text", set: setPicture, value: picture, required: false },
-    { name: "Hashtag", key: "hashtag", type: "text", set: setHashtag, value: hashtag, required: false },
+    { name: "Hashtags (comma separated)", key: "hashtags", type: "text", set: setHashtags, value: hashtags, required: false },
   ];
 
   const handleChange = (e: string) => {
@@ -84,7 +84,7 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         title,
         description,
         priv,
-        hashtag,
+        hashtags,
         picture,
         time: (new Date(date)).toISOString(),
         userId: user.id,
@@ -97,20 +97,20 @@ const CreateEvent = ({ userContext }: { userContext: CustomUserContext}) => {
         const addTopic = {
           id : data.event.id,
           searchTitle : topic
-        }
+      }
        
-        const eventData = await makeServerCall({ apiCall: "events/setTopic", method: "POST", 
-          queryParameters: addTopic,
-        })
-        console.log(hashtag);
-        const eventHashtag = await makeServerCall({ apiCall: "events/hashtag", method: "POST", 
-          queryParameters: {
-            id: data.event.id,
-            text: hashtag
-          }
-        })
+      const eventData = await makeServerCall({ apiCall: "events/setTopic", method: "POST", 
+        queryParameters: addTopic,
+      })
 
-        router.push(`/event/${data.event.id}`)
+      const eventHashtag = await makeServerCall({ apiCall: "hashtags/addHashtagsByEvent", method: "POST", 
+        queryParameters: {
+          id: data.event.id,
+          hashtags: hashtags
+        }
+      })
+
+      router.push(`/event/${data.event.id}`)
       } else {
         // it didnt work
       }

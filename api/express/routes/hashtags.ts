@@ -8,7 +8,6 @@ async function getAll(req: Request, res: Response) {
 };
 
 async function addHashtagsByEvent(req: Request, res: Response) {
-    console.log("ZZZZZZZZ")
 	const id = req.query.id
 	const hashtags = req.query.hashtags
 	const event = await models.Event.findOne({

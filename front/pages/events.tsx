@@ -10,6 +10,7 @@ import { CustomUserContext } from '../types';
 import EventPage from '@components/events';
 import Event from '@components/event';
 import makeServerCall from '@lib/makeServerCall';
+import Calendar from "react-material-ui-calendar";
 
 /*
 * useStyles function and Event component adapted from Folder List, Align List Items: https://material-ui.com/components/lists/
@@ -56,6 +57,15 @@ const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   return (
     <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
         <EventPage user={userContext.user} events={events} />
+        <Calendar generalStyle={{
+          maxWidth: "100%",
+          margin: "0 auto",
+          backgroundColor: "rgba(256,256,256,1)",
+          height: "100%",
+          overflow: "auto"
+          }}
+          light={true} 
+          />
     </Page>
   )
 }

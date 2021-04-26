@@ -4041,6 +4041,11 @@ react-is@16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-material-ui-calendar@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-material-ui-calendar/-/react-material-ui-calendar-0.2.3.tgz#a958b25c88e1f22f4fc4dfe161e801c8d6165835"
+  integrity sha512-GSbVS3Vx+rgcsC2UZmQPw3FjFwU7w3rrls2drJMuqjQ0vxG8nXZ/I5CPUnrcighz1NcOoVA8r94kHffz05jjRg==
+
 react-onclickoutside@^6.10.0:
   version "6.10.0"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.10.0.tgz#05abb592575b08b4d129003494056b9dff46eeeb"

@@ -24,6 +24,7 @@ const routes = {
 	topics: require('./routes/topics').default,
 	groups: require('./routes/groups').default,
 	chats: require('./routes/chat').default,
+	hashtags: require('./routes/hashtags').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -149,6 +150,16 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsAttending)
 )
 
+app.get(
+	`/api/events/hashtag`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getEventHashtags)
+)
+
+app.post(
+	`/api/events/hashtag`,
+	makeHandlerAwareOfAsyncErrors(routes.events.addHashtag)
+)
+
 app.post(
 	`/api/events/createEventByUser`,
 	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
@@ -242,6 +253,13 @@ app.get(
 app.get(
 	`/api/chats/getGroupchat/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.chats.getGroupchat)
+)
+
+// Hashtag
+
+app.post(
+	`/api/hashtags/addHashtagsByEvent`,
+	makeHandlerAwareOfAsyncErrors(routes.hashtags.addHashtagsByEvent)
 )
 
 

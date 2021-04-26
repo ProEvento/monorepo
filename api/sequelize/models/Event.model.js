@@ -68,6 +68,12 @@ Event.associate = function(models) {
       type: DataTypes.INTEGER
    });
 
+   Event.hasMany(models.Hashtag, {
+      foreignKey: 'Event_id',
+      target: 'id',
+      type: DataTypes.INTEGER
+   });
+
    Event.belongsTo(models.Topic, {
       foreignKey: 'Topic_id',
       target: 'id',

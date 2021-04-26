@@ -29,7 +29,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
-    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true, topic: true }, method: "GET" })
+    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true, topic: true, hashtag: true }, method: "GET" })
     return { 
       props: {
         event: data
@@ -38,7 +38,6 @@ export const getServerSideProps = withPageAuthRequired({
   }
 })
 
-//have username -> make call to see if attending?
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,6 +74,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   if(event.attendees.length > 0){
     noAttendees = false; 
   }
+
+
   var tags = true; 
   const router = useRouter();
 
@@ -134,6 +135,14 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   }
   var dateEvent = new Date(event.time)
   //console.log(Date.now(),  dateEvent.getTime())
+
+  var hashtags = "";
+  (event.Hashtags).forEach(async (hash : any) => {
+    if (!hashtags.includes(hash['title'])){
+      hashtags += hash['title'] + ","
+    }
+	})
+  hashtags = hashtags.slice(0, -1);
 
   const inviteUser = async () => {
     const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
@@ -224,6 +233,12 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       {event.Topic &&
         <h5>Topic: {event.Topic.title}</h5>
       }
+      {(hashtags!="") &&
+        <h5>Hashtags: {hashtags}</h5>
+      }
+    
+
+      {/* <h5>Hashtags: {event.hashtags.title}</h5> */}
       </div>
       <br/>
       <Chip

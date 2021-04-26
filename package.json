@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@zach.codes/react-calendar": "^0.0.3",
+    "date-fns": "^2.21.1",
+    "react": "^17.0.2",
+    "react-event-calendar": "^0.3.0",
+    "tailwindcss": "^2.1.1"
+  }
+}

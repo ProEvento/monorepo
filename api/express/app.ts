@@ -161,6 +161,10 @@ app.post(
 )
 
 app.post(
+	`/api/events/record`,
+	makeHandlerAwareOfAsyncErrors(routes.events.setRecord)
+)
+app.post(
 	`/api/events/createEventByUser`,
 	makeHandlerAwareOfAsyncErrors(routes.events.createEventByUser)
 )

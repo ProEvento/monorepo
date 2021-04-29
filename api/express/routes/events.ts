@@ -368,6 +368,31 @@ async function addHashtag(req: Request, res: Response) {
 };
 
 
+async function setRecord(req: Request, res: Response) {
+	const { id, record } = req.query;
+	// print(req.)
+	// res.status(200).json(text);
+	const event = await models.Event.findOne({
+		where: {
+			id: id
+		}
+	})
+	if (event) {
+		//@ts-config
+		console.log("record: ", record)
+		console.log("event before : ", event)
+		//@ts-ignore
+		const eventRecord = await event.update({record : record})
+
+		//@ts-config
+		console.log("event after : ", event)
+
+		res.status(200).json(eventRecord);
+	} else {
+		res.status(400).json({msg: "Event not found."})
+	}
+};
+
 export default {
 	getAll,
 	getById,
@@ -386,5 +411,6 @@ export default {
 	endEvent,
 	addTopic,
 	addHashtag,
-	getEventHashtags
+	getEventHashtags,
+	setRecord
 };

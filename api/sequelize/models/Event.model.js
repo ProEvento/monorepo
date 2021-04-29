@@ -38,6 +38,10 @@ const Event = sequelize.define(
    ended: {
       type: DataTypes.BOOLEAN,
       deafultValue: false
+   },
+   record: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
    }
 }, { 
   timestamps: true,

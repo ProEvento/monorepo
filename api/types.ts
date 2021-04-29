@@ -25,7 +25,10 @@ export type EventType = {
     Topic: TopicType,
     host: UserType,
     attendees: UserType[],
-    hashtags: HashtagType[]
+    hashtags: HashtagType[],
+    record: boolean,
+    started: boolean,
+    ended: boolean
 }
 
 export type HashtagType = {

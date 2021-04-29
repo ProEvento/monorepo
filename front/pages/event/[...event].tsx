@@ -25,6 +25,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 
 export const getServerSideProps = withPageAuthRequired({
@@ -137,6 +140,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   //console.log(Date.now(),  dateEvent.getTime())
 
   var hashtags = "";
+  // @ts-ignore
   (event.Hashtags).forEach(async (hash : any) => {
     if (!hashtags.includes(hash['title'])){
       hashtags += hash['title'] + ","
@@ -183,6 +187,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   // console.log("are hosting event", isHost)
   const [dialogTitle, setDialogTitle] = useState("");
   const [open, setOpen] = useState(false);
+  const [record, setRecord] = useState(event.record)
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   let title = "";
@@ -198,6 +203,21 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   const handleClose = () => {
     setOpen(false);
   };
+
+  const toggleRecord = async () => {
+    setRecord((prev) => !prev)
+    
+    const switchRecord = await makeServerCall({ apiCall: `events/record/`, method: "POST",
+    queryParameters: {
+        id : event.id,
+        record : !record
+    }})
+    
+  }
+
+  const sendRecordings = async () => {
+    
+  }
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
@@ -229,6 +249,10 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       {event.priv
         ? <h5>Private Event </h5>
         : <h5>Open Event</h5>
+      }
+      {isHost
+        ? null
+        : event.record ? <h5>Recorded Event </h5> : <h5>Non-Recorded Event </h5>
       }
       {event.Topic &&
         <h5>Topic: {event.Topic.title}</h5>
@@ -308,6 +332,18 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     
   
       <div style={{display: 'flex',  justifyContent:'flex-end', alignItems:'center', height: '10vh'}}>
+      
+        {isHost && !event.ended && 
+          <FormGroup row>
+            <FormControlLabel
+                control={<Switch checked={record} onChange={toggleRecord} />}
+                label="Record Event"
+              />
+          </FormGroup>
+        }
+        {isHost && !event.ended && event.record && 
+          <Button onClick={sendRecordings} color="primary" variant="contained">Send Recordings</Button>
+        }
         {isHost && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
       </div>
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>

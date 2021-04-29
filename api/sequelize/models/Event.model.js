@@ -38,6 +38,10 @@ const Event = sequelize.define(
    ended: {
       type: DataTypes.BOOLEAN,
       deafultValue: false
+   },
+   record: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
    }
 }, { 
   timestamps: true,
@@ -63,6 +67,12 @@ Event.associate = function(models) {
    });
 
    Event.hasMany(models.Comment, {
+      foreignKey: 'Event_id',
+      target: 'id',
+      type: DataTypes.INTEGER
+   });
+
+   Event.hasMany(models.Hashtag, {
       foreignKey: 'Event_id',
       target: 'id',
       type: DataTypes.INTEGER

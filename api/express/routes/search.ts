@@ -45,28 +45,57 @@ async function search(req: Request, res: Response) {
 		//console.log(results)
 		res.status(200).json({results});
 	} else if (type === "event") {
-		const results = await models.Event.findAll({
-			order: [
-				['time', sort === "ascending" ? "ASC" : "DESC"]
-			],
-			include: [{ model: models.User, as: "host"}, { model: models.User, as: "attendees"}],
-			where: { 
-				[Op.or]: [
-				{
-					title: 
+		var results: any[] = [];
+		//@ts-ignore
+		if(!terms.join().includes("#")){
+			results = await models.Event.findAll({
+				order: [
+					['time', sort === "ascending" ? "ASC" : "DESC"]
+				],
+				include: [{ model: models.User, as: "host"}, { model: models.User, as: "attendees"}],
+				where: { 
+					[Op.or]: [
 					{
-						[Op.like]: `%${terms}%`
-					}
-				}, 
-				{
-					description: 
+						title: 
+						{
+							[Op.like]: `%${terms}%`
+						}
+					}, 
 					{
-						[Op.like]: `%${terms}%`
-					}
-				}, 
-			]
-			}	
-		});
+						description: 
+						{
+							[Op.like]: `%${terms}%`
+						}
+					}, 
+				]
+				}	
+			});
+		}
+		else{
+			const events = await models.Event.findAll({
+				order: [
+					['time', sort === "ascending" ? "ASC" : "DESC"]
+				],
+				include: [{ model: models.Hashtag, as: "Hashtags"}, { model: models.User, as: "host"}, { model: models.User, as: "attendees"}]
+			});
+			results = [];
+			const seen = [0];
+			events.forEach(async (event : any) => {
+				//@ts-ignore
+				(event.Hashtags).forEach(async (eventh : any) => {
+					console.log("zz")
+					console.log(eventh)
+					for (var i = 0; i < terms.length; i++){
+						//@ts-ignore
+						if(eventh.title == terms[i] && !seen.includes(event.id)){
+							results.push(event)
+							//@ts-ignore
+							seen.push(event.id)
+						}
+					}	
+				})
+			})
+		}
 		res.status(200).json({results});
 
 	} else if (type === "event_date") {

@@ -207,7 +207,7 @@ const Page = ({
         {isLoading && <div>Loading</div>}
         {error && <div>Error</div>}
         {!error && !isLoading && children}
-        {!error && userContext?.user && <Notification notifications={userContext.user.notifications} />}
+        {!error && userContext?.user && !userContext?.user.deleted && <Notification notifications={userContext.user.notifications} />}
       </main>
     </div>
   )

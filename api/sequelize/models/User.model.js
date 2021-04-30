@@ -37,6 +37,10 @@ const User = sequelize.define(
    },
    picture: {
       type: DataTypes.STRING
+   },
+   deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull:false
    }
 }, { 
   timestamps: false,

@@ -48,10 +48,11 @@ export const withUserProp = (Component: any) => {
     const { data: notifData, error: notifError } = useSWR(() => `users/notifications/${data.id}`, makeServerCallFetcher, { refreshInterval: 60000 * 5 });
 
     const isLoading = !data && !error;
-  
+
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {
       router.push("/signup")
     }
+
     const mergedUser: (CustomUserContext) = (user.user && data) ? {
       ...user,
       user: {
@@ -67,6 +68,11 @@ export const withUserProp = (Component: any) => {
 
      if (user.isLoading || (isLoading && user.user !== undefined)) {
        return <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
+     }
+
+     console.log("Deleted: ", data)
+     if (data && data.deleted) {
+      router.push("/deleted")
      }
 
     return <Component userContext={mergedUser} {...props} />;

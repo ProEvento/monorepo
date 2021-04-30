@@ -40,7 +40,8 @@ export type DBUser = {
         username: string,
         id: string,
         picture?: string,
-        notifications: []
+        notifications: [],
+        deleted: boolean
 }
 
 export type Chat = {

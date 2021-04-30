@@ -262,13 +262,21 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
 	const id = getIdParam(req);
-	await models.User.destroy({
-		where: {
-			id: id
-		}
-	});
+	// await models.User.destroy({
+	// 	where: {
+	// 		id: id
+	// 	}
+	// });
+	const user = await models.User.findOne({where: { id: id }})
+
+	if (user) {
+		const deletedUser = await user.update({deleted : true})
+	}
+	
+
 	res.status(200).end();
 };
+
 
 export default {
 	getAll,

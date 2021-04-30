@@ -124,6 +124,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
       userfollowed : targetUser.username,
       follower : user.username
     }})
+    sendFollowNotification(targetUser)
     location.reload()
 
   }
@@ -193,7 +194,7 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
 
   const deleteAccount = async () => {
     await makeServerCall({ apiCall: `users/${userContext.user.id}`, method: "DELETE" })
-    router.push("/signup");
+    router.push("/deleted");
   }
 
   const handleMessage = async (targetUser) => {
@@ -206,6 +207,20 @@ const User = ({targetUser, userContext, followerData, badgesData}: { userContext
 
     window.location.href = `http://localhost:3000/chats/${response.id}`
   }
+
+  const sendFollowNotification = async (targetUser) => {
+    const targetUserId = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
+      queryParameters: {
+        username: targetUser.username
+      }
+    })
+    const data = await makeServerCall({ apiCall: `users/notifications/${targetUserId.id}`, method: "POST", 
+    queryParameters: { 
+      text: `${userContext.user.username} is now following you!`
+      },
+    })
+  };
+
 
    return (
     <Page header={false} activePage={"User Profile"} title={targetUser.firstName + targetUser.lastName} userContext={userContext}>

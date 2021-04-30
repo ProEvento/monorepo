@@ -8,7 +8,8 @@ export type UserType = {
     bio?: string,
     twitter?: string,
     username: string,
-    picture?: string
+    picture?: string,
+    deleted: boolean
 }
 
 export type EventType = {

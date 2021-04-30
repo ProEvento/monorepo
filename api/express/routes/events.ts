@@ -441,7 +441,7 @@ async function getHostRecording(req: Request, res: Response) {
 	const client = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid })
 
 	//@ts-ignore
-	const recordings = await client.video.recordings.list({groupingSid: [event.roomTwilioId], limit: 20})
+	const recordings = await client.video.recordings.list({groupingSid: [event.hostTwilioId], limit: 20})
 	const videoRecordings = new Array();
 	const audioRecordings = new Array();
 	for (const recording of recordings) {

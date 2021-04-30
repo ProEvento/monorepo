@@ -66,9 +66,9 @@ const Meeting = ({ userContext, event, recordings }: { userContext: CustomUserCo
         render = (<Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
               {/*@ts-ignore */}
               {recordings.videoRecordings.map((e, i) => (<div key={e.url} className={styles.participant}>
-                <h3>{i === 0 ? `${event.host.firstName} ${event.host.lastName}` : ""}</h3>
+                <h3>{event.host.firstName} {event.host.lastName}</h3>
                 {/*@ts-ignore*/}
-                <video src={e.url} autoPlay={true} />
+                <video src={e.url} autoPlay={true} controls={true} />
                {/*@ts-ignore*/}
                 <audio src={recordings.audioRecordings[i].url} autoPlay={true} muted={false} />
               </div>))}

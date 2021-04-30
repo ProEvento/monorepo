@@ -10,11 +10,24 @@ import { CustomUserContext } from '../types';
 import EventPage from '@components/events';
 import Event from '@components/event';
 import makeServerCall from '@lib/makeServerCall';
-import Calendar from "react-material-ui-calendar";
+import {Calendar, momentLocalizer, Views} from 'react-big-calendar';
+import moment from 'moment'
+import { DateRangeSharp } from "@material-ui/icons";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+const localize = momentLocalizer(moment);
+let views = Object.keys(Views).map(k => Views[k]);
+const ColoredDateCellWrapper = ({ children }) => 
+  React.cloneElement(React.Children.only(children), {
+    style: {
+      backgroundColor: 'lightblue',
+    },
+  })
 
 /*
 * useStyles function and Event component adapted from Folder List, Align List Items: https://material-ui.com/components/lists/
-*/
+* ex for calendar: https://github.com/jquense/react-big-calendar/blob/master/examples/demos/basic.js
+*/ 
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const getServerSideProps = withPageAuthRequired();
+
+
 
 const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   const { user, error, isLoading } = userContext;
@@ -53,19 +68,26 @@ const EventsPage = ({ userContext }: { userContext: CustomUserContext}) => {
   }, [user])
 
   const classes = useStyles();
-
+  let Cal = ({events, localizer, views}) => (
+      <Calendar 
+        localizer={localizer}
+        events={events}
+        step={60}
+        showMultiDayTimes
+        views={views}
+        components={{
+          timeSlotWrapper: ColoredDateCellWrapper,
+        }}
+        style={{height: 500}}
+        titleAccessor="title"
+        startAccessor="time"
+        endAccessor="time"
+      />
+  )
   return (
     <Page header={false} activePage={"My Events"} title={user ? `Welcome, ${user.name}!` : "Welcome!"} userContext={userContext}>
-        <EventPage user={userContext.user} events={events} />
-        <Calendar generalStyle={{
-          maxWidth: "100%",
-          margin: "0 auto",
-          backgroundColor: "rgba(256,256,256,1)",
-          height: "100%",
-          overflow: "auto"
-          }}
-          light={true} 
-          />
+        <EventPage user={userContext.user} events={events}/>
+        <Cal localizer={localize} events={events} views={views} />
     </Page>
   )
 }

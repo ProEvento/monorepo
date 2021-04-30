@@ -336,7 +336,6 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       
       }
       </div>
-    
   
       <div style={{display: 'flex',  justifyContent:'flex-end', alignItems:'center', height: '10vh'}}>
       
@@ -348,11 +347,15 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
               />
           </FormGroup>
         }
+        
         {isHost && event.record && event.started &&
           <Button onClick={sendRecordings} color="primary" variant="contained">Send Host Recording to Attendees</Button>
         }
         {isHost && !event.started && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
+        {attend && <Link href={`/recording/${event.id}`}><Button color="secondary" variant="contained">View recording here</Button></Link>}
+
       </div>
+      
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
         {!attend &&
           <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>

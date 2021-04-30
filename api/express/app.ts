@@ -1,11 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
 
 // Twilio
-import { jwt } from 'twilio';
+import { jwt, Twilio } from 'twilio';
 
 const { AccessToken } = jwt;
 const VideoGrant = AccessToken.VideoGrant;
+
 const MAX_ALLOWED_SESSION_DURATION = 14400;
 
 require('dotenv').config({ path: '.env.local' })
@@ -13,9 +15,11 @@ require('dotenv').config({ path: '.env.local' })
 if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_API_KEY_SID || !process.env.TWILIO_API_KEY_SECRET) {
 	throw new Error("Missing required Twilio API keys in api/.env.local")
 }
+
 const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
 const twilioApiKeySID = process.env.TWILIO_API_KEY_SID;
 const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
+const TwilioClient = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid })
 
 const routes = {
 	users: require('./routes/users').default,
@@ -138,6 +142,21 @@ app.get(
 app.get(
 	`/api/events/getEventsForUser/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
+)
+
+app.put(
+	`/api/events/setHost`,
+	makeHandlerAwareOfAsyncErrors(routes.events.setTwilioHostId)
+)
+
+app.get(
+	`/api/events/getHostRecording`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getHostRecording)
+)
+
+app.post(
+	`/api/events/sendHostRecording`,
+	makeHandlerAwareOfAsyncErrors(routes.events.sendHostRecording)
 )
 
 app.get(
@@ -267,8 +286,9 @@ app.post(
 )
 
 
-// Twilio token
-app.get('/api/token', (req, res) => {
+// Twilio
+
+app.get('/api/twilio/token', (req, res) => {
 	const { username, room } = req.query;
 	const token = new AccessToken(twilioAccountSid, twilioApiKeySID, twilioApiKeySecret, {
 	  ttl: MAX_ALLOWED_SESSION_DURATION,

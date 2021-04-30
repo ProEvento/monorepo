@@ -6,6 +6,9 @@ import { query, Request, Response } from "express"
 import { Model, Op, useInflection } from "sequelize"
 import { createDecipher } from 'crypto';
 import Events from 'twilio/lib/rest/Events';
+import { Twilio } from 'twilio';
+require('dotenv').config({ path: '.env.local' })
+import request from "request";
 
 async function getAll(req: Request, res: Response) {
 	const events = await models.Event.findAll({include: models.User});
@@ -389,9 +392,95 @@ async function setRecord(req: Request, res: Response) {
 
 		res.status(200).json(eventRecord);
 	} else {
-		res.status(400).json({msg: "Event not found."})
+		res.status(404).json({msg: "Event not found."})
 	}
 };
+
+async function setTwilioHostId(req: Request, res: Response) {
+	const { id, roomId } = req.query;
+	// print(req.)
+	// res.status(200).json(text);
+	const event = await models.Event.findOne({
+		where: {
+			id: id
+		}
+	})
+
+	if (event) {
+		const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+		const twilioApiKeySID = process.env.TWILIO_API_KEY_SID;	
+		const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
+		//@ts-ignore
+		const client = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid })
+
+		//@ts-ignore
+		client.video.rooms(roomId).participants
+			.each({status: 'connected'}, async (participant) => {
+				const hostId = participant.sid;
+				event.update({ hostTwilioId: hostId, roomTwilioId: roomId })
+			});
+
+		res.status(200).json({msg: "Success"});
+	} else {
+		res.status(404).json({msg: "Event not found."})
+	}
+};
+
+async function getHostRecording(req: Request, res: Response) {
+	const { id } = req.query;
+	const event = await models.Event.findByPk(id.toString())
+
+	if (!event) {
+		return res.status(404).json({msg: "Event not found."})
+	}
+
+	const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+	const twilioApiKeySID = process.env.TWILIO_API_KEY_SID;	
+	const twilioApiKeySecret = process.env.TWILIO_API_KEY_SECRET;
+	//@ts-ignore
+	const client = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid })
+
+	//@ts-ignore
+	const recordings = await client.video.recordings.list({groupingSid: [event.roomTwilioId], limit: 20})
+	const videoRecordings = new Array();
+	const audioRecordings = new Array();
+	for (const recording of recordings) {
+		const uri =
+			"https://video.twilio.com/v1/" +
+			//@ts-ignore
+			`Rooms/${event.roomTwilioId}/` +
+			`Recordings/${recording.sid}` +
+			"/Media";
+
+		const res = await client.request({ method: "GET", uri: uri });
+		const mediaLocation = res.body.redirect_to;
+
+		if (recording.type === "video") {
+			videoRecordings.push({ url: mediaLocation, speaker: recording.groupingSids.participant_sid })
+		} else if (recording.type === "audio") {
+			audioRecordings.push({ url: mediaLocation, speaker: recording.groupingSids.participant_sid })
+		}
+	}
+
+
+	res.json({ videoRecordings, audioRecordings })
+}
+
+async function sendHostRecording(req: Request, res: Response) {
+	const { id } = req.query
+	const event = await models.Event.findByPk(id.toString(), { include: [{model: models.User, as: "host"}, {model: models.User, as: "attendees"}]})
+
+	//@ts-ignore
+	for (const attendee of event.attendees) { 
+		//@ts-ignore
+		await attendee.createNotification({text: `You've been sent the recordings to ${event.title}: <a href="/recording/${event.id}">click here.</a>`})
+	}
+
+	//@ts-ignore
+	const host = event.host;
+	//@ts-ignore
+	await host.createNotification({text: `<a href="/recording/${event.id}">Click here to view your recording for ${event.title}.</a>`})
+}
 
 export default {
 	getAll,
@@ -412,5 +501,8 @@ export default {
 	addTopic,
 	addHashtag,
 	getEventHashtags,
-	setRecord
+	setRecord,
+	setTwilioHostId,
+	getHostRecording,
+	sendHostRecording
 };

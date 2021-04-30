@@ -42,6 +42,16 @@ const Event = sequelize.define(
    record: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+   },
+   hostTwilioId: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: true
+   },
+   roomTwilioId: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: true
    }
 }, { 
   timestamps: true,

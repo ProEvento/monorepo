@@ -1,0 +1,6 @@
+{
+    "watch": ["express", "mysql-db"],
+    "ext": "ts,js",
+    "exec": "node -r esbuild-register index.ts",
+    "legacyWatch": true
+  }

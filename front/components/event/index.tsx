@@ -69,7 +69,7 @@ const Item = ({ user, event, cancelEvent, joinEvent, leaveEvent }) => {
         <Typography variant="h4">{title}</Typography>
         {/*@ts-ignore */}
         <Typography variant="h5">{date.toLocaleDateString("en-US", options)} @ {date.toLocaleTimeString("en-US")}</Typography>
-        <Typography variant="h6">hosted by <Link href={`/user/${host.username}`}>{host.firstName} {host.lastName}</Link></Typography>
+        <Typography variant="h6">hosted by <Link href={`/user/${host?.username}`}>{host?.firstName} {host?.lastName}</Link></Typography>
       </div>
       <div className="users">{getAttendeeAvatars(attendees)}</div>
 

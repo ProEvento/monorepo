@@ -50,13 +50,14 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     const endEvent = async () => {
       await makeServerCall({ apiCall: `events/endEvent`, method: "PUT", queryParameters: { id: event.id } })
     }
+
+
   
     if (!event) {
       return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>This is an invalid event. Check out the <Link href="/explore">Explore page to find another</Link>.</Page>
     }
 
     const dateEvent = new Date(event.time)
-    console.log(Date.now() < dateEvent.getTime(), Date.now(), dateEvent.getTime())
     if (Date.now() < dateEvent.getTime()) {
       return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>You're too early! Come back when the Event time has been reached.</Page>
     }
@@ -68,10 +69,7 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
           <Typography align="center" style={{marginTop: 300}}><Button id="start" onClick={startEvent} style={{margin: "0 auto"}} variant="contained" color="primary" size="large">Start Meeting</Button></Typography>
         </Page>
     }
-    
   
-    console.log(event)
-
     useEffect(() => {
       setConnecting(true)
       handleJoin()
@@ -134,7 +132,6 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
       };
     }
   }, [room, handleLogout]);
-    console.log(room, connecting, token)
 
     let render;
     if (!connecting && !token) {
@@ -142,6 +139,9 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     } else if (token && connecting) {
         render = <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (token && !connecting && room) {
+        if (event.host.username === username) {
+          makeServerCall({ apiCall: `events/setHost`, method: "PUT", queryParameters: { id: event.id, roomId: room.sid  } })
+        }
         render = <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
           <Room roomName={roomName} room={room} handleLogout={handleLogout} description={event.description}/></Page>
     } else {

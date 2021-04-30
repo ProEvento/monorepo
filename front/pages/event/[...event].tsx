@@ -25,11 +25,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
-    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true, topic: true }, method: "GET" })
+    const data = await makeServerCall({ apiCall: `events/${context.params.event}`, queryParameters: { attending: true, topic: true, hashtag: true }, method: "GET" })
     return { 
       props: {
         event: data
@@ -38,7 +41,6 @@ export const getServerSideProps = withPageAuthRequired({
   }
 })
 
-//have username -> make call to see if attending?
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,6 +77,8 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   if(event.attendees.length > 0){
     noAttendees = false; 
   }
+
+
   var tags = true; 
   const router = useRouter();
 
@@ -135,6 +139,15 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   var dateEvent = new Date(event.time)
   //console.log(Date.now(),  dateEvent.getTime())
 
+  var hashtags = "";
+  // @ts-ignore
+  (event.Hashtags).forEach(async (hash : any) => {
+    if (!hashtags.includes(hash['title'])){
+      hashtags += hash['title'] + ","
+    }
+	})
+  hashtags = hashtags.slice(0, -1);
+
   const inviteUser = async () => {
     const targetUser = await makeServerCall({ apiCall: `users/getByUsername`, method: "GET",
       queryParameters: {
@@ -174,6 +187,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   // console.log("are hosting event", isHost)
   const [dialogTitle, setDialogTitle] = useState("");
   const [open, setOpen] = useState(false);
+  const [record, setRecord] = useState(event.record)
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   let title = "";
@@ -190,6 +204,28 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
     setOpen(false);
   };
 
+  const toggleRecord = async () => {
+    setRecord((prev) => !prev)
+    
+    await makeServerCall({ apiCall: `events/record/`, method: "POST",
+      queryParameters: {
+          id : event.id,
+          record : !record
+      }
+    })
+    
+  }
+
+  const sendRecordings = async () => {
+    const recordings = await makeServerCall({ apiCall: `events/sendHostRecording`, method: "POST",
+      queryParameters: {
+          id: event.id,
+      }
+    })
+
+    console.log("Recordings", recordings)
+  }
+
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   return (
@@ -197,7 +233,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
       <div style={{display: 'flex', flexDirection: 'column'}}>
       <h1>{event.title}</h1>
-
+      {/*//@ts-ignore*/}
       <h4>{dateEvent.toLocaleDateString(undefined,options)} @ {dateEvent.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</h4>
       {event.host && <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>}
       </div>
@@ -221,9 +257,19 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
         ? <h5>Private Event </h5>
         : <h5>Open Event</h5>
       }
+      {isHost
+        ? null
+        : event.record ? <h5>Recorded Event </h5> : <h5>Non-Recorded Event </h5>
+      }
       {event.Topic &&
         <h5>Topic: {event.Topic.title}</h5>
       }
+      {(hashtags!="") &&
+        <h5>Hashtags: {hashtags}</h5>
+      }
+    
+
+      {/* <h5>Hashtags: {event.hashtags.title}</h5> */}
       </div>
       <br/>
       <Chip
@@ -290,11 +336,26 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
       
       }
       </div>
-    
   
       <div style={{display: 'flex',  justifyContent:'flex-end', alignItems:'center', height: '10vh'}}>
-        {isHost && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
+      
+        {isHost && 
+          <FormGroup row>
+            <FormControlLabel
+                control={<Switch checked={record} onChange={toggleRecord} />}
+                label="Record Event"
+              />
+          </FormGroup>
+        }
+        
+        {isHost && event.record && event.started &&
+          <Button onClick={sendRecordings} color="primary" variant="contained">Send Host Recording to Attendees</Button>
+        }
+        {isHost && !event.started && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
+        {attend && <Link href={`/recording/${event.id}`}><Button color="secondary" variant="contained">View recording here</Button></Link>}
+
       </div>
+      
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
         {!attend &&
           <Button onClick={joinEvent} className={styles.button}>Attend this event</Button>

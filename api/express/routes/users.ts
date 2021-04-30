@@ -1,4 +1,4 @@
-import { query, Request, Response } from "express"
+import { Request, Response } from "express"
 import db from '../../sequelize'
 import { Op } from "sequelize"
 import { getIdParam } from '../helpers'

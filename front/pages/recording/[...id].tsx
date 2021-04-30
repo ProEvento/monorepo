@@ -3,10 +3,8 @@ import Page from '@components/page'
 import { CustomUserContext } from '../../types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { withUserProp } from '../../lib/withUserProp';
-import { UserType, EventType } from '../../../api/types';
+import {  EventType } from '../../../api/types';
 import { useRouter } from 'next/router'
-import { connect, Room as RoomType } from 'twilio-video'
-import Room from '../../components/meeting/room'
 import {CircularProgress, Button, Typography} from '@material-ui/core/';
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'

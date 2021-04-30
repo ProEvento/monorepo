@@ -64,13 +64,14 @@ const Meeting = ({ userContext, event, recordings }: { userContext: CustomUserCo
         render = <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (!connecting ) {
         render = (<Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
-              <div className={styles.participant}>
-                <h3>{event.host.firstName} {event.host.lastName}</h3>
+              {/*@ts-ignore */}
+              {recordings.videoRecordings.map((e, i) => (<div key={e.url} className={styles.participant}>
+                <h3>{i === 0 ? `${event.host.firstName} ${event.host.lastName}` : ""}</h3>
                 {/*@ts-ignore*/}
-                <video src={recordings.videoRecordings[0].url} autoPlay={true} />
+                <video src={e.url} autoPlay={true} />
                {/*@ts-ignore*/}
-                <audio src={recordings.audioRecordings[0].url} autoPlay={true} muted={false} />
-              </div>
+                <audio src={recordings.audioRecordings[i].url} autoPlay={true} muted={false} />
+              </div>))}
           </Page>)
     } else {
         render = <div>nothing</div>

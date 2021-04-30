@@ -144,6 +144,21 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventsForUser)
 )
 
+app.put(
+	`/api/events/setHost`,
+	makeHandlerAwareOfAsyncErrors(routes.events.setTwilioHostId)
+)
+
+app.get(
+	`/api/events/getHostRecording`,
+	makeHandlerAwareOfAsyncErrors(routes.events.getHostRecording)
+)
+
+app.post(
+	`/api/events/sendHostRecording`,
+	makeHandlerAwareOfAsyncErrors(routes.events.sendHostRecording)
+)
+
 app.get(
 	`/api/events/getEventAttendees/:id`,
 	makeHandlerAwareOfAsyncErrors(routes.events.getEventAttendees)
@@ -291,44 +306,6 @@ app.get('/api/twilio/token', (req, res) => {
 	res.send(token.toJwt());
 	console.log(`Issued token for ${username} in room ${room}`);
 });
-
-app.get(
-	`/api/twilio/recordings`,
-	makeHandlerAwareOfAsyncErrors(async (req: Request, res: Response) => {
-		// if (typeof req.query.roomId !== 'string') {
-		// 	return res.status(500).json({ msg: "Invalid query"});
-		// }
-		//@ts-ignore
-		const recordings = await twilioGetRecForRoom(TwilioClient, req.query.roomId);
-		res.status(200).json(recordings);
-	})
-);
-
-async function twilioGetRecForRoom(twilioClient: typeof TwilioClient, roomId: string) {
-    const recordingData = await twilioClient.video.recordings
-        .list({
-            groupingSid: [roomId],
-            limit: 20
-        })
-
-	const videoRecordings = new Array();
-	const audioRecordings = new Array();
-	for (const recording of recordingData) {
-		const uri =
-		"https://video.twilio.com/v1/" +
-		`Rooms/${roomId}/` +
-		`Recordings/${recording.sid}` +
-		"/Media";
-
-		if (recording.type === "video") {
-			videoRecordings.push({ url: uri, speaker: recording.groupingSids.participant_sid })
-		} else if (recording.type === "audio") {
-			audioRecordings.push({ url: uri, speaker: recording.groupingSids.participant_sid })
-		}
-	}
-
-    return {videoRecordings, audioRecordings};
-}
 
 // Define REST APIs for each route (if they exist).
 for (const [routeName, routeController] of Object.entries(routes)) {

@@ -207,16 +207,23 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   const toggleRecord = async () => {
     setRecord((prev) => !prev)
     
-    const switchRecord = await makeServerCall({ apiCall: `events/record/`, method: "POST",
-    queryParameters: {
-        id : event.id,
-        record : !record
-    }})
+    await makeServerCall({ apiCall: `events/record/`, method: "POST",
+      queryParameters: {
+          id : event.id,
+          record : !record
+      }
+    })
     
   }
 
   const sendRecordings = async () => {
-    
+    const recordings = await makeServerCall({ apiCall: `events/sendHostRecording`, method: "POST",
+      queryParameters: {
+          id: event.id,
+      }
+    })
+
+    console.log("Recordings", recordings)
   }
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -226,7 +233,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
 
       <div style={{display: 'flex', flexDirection: 'column'}}>
       <h1>{event.title}</h1>
-
+      {/*//@ts-ignore*/}
       <h4>{dateEvent.toLocaleDateString(undefined,options)} @ {dateEvent.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</h4>
       {event.host && <h5>Hosted By: {event.host.firstName} {event.host.lastName}</h5>}
       </div>
@@ -333,7 +340,7 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
   
       <div style={{display: 'flex',  justifyContent:'flex-end', alignItems:'center', height: '10vh'}}>
       
-        {isHost && !event.ended && 
+        {isHost && 
           <FormGroup row>
             <FormControlLabel
                 control={<Switch checked={record} onChange={toggleRecord} />}
@@ -341,10 +348,10 @@ const Event = ({event, userContext, targetUser}: { attendees:any, userContext: C
               />
           </FormGroup>
         }
-        {isHost && !event.ended && event.record && 
-          <Button onClick={sendRecordings} color="primary" variant="contained">Send Recordings</Button>
+        {isHost && event.record && event.started &&
+          <Button onClick={sendRecordings} color="primary" variant="contained">Send Host Recording to Attendees</Button>
         }
-        {isHost && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
+        {isHost && !event.started && <Button onClick={cancelEvent} color="secondary" variant="contained">Cancel Event</Button>}
       </div>
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh'}}>
         {!attend &&

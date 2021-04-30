@@ -50,6 +50,8 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     const endEvent = async () => {
       await makeServerCall({ apiCall: `events/endEvent`, method: "PUT", queryParameters: { id: event.id } })
     }
+
+
   
     if (!event) {
       return <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>This is an invalid event. Check out the <Link href="/explore">Explore page to find another</Link>.</Page>
@@ -137,6 +139,9 @@ const Meeting = ({ userContext, event }: { userContext: CustomUserContext, event
     } else if (token && connecting) {
         render = <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (token && !connecting && room) {
+        if (event.host.username === username) {
+          makeServerCall({ apiCall: `events/setHost`, method: "PUT", queryParameters: { id: event.id, roomId: room.sid  } })
+        }
         render = <Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
           <Room roomName={roomName} room={room} handleLogout={handleLogout} description={event.description}/></Page>
     } else {

@@ -11,6 +11,7 @@ import {CircularProgress, Button, Typography} from '@material-ui/core/';
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import makeServerCall from '../../lib/makeServerCall';
+import styles from '@components/meeting/participant.module.css';
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context: GetServerSidePropsContext) => {
@@ -20,8 +21,7 @@ export const getServerSideProps = withPageAuthRequired({
       return { props: { }}
     }
 
-     const recordingData = await makeServerCall({ apiCall: `twilio/recordings`, queryParameters: { roomId: 'RM11b79977d0283045967359a9ce411254' }, method: "GET" })
-     console.log(recordingData)
+     const recordingData = await makeServerCall({ apiCall: `events/getHostRecording`, queryParameters: { id: context.params.id.toString() }, method: "GET" })
      return { 
       props: {
         event: eventData,
@@ -66,8 +66,13 @@ const Meeting = ({ userContext, event, recordings }: { userContext: CustomUserCo
         render = <div style={{position: "absolute", left: "50%", top: "50%"}}><CircularProgress /></div>
     } else if (!connecting ) {
         render = (<Page header={false} activePage={"Meeting"} title={"Meeting"} userContext={userContext}>
-          {/* <Room roomName={roomName} description={event.description}/> */}
-          
+              <div className={styles.participant}>
+                <h3>{event.host.firstName} {event.host.lastName}</h3>
+                {/*@ts-ignore*/}
+                <video src={recordings.videoRecordings[0].url} autoPlay={true} />
+               {/*@ts-ignore*/}
+                <audio src={recordings.audioRecordings[0].url} autoPlay={true} muted={false} />
+              </div>
           </Page>)
     } else {
         render = <div>nothing</div>

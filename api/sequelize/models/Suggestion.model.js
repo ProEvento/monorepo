@@ -19,7 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       time: {
         type: DataTypes.DATE, 
         allowNull:false
-      }
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+     },
     },
     {
       timestamps: true,

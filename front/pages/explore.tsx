@@ -13,6 +13,7 @@ import {Input, Button} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import makeServerCall from '@lib/makeServerCall';
 import Event from '@components/event'
+import Group from '@components/group/group'
 import User from '@components/user'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -87,6 +88,11 @@ async function getEventsByTime(start: Date, end: Date) {
   return data || []
 }
 
+async function getGroups(value: string) {
+  const data = await makeServerCall({apiCall: "search/groups", method: "GET", queryParameters: {query: value }})
+  return data || []
+}
+
 function SimpleTabs({ user }) {
   const classes = useStyles();
   const [search, setSearch] = React.useState('');
@@ -102,6 +108,7 @@ function SimpleTabs({ user }) {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
+
 
   const cancelEvent = (id: number) => {
     makeServerCall({ apiCall: `events/${id}`, method: "DELETE" }).then((data) => {
@@ -139,6 +146,7 @@ function SimpleTabs({ user }) {
         <Tab label="Search for Events" {...a11yProps(0)} />
         <Tab label="Search for Users" {...a11yProps(1)} />
         <Tab label="Search for Events by Date" {...a11yProps(2)} />
+        <Tab label="Search for Groups" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <TextField style={{height: 50}} id="outlined-basic" label="Search for Events..." variant="outlined"  value={search} onChange={handleSearchChange}></TextField>
@@ -157,6 +165,11 @@ function SimpleTabs({ user }) {
         <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
         <Button id="search" style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getEventsByTime(startDate, endDate)).results)}>Search</Button>
         {value === 2 && results.length > 0 && results.map((event) => <Event user={user} cancelEvent={cancelEvent} joinEvent={joinEvent} leaveEvent={leaveEvent} event={event}/>)}
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <TextField style={{height: 50}} id="outlined-basic" label="Search for Groups..." variant="outlined"  value={search} onChange={handleSearchChange}></TextField>
+        <Button id="search" style={{marginLeft: 8, height: 50 }} variant="contained" onClick={async () => setResults((await getGroups(search)).results)}>Search</Button>
+        {value === 3 && results.length > 0 && results.map((group) => <Group user={user} group={group} />)}
       </TabPanel>
     </div>
   );

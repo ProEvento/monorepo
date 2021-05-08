@@ -7,6 +7,7 @@ import { Model, Op, useInflection } from "sequelize"
 async function search(req: Request, res: Response) {
     // type: "event" | "user" | "event_date" | "groups",
     const { type } = req.params
+	console.log(type)
 	// query: string comma seperated terms, sort: "ascending" | "descending"
 	const { query, sort, start, end }  = req.query
 
@@ -119,6 +120,30 @@ async function search(req: Request, res: Response) {
 				time: {
 					[Op.between] : [startDate.toString(), endDate.toString()]
 				}
+			}	
+		});
+		res.status(200).json({results});
+	} else if (type === "groups") {
+		results = await models.Group.findAll({
+			order: [
+				['createdAt', sort === "ascending" ? "ASC" : "DESC"]
+			],
+			include: [{ model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories" }, { model: models.User, as: "owner" }],
+			where: { 
+				[Op.or]: [
+				{
+					name: 
+					{
+						[Op.like]: `%${terms}%`
+					}
+				}, 
+				{
+					description: 
+					{
+						[Op.like]: `%${terms}%`
+					}
+				}, 
+			]
 			}	
 		});
 		res.status(200).json({results});

@@ -33,8 +33,9 @@ const containerStyles = makeStyles((theme: Theme) =>
       flex: 1,
       justifyContent: 'center',
       background: 'white',
-      marginBottom: 'calc(2 * var(--gap))',
+      marginBottom: 'var(--gap)',
       borderRadius: 12,
+      marginTop: 'var(--gap)',
     },
   })
 );

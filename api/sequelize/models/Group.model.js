@@ -32,14 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       through: "Users_Groups",
       as: 'users',
       target: 'id',
-    })
+    });
 
     Group.belongsToMany(models.GroupCategory, {
       through: "Group_Categories",
       as: 'categories',
       target: 'id',
       foreignKey: 'category'
-    })
+    });
 
     Group.belongsTo(models.User, {
       as: 'owner',
@@ -51,7 +51,13 @@ module.exports = (sequelize, DataTypes) => {
 
    Group.hasOne(models.Chat, {
      as: "chat",
-   })
+   });
+
+   Group.hasMany(models.Suggestion, {
+    foreignKey: 'Group_id',
+    target: 'id',
+    type: DataTypes.INTEGER
+    });
 
 
   };

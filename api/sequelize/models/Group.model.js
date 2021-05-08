@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      pollTime: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
       description: DataTypes.STRING,
       logo: DataTypes.STRING,
     },

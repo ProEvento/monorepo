@@ -51,7 +51,7 @@ const Item = ({ user, group }) => {
   const classes = containerStyles();
   const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const options = { weekday: "long", year: 'numeric', month: 'long', day: 'numeric' };
-  const { users, owner, name, description, logo, createdAt } = group;
+  const { users, owner, name, description, logo, createdAt, pollTime } = group;
 
 //   const isHost = user.username === (host ? host.username : user.username);
 //   const isAttending = !!attendees.find((attendee) => attendee.username === user.username)
@@ -75,7 +75,6 @@ const Item = ({ user, group }) => {
             <Typography variant="caption">
               created by <Link href={`/user/${owner.username}`}>{owner.username}</Link> on {new Date(createdAt).toLocaleTimeString("en-US")}
             </Typography>
-            
           </React.Fragment>
         }
       />

@@ -20,7 +20,7 @@ async function getById(req: Request, res: Response) {
 
 
 async function create(req: Request, res: Response) {
-    const { creatorId, userIds, logo, name, description, categories: categoriesString } = req.query;
+    const { creatorId, userIds, logo, name, description, categories: categoriesString, pollTime } = req.query;
     console.log("req.body", req.query)
     if (!name || !description || !creatorId) {
         return res.status(400).json({msg: "Missing required field."});
@@ -30,7 +30,7 @@ async function create(req: Request, res: Response) {
     const Creator = await models.User.findByPk(parseInt(creatorId))
 
     //@ts-ignore
-    const Group = await models.Group.create({ logo, name, description })
+    const Group = await models.Group.create({ logo, name, description, pollTime })
 
     //@ts-ignore
     await Group.setOwner(Creator);

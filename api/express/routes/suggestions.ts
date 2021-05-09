@@ -26,6 +26,18 @@ async function getActiveSuggestions(req: Request, res: Response) {
 	res.status(200).json(Suggestions);
 };
 
+async function vote(req: Request, res: Response) {
+    const id = req.query.id
+    const suggestion = await models.Suggestion.findOne({where: {id: id}});
+
+	if (suggestion) {
+        const incrementResult = await suggestion.increment('votes', { by: 1 });
+    }
+	res.status(200).json(suggestion);
+};
+
+
+
 async function createSuggestion(req: Request, res: Response) {
 
     const {name, id, description,group_id, topicName } = req.query;
@@ -60,5 +72,6 @@ async function createSuggestion(req: Request, res: Response) {
 export default {
     getAll,
     createSuggestion,
-    getActiveSuggestions
+    getActiveSuggestions,
+    vote
 };

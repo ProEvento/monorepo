@@ -43,9 +43,12 @@ const [response, setResponse] = useState("")
 const classes = containerStyles();
 const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const options = { weekday: "long", year: 'numeric', month: 'long', day: 'numeric' };
-const { name, description, time } = suggested_event;
+const { name, description, time, id } = suggested_event;
 const date = new Date(time)
 
+const submit = () => {
+  const data = makeServerCall({ apiCall: "groups/vote", method: "GET", queryParameters: {id:id}})
+}
 
 return (
     <div className="grid-container">
@@ -60,10 +63,8 @@ return (
     </div>
     <div className="voting">
         <br></br>
-        <div className={classes.row}>
-            Vote
-          <input type="checkbox" />
-        </div>
+        <Button id="save" onClick={submit} size="large" variant="contained" color="primary">Vote</Button>
+
     </div>
 
     <style jsx>{`
@@ -186,6 +187,8 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
   const { user  } = userContext;
   console.log(suggested[0])
   
+ 
+
 
   
   useEffect(() => {
@@ -324,12 +327,16 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
               {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
             </div>}
           </div>
-          <CreateSuggestionComponent userContext={userContext} group= {group} />
+          {inGroup &&
+            <div>
+            <CreateSuggestionComponent userContext={userContext} group= {group} />
+            <div>
+              {suggested.map((e) =>  <Item suggested_event={e} /> )}
+            
+            </div>
+            </div>
+          }
           
-          <div>
-            {suggested.map((e) =>  <Item suggested_event={e} /> )}
-           
-          </div>
       </div>
 
     </Page>

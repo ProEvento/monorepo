@@ -65,6 +65,7 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
   const [response, setResponse] = useState("")
   const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [date, setDate] = useState<number>(-1);
 
   const classes = useStyles();
 
@@ -76,6 +77,10 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
 
   const topicChange = (e: any) => {
     setTitle(e)
+  }
+
+  const handleDate = (e: any) => {
+    setDate(e);
   }
 
   const makeServerCallFetcher = async url => await makeServerCall({ apiCall: url, method: "GET" })
@@ -125,7 +130,8 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
         description,
         logo: picture,
         creatorId: user.id,
-        categories: JSON.parse(JSON.stringify(categoryIds))
+        categories: JSON.parse(JSON.stringify(categoryIds)),
+        pollTime: (new Date(date)).toISOString()
       }
 
       if (!title) {
@@ -203,6 +209,11 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
                 </MenuItem>
             ))}
         </Select>
+        </div>
+        <br/>
+        <div>
+          Weekly Poll Close Time:
+          <Datetime onChange={handleDate}/>
         </div>
         <br></br>
         <Button id="save" style={{marginTop: 'var(--gap)'}} onClick={submit} size="large" variant="contained" color="primary">Create Group</Button>

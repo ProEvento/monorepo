@@ -241,6 +241,33 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
     })
   }
 
+  const formatDate = () => {
+    const dayNum = new Date(group.pollTime).getDay();
+    let day = "";
+    if (dayNum === 0) {
+      day = "Sunday";
+    }
+    else if (dayNum === 1) {
+      day = "Monday";
+    }
+    else if (dayNum === 2) {
+      day = "Tuesday";
+    }
+    else if (dayNum === 3) {
+      day = "Wednesday";
+    }
+    else if (dayNum === 4) {
+      day = "Thursday";
+    }
+    else if (dayNum === 5) {
+      day = "Friday";
+    }
+    else if (dayNum === 6) {
+      day = "Saturday";
+    }
+    const time = new Date(group.pollTime).toLocaleString().split(",")[1];
+    return day + " at " + time;
+  }
 
   //console.log(event)
   const openAttendEvent = ((e) => {
@@ -274,7 +301,7 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
 
     window.location.href = `http://localhost:3000/chats/${response.id}`
   }
-
+  const finalTime = formatDate();
   return (
     <Page header={false} activePage={"Group"} title={group.name} userContext={userContext}>
 
@@ -285,6 +312,7 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
       {group.categories &&
       <h5>Categories: {getCategories(group)}</h5>
     }
+      <h5>Weekly poll close time: {finalTime}</h5>
       <h4>{group.description}</h4>
       <br />
       <br />  

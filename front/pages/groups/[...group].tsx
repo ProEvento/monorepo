@@ -135,7 +135,7 @@ export const getServerSideProps = withPageAuthRequired({
     const group_id = context.params.group
     console.log(group_id)
 
-    const suggestions = await makeServerCall({ apiCall: `groups/getActiveSuggestions`, method: "GET", queryParameters: {id: "1"} });
+    const suggestions = await makeServerCall({ apiCall: `groups/getActiveSuggestions`, method: "GET", queryParameters: {id: context.params.group} });
 
     return { 
       props: {

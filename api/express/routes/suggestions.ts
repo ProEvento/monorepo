@@ -2,19 +2,28 @@ import { query, Request, Response } from "express"
 import db from '../../sequelize'
 import { getIdParam } from "../helpers";
 const { models } = db.sequelize;
+import { Model, Op, useInflection } from "sequelize"
 
 async function getAll(req: Request, res: Response) {
 	const Suggestions = await models.Suggestion.findAll();
 	res.status(200).json(Suggestions);
 };
 
-async function getById(req: Request, res: Response) {
-    const id = getIdParam(req);
-	const Suggestion = await models.Suggestion.findByPk(id);
-	if (!Suggestion) {
-        return res.status(404).json({ msg: "Group not found."})
-    }
-    res.status(200).json(Suggestion);
+async function getActiveSuggestions(req: Request, res: Response) {
+    const id = req.query.id;
+	const Suggestions = await models.Suggestion.findAll({
+        // where: { Group_id: id}
+        where: { 
+            [Op.and]: [
+            {
+                Group_id: id
+            }, 
+            {
+                active: "1"
+            }, 
+        ]}
+	});
+	res.status(200).json(Suggestions);
 };
 
 async function createSuggestion(req: Request, res: Response) {
@@ -27,7 +36,7 @@ async function createSuggestion(req: Request, res: Response) {
     // JSON.stringify(Topic_id)
 
 	// const searchTitle = req.query.searchTitle
-    
+
 	const topic = await models.Topic.findOne({
 		where: {
 			title: topicName
@@ -50,6 +59,6 @@ async function createSuggestion(req: Request, res: Response) {
 
 export default {
     getAll,
-    getById,
-    createSuggestion
+    createSuggestion,
+    getActiveSuggestions
 };

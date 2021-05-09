@@ -276,6 +276,12 @@ app.post(
 	makeHandlerAwareOfAsyncErrors(routes.suggestions.createSuggestion)
 )
 
+app.get(
+	`/api/groups/getActiveSuggestions`,
+	makeHandlerAwareOfAsyncErrors(routes.suggestions.getActiveSuggestions)
+
+)
+
 // Chat
 
 app.post(

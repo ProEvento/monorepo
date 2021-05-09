@@ -16,6 +16,7 @@ import {TextField} from '@material-ui/core';
 import { getEnabledCategories } from "node:trace_events";
 import { Label } from "@material-ui/icons";
 import User from '@components/user'
+import CreateSuggestionComponent from '@components/createSuggestion'
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
@@ -200,6 +201,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
             </div>}
           </div>
 
+          <CreateSuggestionComponent userContext={userContext} group= {group} />
 
       </div>
 

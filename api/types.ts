@@ -32,6 +32,10 @@ export type EventType = {
     ended: boolean
 }
 
+export type GroupType = {
+    id: string 
+}
+
 export type HashtagType = {
     title: string
 }

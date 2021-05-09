@@ -145,6 +145,9 @@ async function removeUserFromGroup(req: Request, res: Response) {
     }
 };
 
+
+
+
 export default {
     getCategories,
 	getAll,
@@ -153,5 +156,5 @@ export default {
     getById,
     remove,
     addUserToGroup,
-    removeUserFromGroup
+    removeUserFromGroup,
 };

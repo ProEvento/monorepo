@@ -29,6 +29,7 @@ const routes = {
 	groups: require('./routes/groups').default,
 	chats: require('./routes/chat').default,
 	hashtags: require('./routes/hashtags').default,
+	suggestions: require('./routes/suggestions').default,
 	// items: require('./routes/<item>').default,
 };
 
@@ -266,6 +267,29 @@ app.post(
 app.post(
 	`/api/groups/removeUserFromGroup`,
 	makeHandlerAwareOfAsyncErrors(routes.groups.removeUserFromGroup)
+)
+
+// Suggestions
+
+app.post(
+	`/api/groups/createSuggestion`,
+	makeHandlerAwareOfAsyncErrors(routes.suggestions.createSuggestion)
+)
+
+app.get(
+	`/api/groups/getActiveSuggestions`,
+	makeHandlerAwareOfAsyncErrors(routes.suggestions.getActiveSuggestions)
+
+)
+
+app.get(
+	`/api/groups/getActiveSuggestions`,
+	makeHandlerAwareOfAsyncErrors(routes.suggestions.getActiveSuggestions)
+)
+
+app.get(
+	`/api/groups/vote`,
+	makeHandlerAwareOfAsyncErrors(routes.suggestions.vote)
 )
 
 // Chat

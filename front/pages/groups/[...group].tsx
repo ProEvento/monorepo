@@ -16,14 +16,131 @@ import {TextField} from '@material-ui/core';
 import { getEnabledCategories } from "node:trace_events";
 import { Label } from "@material-ui/icons";
 import User from '@components/user'
+import CreateSuggestionComponent from '@components/createSuggestion'
+import DisplaySuggestionComponent from '@components/suggestion'
+import sug_Event from '@components/suggestion_one'
+import Typography from '@material-ui/core/Typography';
 
+const containerStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      height: 140,
+      flex: 1,
+      justifyContent: 'center',
+      background: 'white',
+      marginBottom: 'calc(2 * var(--gap))',
+      borderRadius: 12,
+    },
+  })
+);
+
+const Item = ({ suggested_event}) => {
+  console.log("test", suggested_event)
+const [response, setResponse] = useState("")
+const classes = containerStyles();
+const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const options = { weekday: "long", year: 'numeric', month: 'long', day: 'numeric' };
+const { name, description, time, id } = suggested_event;
+const date = new Date(time)
+
+const submit = () => {
+  const data = makeServerCall({ apiCall: "groups/vote", method: "GET", queryParameters: {id:id}})
+}
+
+return (
+    <div className="grid-container">
+    <div className="date">
+      <div className="number">{date.getDate()}</div>
+      <div className="day">{days[date.getDay()]}</div>
+    </div>
+    <div className="info">
+      <Typography variant="h4">{name}</Typography>
+      {/*@ts-ignore */}
+      <Typography variant="h5">{description}</Typography>
+    </div>
+    <div className="voting">
+        <br></br>
+        <Button id="save" onClick={submit} size="large" variant="contained" color="primary">Vote</Button>
+
+    </div>
+
+    <style jsx>{`
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: 0.6fr 1.8fr 0.6fr;
+        grid-template-rows: 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+          "date info users";
+        color: #535353;
+        padding: var(--gap-double) 0px;
+        background: #FFFFFF;
+        border: 1px solid #000000;
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        transition: all .2s ease-in-out;
+      }
+      .users { grid-area: users; display: flex; justify-content: center; align-items: center;}
+      .info {
+        display: flex;
+        flex-direction: column;
+        grid-area: info;
+        margin-left: var(--gap);
+      }
+      .voting{
+        display: flex;
+        flex-direction: column;
+        grid-area: users;
+        margin-left: var(--gap);
+      }
+      .date {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: .5fr 1.5fr;
+        gap: 0px 0px;
+        grid-template-areas:
+          "day day day"
+          "number number number";
+        grid-area: date;
+        border-right: 1px solid #373737;
+      }
+      .number { 
+        grid-area: number;
+        font-size: 48px;
+        margin: 0 auto;
+        font-weight: 500;
+      }
+      .day {
+        grid-area: day;
+        font-size: 14px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        font-weight: 500;
+       }
+      `}</style>
+  </div>
+  )
+}
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async (context) => {
     const data = await makeServerCall({ apiCall: `groups/${context.params.group}`, method: "GET" })
     console.log(data)
+
+    const group_id = context.params.group
+    console.log(group_id)
+
+    const suggestions = await makeServerCall({ apiCall: `groups/getActiveSuggestions`, method: "GET", queryParameters: {id: "1"} });
+
     return { 
       props: {
-        group: data
+        suggested: suggestions,
+        group: data,
       }
     }
   }
@@ -54,14 +171,26 @@ async function getUsers(value) {
     return data
 }
 
-const Group = ({group, userContext}: { userContext: CustomUserContext, group:any}) => {
+async function getSuggested(value) {
+  const data = await makeServerCall({ apiCall: `groups/getActiveSuggestions`, method: "GET", queryParameters: {id: "1"}})
+  console.log(data)
+  return data
+}
+
+const Group = ({group, userContext, suggested }: { userContext: CustomUserContext, group:any, suggested: any[]}) => {
   const [search, setSearch] = useState("")
   const [results, setResults] = useState([])
   const [badge, setBadge] = useState("")
   const [inGroup, setInGroup] = useState(false)
   const [invited, setInvited] = useState(false)
+  // const [suggested, setSuggested] = useState([]);
+  const { user  } = userContext;
+  console.log(suggested[0])
+  
+ 
 
 
+  
   useEffect(() => {
       //@ts-ignore
       if (!userContext.user.notifications) {
@@ -79,7 +208,6 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
   const styles = useStyles()
   // console.log(targetUser)
   
-  const { user, error, isLoading } = userContext;
 
   const getCategories = ({ categories }) => {
     if (categories.length > 1) { 
@@ -149,7 +277,7 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
 
   return (
     <Page header={false} activePage={"Group"} title={group.name} userContext={userContext}>
-       
+
       <h1>{group.name}</h1>
       <img id="pic" src={group.logo} className={styles.img} />
 
@@ -199,8 +327,16 @@ const Group = ({group, userContext}: { userContext: CustomUserContext, group:any
               {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
             </div>}
           </div>
-
-
+          {inGroup &&
+            <div>
+            <CreateSuggestionComponent userContext={userContext} group= {group} />
+            <div>
+              {suggested.map((e) =>  <Item suggested_event={e} /> )}
+            
+            </div>
+            </div>
+          }
+          
       </div>
 
     </Page>

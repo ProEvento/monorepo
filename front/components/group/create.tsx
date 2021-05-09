@@ -145,6 +145,9 @@ const CreateGroup = ({ userContext }: { userContext: CustomUserContext}) => {
       const data = await makeServerCall({ apiCall: "groups", method: "POST", 
           queryParameters: toSend,
       })
+
+      location.reload();
+
       if (data.msg === "success") {
         
         router.push(`/groups/${data.group.id}`)

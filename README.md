@@ -1,4 +1,4 @@
-# ProEvento
+# ProEvento for CSCI 310
 
 `api/` -- Express backend service for interacting with MySQL database
 

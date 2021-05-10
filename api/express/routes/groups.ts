@@ -2,6 +2,7 @@ import { query, Request, Response } from "express"
 import db from '../../sequelize'
 import { getIdParam } from "../helpers";
 const { models } = db.sequelize;
+import { Op } from "sequelize"
 
 async function getAll(req: Request, res: Response) {
 	const Groups = await models.Group.findAll({ include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"},  { model: models.GroupCategory, as: "categories"}]});
@@ -146,6 +147,33 @@ async function removeUserFromGroup(req: Request, res: Response) {
 };
 
 
+async function getStats(req: Request, res: Response) {
+    const { groupId } = req.query;
+
+    const endDate = new Date(Date.now());
+    const startDate = new Date(Date.now())
+    startDate.setMonth(endDate.getMonth() - 6) 
+
+    //@ts-ignore
+    const Group = await models.Group.findByPk(groupId);
+    //@ts-ignore
+    const suggestions = await Group.getSuggestions({
+        where: { 
+            winner: {
+                [Op.eq]: 1
+            },
+            Group_id: {
+                [Op.eq]: groupId
+            },
+            createdAt: {
+                [Op.between]: [startDate, endDate]
+            }
+        },
+        include: models.User
+    });
+
+    res.json(suggestions)
+}
 
 
 export default {
@@ -157,4 +185,5 @@ export default {
     remove,
     addUserToGroup,
     removeUserFromGroup,
+    getStats
 };

@@ -101,7 +101,7 @@ const CreateSuggestion = ({ userContext, group }: { userContext: CustomUserConte
   return (
     <form className={classes.root}>
         <div className={classes.row}>
-          <Typography variant="h6">Please provide some information about your suggested event.</Typography>
+          <Typography variant="h6">Please fill out the form below to suggest an event.</Typography>
         </div>  
         {response && response !== "success" && <Typography variant="h6">‼️{response}‼️</Typography>}
         <div className={classes.row}>

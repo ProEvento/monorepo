@@ -137,10 +137,17 @@ export const getServerSideProps = withPageAuthRequired({
 
     const suggestions = await makeServerCall({ apiCall: `groups/getActiveSuggestions`, method: "GET", queryParameters: {id: context.params.group} });
 
+    async function getVoteStats() {
+      //@ts-ignore
+      const data = await makeServerCall({ apiCall: `groups/getStats`, method: "GET", queryParameters: { groupId: group_id}})
+      return data
+    }
+
     return { 
       props: {
         suggested: suggestions,
         group: data,
+        stats: await getVoteStats()
       }
     }
   }
@@ -177,7 +184,8 @@ async function getSuggested(value) {
   return data
 }
 
-const Group = ({group, userContext, suggested }: { userContext: CustomUserContext, group:any, suggested: any[]}) => {
+
+const Group = ({group, userContext, suggested, stats }: { userContext: CustomUserContext, group:any, suggested: any[], stats: []}) => {
   const [search, setSearch] = useState("")
   const [results, setResults] = useState([])
   const [badge, setBadge] = useState("")
@@ -187,8 +195,6 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
   const { user  } = userContext;
   console.log(suggested[0])
   
- 
-
 
   
   useEffect(() => {
@@ -295,6 +301,27 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
       }
   }
 
+  const getPrettyStats = () => {
+    let res = new Map();
+    for (const stat of stats) {
+      res.set(stat['User']['username'], (res.get(stat['User']['username']) || 0) + 1)
+    }
+    
+    res[Symbol.iterator] = function* () {
+      yield* [...this.entries()].sort((a, b) => a[1] - b[1]);
+    }
+
+    const elements = []
+    for (const [key, value] of res) {
+      elements.push({ key, value })
+    }
+
+    return elements.length ? <ol>
+      {elements.map(({key, value}) => <li>{key}: {value}</li> )}
+    </ol> : <p>No winners have been chosen yet! Check back sometime next week!</p>
+
+  }
+
   const handleMessage = async () => {
     // find chat between two
     const response = await makeServerCall({ apiCall: `chats/getGroupchat/${group.id}`, method: "GET" })
@@ -355,15 +382,20 @@ const Group = ({group, userContext, suggested }: { userContext: CustomUserContex
               {results && <div>{results.map((attendee) => <User key={attendee.username} group={group} username={attendee.username} imgURL={attendee.picture} firstName={attendee.firstName} lastName={attendee.lastName}/>)}</div>}
             </div>}
           </div>
-          {inGroup &&
+          <div style={{width: "100%"}}>{inGroup &&
             <div>
             <CreateSuggestionComponent userContext={userContext} group= {group} />
             <div>
               {suggested.map((e) =>  <Item suggested_event={e} /> )}
             
             </div>
+
+            <div>
+            <p>Group event submission</p>
             </div>
-          }
+              {getPrettyStats()}
+            </div>
+          }</div>
           
       </div>
 

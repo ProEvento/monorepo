@@ -274,6 +274,11 @@ app.post(
 	makeHandlerAwareOfAsyncErrors(routes.groups.removeUserFromGroup)
 )
 
+app.get(
+	`/api/groups/getStats`,
+	makeHandlerAwareOfAsyncErrors(routes.groups.getStats)
+)
+
 // Suggestions
 
 app.post(

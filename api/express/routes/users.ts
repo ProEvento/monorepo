@@ -2,7 +2,8 @@ import { Request, Response } from "express"
 import db from '../../sequelize'
 import { Op } from "sequelize"
 import { getIdParam } from '../helpers'
-import { UserType } from '../../types'
+import { UserType, GroupType, Suggestion } from '../../types'
+import suggestions from "./suggestions"
 const { models } = db.sequelize;
 
 async function getAll(req: Request, res: Response) {
@@ -277,8 +278,106 @@ async function remove(req: Request, res: Response) {
 	res.status(200).end();
 };
 
+async function convertSuggestion(req: Request, res: Response) {
+
+	/*
+     Query
+      - Check for all the times in groups and see if any have just passed
+          - Yes-> Find all suggestions that are active.
+              - Grab 3 with most votes
+                  - Convert to events
+                      - Send notifications to all group members
+     */
+	const id = getIdParam(req);
+	const user = await models.User.findOne({where: { id: id }})
+
+	// Get groups for user
+	//@ts-ignore
+	const Groups = await user.getGroups({ include: [{ model: models.User, as: "owner" }, { model: models.User, as: "users"}, { model: models.GroupCategory, as: "categories"} ] });
+
+	for (let group of Groups) {		
+		//@ts-ignore
+		let pollTime = new Date(group.pollTime)
+
+		// If within 1 min
+		if (pollTime.getTime() > Date.now() && pollTime.getTime() + 60000 > Date.now()) {
+
+			// Find suggestions that are active
+			const suggestions = await models.Suggestion.findAll({
+				// where: { Group_id: id}
+				where: { 
+					[Op.and]: [
+					{
+						//@ts-ignore
+						Group_id: group.id
+					}, 
+					{
+						active: "1"
+					}, 
+				]},
+				order: [
+					['votes', 'DESC']
+				]
+			});
+
+			if (suggestions) {
+				for (let i  = 0; i < suggestions.length; i++) {
+					//@ts-ignore
+					console.log(`Suggestion: ${suggestions[i].name} with ${suggestions[i].votes} votes`)
+					// Set as winners and convert to an event and notify
+					if (i < 3) {
+						// Set as winner
+						//@ts-ignore
+						await suggestions[i].update({winner: true})
+
+						// Convert to event
+						const newEvent = {
+							//@ts-ignore
+							title: suggestions[i].name,
+							//@ts-ignore
+							description: suggestions[i].description,
+							//@ts-ignore
+							priv: false,
+							//@ts-ignore
+							hashtags: [],
+							//@ts-ignore
+							picture : "",
+							//@ts-ignore
+							time: (new Date(suggestions[i].time)).toISOString(),
+							//@ts-ignore
+							User_id: group.User_id.toString()
+						}
+
+						// Add event
+						//@ts-ignore
+						const eventAdded = await models.Event.create(newEvent)
+
+						// Set topic
+						//@ts-ignore
+						await eventAdded.update({topic: suggestions[i].topic})
+
+						// Notification
+						//@ts-ignore
+						const users = await group.getUsers()
+						for (const user of users) {
+							//@ts-ignore
+							//@ts-ignore
+							await user.createNotification({ text: `${suggestions[i].name} has won the voting for ${group.name}! Click <a href="http://localhost:3000/event/${eventAdded.id}">Here</a> to check out the event!` })
+						}
+					}
+					//@ts-ignore
+					await suggestions[i].update({active: false})
+				}
+			}
+		}
+	}
+	res.status(200).end();
+};
+
+
 
 export default {
+	convertSuggestion,
 	getAll,
 	getById,
 	getByUsername,

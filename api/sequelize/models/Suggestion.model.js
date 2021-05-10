@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    winner: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
     },
     {
       timestamps: true,

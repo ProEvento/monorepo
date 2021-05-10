@@ -46,7 +46,7 @@ export const withUserProp = (Component: any) => {
     const makeServerCallFetcher = async url => await makeServerCall({ apiCall: url, method: "GET" })
 
     const { data: notifData, error: notifError } = useSWR(() => `users/notifications/${data.id}`, makeServerCallFetcher, { refreshInterval: 60000 * 5 });
-
+    const { data: convertData, error: convertError } = useSWR(() => `users/convertSuggestion/${data.id}`, makeServerCallFetcher, { refreshInterval: 1000 * 5 });
     const isLoading = !data && !error;
 
     if (typeof window !== "undefined" && !isLoading && error && error.status === 404) {

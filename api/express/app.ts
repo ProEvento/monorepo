@@ -143,6 +143,11 @@ app.get(
 	makeHandlerAwareOfAsyncErrors(routes.users.getUsersBadges)
 )
 
+app.get(
+	`/api/users/convertSuggestion/:id`,
+	makeHandlerAwareOfAsyncErrors(routes.users.convertSuggestion)
+)
+
 
 // Events
 

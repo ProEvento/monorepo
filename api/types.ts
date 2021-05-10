@@ -33,7 +33,10 @@ export type EventType = {
 }
 
 export type GroupType = {
-    id: string 
+    id: string,
+    pollTime: string,
+    User_id: UserType,
+    name: string
 }
 
 export type HashtagType = {
@@ -48,6 +51,14 @@ export type TopicType = {
 
 export type AttendingType = {
     eventId: string,
-    userId: string
+    userId: string,
     id: BigInteger
+}
+
+export type Suggestion = {
+    name: string,
+    description: string,
+    Topic_id: number,
+    Group_id: number,
+    time: string
 }

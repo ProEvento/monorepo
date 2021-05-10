@@ -300,8 +300,7 @@ async function convertSuggestion(req: Request, res: Response) {
 		let pollTime = new Date(group.pollTime)
 
 		// If within 1 min
-		if (pollTime.getTime() > Date.now() && pollTime.getTime() + 60000 > Date.now()) {
-
+		if (pollTime.getTime() > Date.now() && pollTime.getTime() - 600000 < Date.now()) {
 			// Find suggestions that are active
 			const suggestions = await models.Suggestion.findAll({
 				// where: { Group_id: id}
@@ -319,11 +318,8 @@ async function convertSuggestion(req: Request, res: Response) {
 					['votes', 'DESC']
 				]
 			});
-
-			if (suggestions) {
+			if (suggestions.length) {
 				for (let i  = 0; i < suggestions.length; i++) {
-					//@ts-ignore
-					console.log(`Suggestion: ${suggestions[i].name} with ${suggestions[i].votes} votes`)
 					// Set as winners and convert to an event and notify
 					if (i < 3) {
 						// Set as winner
@@ -368,7 +364,13 @@ async function convertSuggestion(req: Request, res: Response) {
 					//@ts-ignore
 					await suggestions[i].update({active: false})
 				}
+
+				// Update
+				pollTime.setTime(pollTime.getTime() + 604800000)
+				await group.update({pollTime: pollTime.toString()})
 			}
+
+			
 		}
 	}
 	res.status(200).end();

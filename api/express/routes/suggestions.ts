@@ -40,11 +40,12 @@ async function vote(req: Request, res: Response) {
 
 async function createSuggestion(req: Request, res: Response) {
 
-    const {name, id, description,group_id, topicName } = req.query;
+    const {name, id, description,group_id, topicName, time } = req.query;
     JSON.stringify(name)
     JSON.stringify(id)
     JSON.stringify(description)
     JSON.stringify(group_id)
+    JSON.stringify(time);
     // JSON.stringify(Topic_id)
 
 	// const searchTitle = req.query.searchTitle
@@ -63,7 +64,7 @@ async function createSuggestion(req: Request, res: Response) {
 
     const topic_id = topic.id
     console.log("topic id", topic_id)
-    await models.Suggestion.create({name: name, User_id: id, time: "2021-03-19 10:43:58", description: description, Group_id: group_id, Topic_id: topic_id});
+    await models.Suggestion.create({name: name, User_id: id, time: time, description: description, Group_id: group_id, Topic_id: topic_id});
     res.status(201).json({msg: "success"});
     
 };

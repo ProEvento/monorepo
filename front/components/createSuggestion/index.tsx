@@ -84,7 +84,7 @@ const CreateSuggestion = ({ userContext, group }: { userContext: CustomUserConte
         userId: user.id,
         User_id: user.id.toString()
       }
-      const data = await makeServerCall({ apiCall: "groups/createSuggestion", method: "POST", queryParameters: { name: title, description: description, id: user.id, group_id: group_id, topicName: Topic_id } })
+      const data = await makeServerCall({ apiCall: "groups/createSuggestion", method: "POST", queryParameters: { name: title, description: description, id: user.id, group_id: group_id, topicName: Topic_id, time: toSend.time} })
       if (data.msg === "success") {
         location.reload(); 
       } else {

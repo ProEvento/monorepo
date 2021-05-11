@@ -43,11 +43,12 @@ const [response, setResponse] = useState("")
 const classes = containerStyles();
 const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const options = { weekday: "long", year: 'numeric', month: 'long', day: 'numeric' };
-const { name, description, time, id } = suggested_event;
+const { name, description, time, id, votes } = suggested_event;
 const date = new Date(time)
 
 const submit = () => {
   const data = makeServerCall({ apiCall: "groups/vote", method: "GET", queryParameters: {id:id}})
+  location.reload()
 }
 
 return (
@@ -60,6 +61,7 @@ return (
       <Typography variant="h4">{name}</Typography>
       {/*@ts-ignore */}
       <Typography variant="h5">{description}</Typography>
+      <Typography variant="h5">Votes: {votes}</Typography>
     </div>
     <div className="voting">
         <br></br>

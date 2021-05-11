@@ -300,7 +300,7 @@ async function convertSuggestion(req: Request, res: Response) {
 		let pollTime = new Date(group.pollTime)
 
 		// If within 1 min
-		if (pollTime.getTime() > Date.now() && pollTime.getTime() - 600000 < Date.now()) {
+		if (pollTime.getTime() < Date.now()) {
 			// Find suggestions that are active
 			const suggestions = await models.Suggestion.findAll({
 				// where: { Group_id: id}
@@ -366,8 +366,13 @@ async function convertSuggestion(req: Request, res: Response) {
 				}
 
 				// Update
-				pollTime.setTime(pollTime.getTime() + 604800000)
+				pollTime.setTime(pollTime.getTime() + 604800000)			
 				await group.update({pollTime: pollTime.toString()})
+				while (pollTime.getTime() < Date.now()) {
+					pollTime.setTime(pollTime.getTime() + 604800000)			
+					await group.update({pollTime: pollTime.toString()})
+				}
+
 			}
 
 			
